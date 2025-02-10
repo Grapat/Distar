@@ -1,25 +1,21 @@
-import './css/App.css';
-import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
-import Vegetable from './component/vegetable';
+import React from "react";
+import "./css/App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import LandingPage from "./component/landingPage";
+import HomePage from "./component/HomePage";
+import Vegetable from "./component/vegetable";
+import VegDetail from "./component/vegDetail";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <header>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/veglist">Vegetable</Link>
-            </li>
-          </ul>
-        </header>
         <main>
           <Routes>
-            <Route path="/" element={<h1>Welcome to Home Page</h1>} />
-            <Route path="/veglist" element={<Vegetable />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/veg" element={<Vegetable />} />
+            <Route path="/veg/:id" element={<VegDetail />} />
           </Routes>
         </main>
       </Router>

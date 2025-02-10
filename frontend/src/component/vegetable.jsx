@@ -1,45 +1,67 @@
 import { useState, useEffect } from "react";
+import "../css/vegetable.css";
 
 export default function Vegetable() {
-  const [vegetables, setVegetables] = useState([]);  // State for storing vegetables
-  const [loading, setLoading] = useState(true);  // State for loading indicator
-  const [error, setError] = useState(null);  // State for error handling
+  const [vegetables, setVegetables] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:4005/api/vegs');
+        const response = await fetch("http://localhost:4005/api/vegs");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setVegetables(data);  // Update state with fetched vegetables
+        setVegetables(data);
+        setQuantities(
+          data.reduce((acc, veg) => ({ ...acc, [veg.id]: 1 }), {})
+        ); // Default quantity to 1
       } catch (err) {
-        setError(err.message);  // Handle any errors
+        setError(err.message);
       } finally {
-        setLoading(false);  // Stop loading after data is fetched
+        setLoading(false);
       }
     };
 
-    fetchData();  // Call fetchData inside useEffect
-  }, []);  // Empty dependency array to run once on component mount
+    fetchData();
+  }, []);
+
+  const handleQuantityChange = (id, change) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: Math.max(0, (prev[id] || 0) + change),
+    }));
+  };
 
   if (loading) {
-    return <h1>Loading...</h1>;  // Display loading message
+    return <h1>Loading...</h1>;
   }
 
   if (error) {
-    return <h1>Error: {error}</h1>;  // Display error message
+    return <h1>Error: {error}</h1>;
   }
 
   return (
-    <div>
-      <h1>Vegetables</h1>
-      <ul>
-        {vegetables.map((veg, index) => (
-          <li key={index}>{veg.name}</li>
+    <div className="vegetable-container">
+      <h1 className="title">รายการผัก</h1>
+      <div className="grid">
+        {vegetables.map((veg) => (
+          <div key={veg.id} className="card">
+            <img src={veg.image} alt={veg.name} className="veg-image" />
+            <div className="info">
+              <p className="veg-name">{veg.name}</p>
+              <div className="quantity-control">
+                <button onClick={() => handleQuantityChange(veg.id, -1)}>-</button>
+                <span>{quantities[veg.id]}</span>
+                <button onClick={() => handleQuantityChange(veg.id, 1)}>+</button>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
