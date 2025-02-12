@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "./header";
+import Header from "./Header";
+import BottomNav from "./BottomNav";
 import "../css/HomePage.css";
 
 const HomePage = () => {
@@ -35,6 +36,7 @@ const HomePage = () => {
         <p>ของดีเมืองนนท์</p>
         <img src="/promo.png" alt="Promotion" />
       </div>
+      <BottomNav />
     </div>
   );
 };

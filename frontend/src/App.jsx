@@ -16,6 +16,9 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/veg" element={<Vegetable />} />
             <Route path="/veg/:id" element={<VegDetail />} />
+            <Route path="/popular" element={<PopularVegetables />} />
+            <Route path="/cart" element={<Cart />} />
+
           </Routes>
         </main>
       </Router>
