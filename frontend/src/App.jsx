@@ -5,6 +5,8 @@ import LandingPage from "./component/landingPage";
 import HomePage from "./component/HomePage";
 import Vegetable from "./component/vegetable";
 import VegDetail from "./component/vegDetail";
+import PopularVegetables from "./component/PopularVegetables";
+import Cart from "./component/cart";
 
 function App() {
   return (
@@ -18,7 +20,6 @@ function App() {
             <Route path="/veg/:id" element={<VegDetail />} />
             <Route path="/popular" element={<PopularVegetables />} />
             <Route path="/cart" element={<Cart />} />
-
           </Routes>
         </main>
       </Router>
