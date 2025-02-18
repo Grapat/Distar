@@ -14,12 +14,10 @@ const BottomNav = () => {
       <div className="nav-item" onClick={() => navigate("/cart")}>
         <img src="/icons/cart.svg" alt="Cart" />
         <span>ตะกร้า</span>
-        <span className="badge">8</span> 
       </div>
       <div className="nav-item" onClick={() => navigate("/notifications")}>
         <img src="/icons/notification.svg" alt="Notifications" />
         <span>การแจ้งเตือน</span>
-        <span className="badge">3</span>
       </div>
       <div className="nav-item" onClick={() => navigate("/profile")}>
         <img src="/icons/profile.svg" alt="Profile" />

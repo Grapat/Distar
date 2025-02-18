@@ -1,17 +1,52 @@
 .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2vh 2vw; /* Responsive padding */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; /* Ensure header is not transparent */
+  z-index: 1000; /* Keep header on top */
+}
+
+.logo {
+  height: 4vh; /* Adjust height dynamically */
+  margin-right: 1vw;
+}
+
+.title {
+  font-size: 1.8vw; /* Responsive text size */
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+      padding: 1.5vh 3vw; /* Adjust padding for tablets */
   }
-  
+
   .logo {
-    height: 32px;
-    margin-right: 8px;
+      height: 3vh; /* Smaller logo */
+      margin-right: 2vw;
   }
-  
+
   .title {
-    font-size: 18px;
-    font-weight: bold;
+      font-size: 1.5rem; /* Adjust title size */
   }
-  
+}
+
+@media (max-width: 480px) {
+  .header {
+      padding: 1.2vh 3vw; /* Reduce padding for small screens */
+  }
+
+  .logo {
+      height: 2.5vh;
+  }
+
+  .title {
+      font-size: 1.2rem; /* Smaller text */
+  }
+}

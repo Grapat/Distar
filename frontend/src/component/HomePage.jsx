@@ -32,10 +32,10 @@ const HomePage = () => {
         <div className="menu-item">รายการผัก</div>
         <div className="menu-item">ติดตามคำสั่งซื้อ</div>
       </div>
-      <div className="promo-section">
+      {/*<div className="promo-section">
         <p>ของดีเมืองนนท์</p>
         <img src="/promo.png" alt="Promotion" />
-      </div>
+      </div>*/}
       <BottomNav />
     </div>
   );
