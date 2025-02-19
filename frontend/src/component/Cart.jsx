@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import BottomNav from "./BottomNav";
 import "../css/cart.css";
 
 const Cart = () => {
@@ -55,7 +54,6 @@ const Cart = () => {
           </div>
         ))}
       </div>
-      <BottomNav />
     </div>
   );
 };
