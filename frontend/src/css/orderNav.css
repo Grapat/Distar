@@ -1,0 +1,35 @@
+.order-nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-bottom: 2px solid #ddd;
+  background: white; /* ✅ ป้องกัน Header บัง */
+  position: relative; /* ✅ ทำให้แน่ใจว่าอยู่เหนือ Header */
+  z-index: 10; /* ✅ เพิ่ม z-index ให้สูงกว่า Header ถ้าจำเป็น */
+  margin-top: 60px; /* ✅ ปรับให้ไม่โดน Header บัง (ค่าปรับได้ตาม Header ของคุณ) */
+}
+
+.nav-item {
+  font-size: 16px;
+  font-weight: bold;
+  background: #fff;
+  color: #444;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.3s;
+}
+
+.nav-item.active {
+  color: #8cc63f;
+}
+
+.nav-item.active::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #8cc63f;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}

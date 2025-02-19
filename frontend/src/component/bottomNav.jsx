@@ -15,7 +15,7 @@ const BottomNav = () => {
         <img src="/icons/cart.svg" alt="Cart" />
         <span>ตะกร้า</span>
       </div>
-      <div className="nav-item" onClick={() => navigate("/orders")}>
+      <div className="nav-item" onClick={() => navigate("/orders/deliver")}>
         <img src="/icons/orders.svg" alt="orders" />
         <span>การแจ้งเตือน</span>
       </div>

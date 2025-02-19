@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../css/orderDeliver.css";
+import "../css/order.css";
 
 const OrderDeliver = () => {
   const [orders, setOrders] = useState([]);
@@ -19,7 +19,7 @@ const OrderDeliver = () => {
   }, []);
 
   return (
-    <div className="order-deliver-container">
+    <div className="order-container">
       <div className="order-content">
         <h2>ติดตามคำสั่งซื้อ</h2>
         {orders.length === 0 ? (
@@ -32,7 +32,6 @@ const OrderDeliver = () => {
                   <h3>คำสั่งซื้อ #{order.id}</h3>
                   <p>สถานะ: <span className={`status ${order.status}`}>{order.status}</span></p>
                   <p>วันที่สั่งซื้อ: {order.date}</p>
-                  <p>ยอดรวม: {order.total} บาท</p>
                 </div>
               </li>
             ))}
