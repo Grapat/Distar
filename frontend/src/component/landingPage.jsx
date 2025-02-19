@@ -1,13 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "./header";
 import "../css/landingPage.css";
 
 const LandingPage = () => {
     const navigate = useNavigate();
     return (
     <div className="container">
-      <Header />
       <div className="content">
         <img src="/basket.png" alt="Vegetable Basket" className="image" />
         <p className="description">

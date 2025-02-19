@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/vegDetail.css";
 import Header from "./header";
+import BottomNav from "./bottomNav";
 import { useParams } from "react-router-dom";
 
 const VegDetail = ({ vegetables }) => {
@@ -34,7 +35,7 @@ const VegDetail = ({ vegetables }) => {
             <li key={index}>{nutrient}</li>
           ))}
         </ul>
-        <h4>ผักที่คุณอาจสนใจ</h4>
+        {/* <h4>ผักที่คุณอาจสนใจ</h4>
         <div className="related-vegs">
           {vegetables.slice(0, 4).map((related) => (
             <div key={related.id} className="related-veg">
@@ -42,8 +43,9 @@ const VegDetail = ({ vegetables }) => {
               <p>{related.name}</p>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
+      <BottomNav />
     </div>
   );
 };

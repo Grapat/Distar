@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import BottomNav from "./BottomNav";
 import "../css/popularVegetables.css";
 
 const PopularVegetables = () => {
@@ -40,7 +39,6 @@ const PopularVegetables = () => {
           </li>
         ))}
       </ul>
-      <BottomNav />
     </div>
   );
 };

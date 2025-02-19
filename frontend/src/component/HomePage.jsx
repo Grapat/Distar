@@ -1,13 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "./Header";
-import BottomNav from "./BottomNav";
 import "../css/HomePage.css";
 
 const HomePage = () => {
   return (
     <div className="home-container">
-      <Header />
       <div className="banner-carousel">
         <img src="/banner.png" alt="Banner" className="banner-image" />
         <div className="banner-text">
@@ -36,7 +33,6 @@ const HomePage = () => {
         <p>ของดีเมืองนนท์</p>
         <img src="/promo.png" alt="Promotion" />
       </div>*/}
-      <BottomNav />
     </div>
   );
 };

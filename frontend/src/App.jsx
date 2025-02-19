@@ -6,6 +6,8 @@ import HomePage from "./component/HomePage";
 import Vegetable from "./component/vegetable";
 import VegDetail from "./component/vegDetail";
 import PopularVegetables from "./component/PopularVegetables";
+import Header from "./component/header";
+import BottomNav from "./component/bottomNav";
 import Cart from "./component/cart";
 
 function App() {
@@ -15,11 +17,12 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/veg" element={<Vegetable />} />
-            <Route path="/veg/:id" element={<VegDetail />} />
-            <Route path="/popular" element={<PopularVegetables />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/home" element={<div><Header /><HomePage /><BottomNav /></div>} />
+            <Route path="/veg" element={<div><Header /><Vegetable /><BottomNav /></div>} />
+            <Route path="/veg/:id" element={<div><VegDetail /><BottomNav /></div>} />
+            <Route path="/popular" element={<div><PopularVegetables /><BottomNav /></div>} />
+            <Route path="/cart" element={<div><Cart /><BottomNav /></div>} />
+            <Route path="/*" element={<div><Header /><HomePage /><BottomNav /></div>}/>
           </Routes>
         </main>
       </Router>
