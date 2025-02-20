@@ -1,16 +1,17 @@
 import React from "react";
 import "./css/App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LandingPage from "./component/landingPage";
-import HomePage from "./component/homePage";
-import Vegetable from "./component/vegetable";
-import VegDetail from "./component/vegDetail";
-import PopularVegetables from "./component/popularVegetables";
-import OrderNav from "./component/orderNav";
-import OrderDeliver from "./component/orderDeliver";
-import OrderArrived from "./component/orderArrived";
-import OrderSuccess from "./component/orderSuccess";
-import Cart from "./component/cart";
+import LandingPage from "./pages/landingPage";
+import HomePage from "./pages/homePage";
+import Vegetable from "./pages/vegetable";
+import VegDetail from "./pages/vegDetail";
+import PopularVegetables from "./pages/popularVegetables";
+import OrderNav from "./pages/orderNav";
+import OrderDeliver from "./pages/orderDeliver";
+import OrderArrived from "./pages/orderArrived";
+import OrderSuccess from "./pages/orderSuccess";
+import Cart from "./pages/cart";
+import AccountPage from "./pages/accountPage";
 import Header from "./component/header";
 import BottomNav from "./component/bottomNav";
 
@@ -34,7 +35,8 @@ function App() {
             <Route path="/veg/:id" element={<LayoutWithBottomNav><VegDetail /></LayoutWithBottomNav>} />
             <Route path="/popular" element={<LayoutWithBottomNav><PopularVegetables /></LayoutWithBottomNav>} />
             <Route path="/cart" element={<LayoutWithBottomNav><Cart /></LayoutWithBottomNav>} />
-            
+            <Route path="/acc" element={<LayoutWithBottomNav><AccountPage /></LayoutWithBottomNav>} />
+
             {/* Group Order Pages under one Route */}
             <Route path="/orders/*" element={
               <LayoutWithBottomNav>

@@ -19,7 +19,7 @@ const BottomNav = () => {
         <img src="/icons/orders.svg" alt="orders" />
         <span>การแจ้งเตือน</span>
       </div>
-      <div className="nav-item" onClick={() => navigate("/profile")}>
+      <div className="nav-item" onClick={() => navigate("/acc")}>
         <img src="/icons/profile.svg" alt="Profile" />
         <span>บัญชี</span>
       </div>

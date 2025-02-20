@@ -1,7 +1,6 @@
 import React from "react";
 import "../css/vegDetail.css";
-import Header from "./header";
-import BottomNav from "./bottomNav";
+import BottomNav from "../component/bottomNav";
 import { useParams } from "react-router-dom";
 
 const VegDetail = ({ vegetables }) => {
@@ -14,7 +13,6 @@ const VegDetail = ({ vegetables }) => {
 
   return (
     <div className="veg-detail-container">
-      <Header />
       <div className="veg-info-top">
         <img src={vegetable.image} alt={vegetable.name} className="veg-image" />
         <h2>{vegetable.name} ({vegetable.englishName})</h2>

@@ -4,8 +4,7 @@ import "../css/header.css";
 const Header = () => {
   return (
     <header className="header">
-      <img src="/logo.svg" alt="Distar Fresh Logo" className="logo" />
-      <h1 className="title">DISTAR FRESH</h1>
+      <img src="/img/L1.png" alt="Distar Fresh Logo" className="logo" />
     </header>
   );
 };
