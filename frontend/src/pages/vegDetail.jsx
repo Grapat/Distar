@@ -1,6 +1,5 @@
 import React from "react";
 import "../css/vegDetail.css";
-import BottomNav from "../component/bottomNav";
 import { useParams } from "react-router-dom";
 
 const VegDetail = ({ vegetables }) => {
@@ -43,7 +42,6 @@ const VegDetail = ({ vegetables }) => {
           ))}
         </div> */}
       </div>
-      <BottomNav />
     </div>
   );
 };

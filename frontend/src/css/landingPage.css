@@ -1,14 +1,14 @@
 .container {
-  position: sticky; /* Makes the container sticky */
-  top: 0; /* Sticks it to the top */
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   padding: 16px;
-  background-color: white; /* Optional, to ensure background stays consistent */
-  z-index: 10; /* Keeps it above other content */
+  background-color: white;
+  z-index: 10;
 }
 
 .content {
@@ -49,4 +49,33 @@
   background-color: #fcfcfc;
   border-radius: 8px;
   cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .image {
+    width: 150px;
+  }
+  .description {
+    font-size: 13px;
+  }
+  .button-group {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image {
+    width: 120px;
+  }
+  .description {
+    font-size: 12px;
+  }
+  .button-group {
+    max-width: 220px;
+  }
+  .primary-btn, .secondary-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
