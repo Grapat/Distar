@@ -4,11 +4,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     static associate(models) {
-      // เชื่อมโยงกับ Vegetables
-      Category.hasMany(models.Vegetable, {
-        foreignKey: "category_id",
-        as: "vegetables"
-      });
+      Category.hasMany(models.Vegetable, { foreignKey: "category_id" });
     }
   }
 
@@ -19,16 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      }
+      name: DataTypes.STRING
     },
     {
       sequelize,
       modelName: "Category",
       tableName: "Categories",
-      timestamps: true
+      timestamps: false
     }
   );
 

@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Vegetables", {
@@ -28,13 +30,9 @@ module.exports = {
         },
         onDelete: "CASCADE"
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false
       }
     });
   },
