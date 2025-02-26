@@ -1,17 +1,17 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const helmet = require('helmet');
-const compression = require('compression');
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const helmet = require("helmet");
+const compression = require("compression");
 
 // Import Middleware
-const errorMiddleware = require('./middleware/errorMiddleware');
-const requestLogger = require('./middleware/requestLogger');
-const rateLimiter = require('./middleware/rateLimiter');
+const errorMiddleware = require("./middleware/errorMiddleware");
+const requestLogger = require("./middleware/requestLogger");
+const rateLimiter = require("./middleware/rateLimiter");
 
 // Import Routes
-const vegetableRoutes = require('./routes/vegetableRoutes');
+const authRoutes = require("./routes/authRoutes");
 
 dotenv.config();
 
@@ -27,14 +27,14 @@ app.use(rateLimiter);
 app.use(requestLogger);
 
 // 🌱 Serve Static Files (Vite frontend)
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // 🚀 API Routes
-app.use('/api/vegs', vegetableRoutes);
+app.use("/api/auth", authRoutes); // ✅ เพิ่ม Authentication Routes
 
 // 🌍 Handle unknown routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
 // 🛑 Error Handling Middleware (ต้องใส่ท้ายสุด)
