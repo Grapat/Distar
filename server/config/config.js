@@ -1,7 +1,6 @@
-require("dotenv").config(); // โหลดค่า .env
+require("dotenv").config();
 const path = require("path");
 
-// Debug: ตรวจสอบว่าตัวแปรจาก .env โหลดสำเร็จหรือไม่
 console.log("DB_USERNAME:", process.env.DB_USERNAME);
 console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
 console.log("DB_HOST:", process.env.DB_HOST);
@@ -14,7 +13,7 @@ module.exports = {
     password: process.env.DB_PASSWORD || "password",
     database: process.env.DB_NAME || "distart_db",
     host: process.env.DB_HOST || "localhost",
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
+    port: process.env.DB_PORT,
     dialect: "postgres",
     logging: false
   },
@@ -23,7 +22,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
+    port: process.env.DB_PORT,
     dialect: "postgres"
   },
   production: {
@@ -31,7 +30,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
+    port: process.env.DB_PORT,
     dialect: "postgres"
   }
 };
