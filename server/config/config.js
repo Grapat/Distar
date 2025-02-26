@@ -15,7 +15,9 @@ module.exports = {
     host: process.env.DB_HOST || "localhost",
     port: process.env.DB_PORT,
     dialect: "postgres",
-    logging: false
+    logging: false,
+    jwtSecret: process.env.JWT_SECRET || "defaultsecret",  // ✅ เพิ่ม JWT_SECRET
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1h"       // ✅ เพิ่ม JWT_EXPIRES_IN
   },
   test: {
     username: process.env.DB_USERNAME,
