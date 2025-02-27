@@ -15,6 +15,9 @@ const authRoutes = require("./routes/authRoutes");
 const vegRoutes = require("./routes/vegRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const inventoryRoutes = require("./routes/inventoryRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+
 
 dotenv.config();
 
@@ -37,6 +40,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/vegs", vegRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/inventory", inventoryRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
 
 // 🌍 Handle unknown routes
 app.get("*", (req, res) => {

@@ -17,14 +17,22 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true
       },
       user_id: DataTypes.INTEGER,
-      status: DataTypes.ENUM("pending", "shipped", "delivered"),
-      created_at: DataTypes.DATE
+      credits_remaining: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 10 // ✅ แต่ละออเดอร์เริ่มที่ 10 เครดิต
+      },
+      status: {
+        type: DataTypes.ENUM("pending", "shipped", "delivered"),
+        allowNull: false,
+        defaultValue: "pending"
+      }
     },
     {
       sequelize,
       modelName: "Order",
       tableName: "Orders",
-      timestamps: false
+      timestamps: true
     }
   );
 
