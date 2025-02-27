@@ -13,6 +13,8 @@ const rateLimiter = require("./middleware/rateLimiter");
 // Import Routes
 const authRoutes = require("./routes/authRoutes");
 const vegRoutes = require("./routes/vegRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const inventoryRoutes = require("./routes/inventoryRoutes");
 
 dotenv.config();
 
@@ -33,6 +35,8 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 // 🚀 API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/vegs", vegRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 // 🌍 Handle unknown routes
 app.get("*", (req, res) => {
