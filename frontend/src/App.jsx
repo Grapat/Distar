@@ -13,6 +13,7 @@ import Cart from "./pages/cart";
 import AccountPage from "./pages/accountPage";
 import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
+import ForgotPasswordPage from "./pages/forgotPasswordPage";
 import Header from "./component/header";
 import BottomNav from "./component/bottomNav";
 
@@ -32,6 +33,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/home" element={<WithNav><HomePage /></WithNav>} />
             <Route path="/veg" element={<WithNav><Vegetable /></WithNav>} />
             <Route path="/veg/:id" element={<WithNav><VegDetail /></WithNav>} />
