@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../css/cart.css";
+import "../../css/cart.css";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -9,7 +9,7 @@ const Cart = () => {
     // Fetch only unsubmitted cart items from API
     const fetchCartItems = async () => {
       try {
-        const response = await fetch("http://localhost:4005/api/cart/unsubmitted");
+        const response = await fetch("http://localhost:4005/api/cart");
         const data = await response.json();
         setCartItems(data);
         

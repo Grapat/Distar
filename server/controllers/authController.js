@@ -37,18 +37,19 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // ค้นหาผู้ใช้จากอีเมล
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).json({ message: "User not found." });
 
-    // ตรวจสอบรหัสผ่าน
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) return res.status(401).json({ message: "Invalid password." });
 
-    // สร้าง JWT Token
-    const token = jwt.sign({ userId: user.customer_id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { userId: user.customer_id, email: user.email, userType: user.user_type }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: "1h" }
+    );
 
-    res.json({ message: "Login successful!", token });
+    res.json({ message: "Login successful!", token, userType: user.user_type });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -112,4 +113,26 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, forgotPassword, resetPassword };
+const getUser = async (req, res) => {
+  try {
+    // ดึง Token จาก Header
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+    // ตรวจสอบ Token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // ค้นหาผู้ใช้จาก ID ที่ถอดรหัสจาก Token
+    const user = await User.findByPk(decoded.userId, {
+      attributes: ["customer_id", "name", "email", "user_type"]
+    });
+
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { register, login, forgotPassword, resetPassword, getUser };

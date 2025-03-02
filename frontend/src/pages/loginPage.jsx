@@ -21,12 +21,22 @@ const LoginPage = () => {
       
       const data = await response.json();
       if (!response.ok) {
-        throw new Error("Email or password is invalid");
+        throw new Error(data.message || "Login failed");
       }
+
+    // ✅ เก็บ Token และ userType ไว้ใน Local Storage
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("userType", data.userType);
 
       // Handle successful login (e.g., save token, redirect)
       console.log("Login successful", data);
-      navigate("/home"); // Redirect to home after login
+
+      if (data.userType === "admin") {
+        navigate("/admin");  // Admin ไปที่หน้า AdminHome
+      } else {
+        navigate("/home");  // ลูกค้าทั่วไปไปที่หน้า Home
+      }
+
     } catch (err) {
       setError(err.message);
     }
