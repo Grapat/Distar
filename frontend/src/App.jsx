@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children }) => {
     return <LoginPage />;
   }
 
-  return user.userType === "admin" ? <AdminHome /> : <HomePage />;
+  return user.userType === "admin" ? <AdminHome /> : <WithNav><HomePage /></WithNav>;
 };
 
 function App() {

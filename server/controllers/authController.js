@@ -36,7 +36,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).json({ message: "User not found." });
 
@@ -49,11 +49,14 @@ const login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ message: "Login successful!", token, userType: user.user_type });
+    return res.json({ message: "Login successful!", token, userType: user.user_type });
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Login Error:", error.message);
+    return res.status(500).json({ error: error.message });
   }
 };
+
 
 // ✉️ Forgot Password (ลืมรหัสผ่าน)
 const forgotPassword = async (req, res) => {

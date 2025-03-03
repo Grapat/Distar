@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "../css/loginPage.css";
 
 const LoginPage = () => {
@@ -7,6 +8,17 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { user, setUser, fetchUser } = useAuth();
+
+  useEffect(() => {
+    if (user && user.userType === "admin") {
+      console.log("Redirecting to Admin Dashboard");
+      navigate("/admin");
+    } else if (user) {
+      console.log("Redirecting to Home Page");
+      navigate("/home");
+    }
+  }, [user, navigate]); // ✅ Navigate เมื่อ user อัปเดต
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,29 +30,39 @@ const LoginPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      
-      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        const errorText = await response.text();
+        throw new Error(`Login failed: ${errorText}`);
       }
 
-    // ✅ เก็บ Token และ userType ไว้ใน Local Storage
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("userType", data.userType);
+      const data = await response.json();
+      console.log("Login Response:", data); // ✅ Debug Response
 
-      // Handle successful login (e.g., save token, redirect)
-      console.log("Login successful", data);
+      if (!data.token || !data.userType) {
+        throw new Error("Invalid response from server");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userType", data.userType);
+
+      setUser({ userType: data.userType });
+      fetchUser();
 
       if (data.userType === "admin") {
-        navigate("/admin");  // Admin ไปที่หน้า AdminHome
+        console.log("Navigating to /admin");
+        navigate("/admin");
       } else {
-        navigate("/home");  // ลูกค้าทั่วไปไปที่หน้า Home
+        console.log("Navigating to /home");
+        navigate("/home");
       }
 
     } catch (err) {
+      console.error("Login Error:", err.message);
       setError(err.message);
     }
   };
+  
 
   return (
     <div className="login-container">
