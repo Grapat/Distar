@@ -8,11 +8,8 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/login" replace />; // ✅ ถ้าไม่ได้ล็อกอินให้ไปหน้า Login
   }
 
-  if (user.userType !== "admin") {
-    return <Navigate to="/home" replace />; // ✅ ถ้าไม่ใช่ Admin ส่งไปหน้า Home
-  }
-
-  return children;
+  const decoded = jwtDecode(token);
+  return decoded.userType === "admin" ? children : <Navigate to="/home" />;
 };
 
 export default AdminRoute;
