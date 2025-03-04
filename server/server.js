@@ -11,20 +11,6 @@ const errorMiddleware = require("./middleware/errorMiddleware");
 const requestLogger = require("./middleware/requestLogger");
 const rateLimiter = require("./middleware/rateLimiter");
 
-<<<<<<< HEAD
-// Import Routes
-const authRoutes = require("./routes/authRoutes");
-const vegRoutes = require("./routes/vegRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
-const inventoryRoutes = require("./routes/inventoryRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const cartRoutes = require("./routes/cartRoutes");
-
-
-dotenv.config();
-
-const app = express();
-=======
 const app = express();
 
 // ✅ PostgreSQL Connection (Ensure Docker is Running)
@@ -35,7 +21,6 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD || "your_database_password",
     port: process.env.DB_PORT || 54321, // Default PostgreSQL port
 });
->>>>>>> 6d2b6d2 (loveYou)
 
 // 🛠️ Apply Global Middleware
 app.use(cors());
