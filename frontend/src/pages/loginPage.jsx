@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../css/loginPage.css";
@@ -8,17 +8,17 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { user, setUser, fetchUser } = useAuth();
+  const { user, setUser } = useAuth();
 
   useEffect(() => {
-    if (user && user.userType === "admin") {
+    if (user?.userType === "admin") {
       console.log("Redirecting to Admin Dashboard");
       navigate("/admin");
     } else if (user) {
       console.log("Redirecting to Home Page");
       navigate("/home");
     }
-  }, [user, navigate]); // ✅ Navigate เมื่อ user อัปเดต
+  }, [user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -37,32 +37,29 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
-      console.log("Login Response:", data); // ✅ Debug Response
+      console.log("Login Response:", data);
 
-      if (!data.token || !data.userType) {
+      if (!data.token || !data.user) {
         throw new Error("Invalid response from server");
       }
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("userType", data.userType);
+      localStorage.setItem("userType", data.user.userType);
 
-      setUser({ userType: data.userType });
-      fetchUser();
+      setUser(data.user);
 
-      if (data.userType === "admin") {
+      if (data.user.userType === "admin") {
         console.log("Navigating to /admin");
         navigate("/admin");
       } else {
         console.log("Navigating to /home");
         navigate("/home");
       }
-
     } catch (err) {
       console.error("Login Error:", err.message);
       setError(err.message);
     }
   };
-  
 
   return (
     <div className="login-container">
@@ -91,4 +88,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginPage; // ✅ Ensure this is present

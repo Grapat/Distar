@@ -20,6 +20,7 @@ import CartOverall from "./pages/admin/cartOverall";
 import Header from "./component/header";
 import BottomNav from "./component/bottomNav";
 import AdminRoute from "./AdminRoute";
+import { Navigate } from "react-router-dom";
 
 const WithNav = ({ children }) => (
   <>
@@ -32,10 +33,10 @@ const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
 
   if (!user) {
-    return <LoginPage />;
+    return <Navigate to="/login" replace />;
   }
 
-  return user.userType === "admin" ? <AdminHome /> : <WithNav><HomePage /></WithNav>;
+  return user.userType === "admin" ? <Navigate to="/admin" replace /> : <WithNav>{children}</WithNav>;
 };
 
 function App() {
@@ -46,7 +47,7 @@ function App() {
           <Header />
           <main>
             <Routes>
-              <Route path="/" element={<ProtectedRoute />} />
+              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/home" element={<WithNav><HomePage /></WithNav>} />
@@ -57,7 +58,6 @@ function App() {
               <Route path="/acc" element={<WithNav><AccountPage /></WithNav>} />
               <Route path="/login" element={<LoginPage />} />
               
-
               {/* Group Order Pages under one Route */}
               <Route path="/orders/*" element={
                 <WithNav>
