@@ -23,43 +23,52 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
-
+  
     try {
       const response = await fetch("http://localhost:4005/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
+  
+      console.log("Raw Response:", response);
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Login failed: ${errorText}`);
       }
-
+  
       const data = await response.json();
-      console.log("Login Response:", data);
-
-      if (!data.token || !data.user) {
+      console.log("Parsed Login Response:", data);
+  
+      // ✅ Ensure data contains a user object and token
+      if (!data.token || !data.user.userType) {
         throw new Error("Invalid response from server");
       }
-
+  
       localStorage.setItem("token", data.token);
       localStorage.setItem("userType", data.user.userType);
-
-      setUser(data.user);
-
-      if (data.user.userType === "admin") {
-        console.log("Navigating to /admin");
-        navigate("/admin");
-      } else {
-        console.log("Navigating to /home");
-        navigate("/home");
-      }
+  
+      setUser(data.user); // ✅ Store full user object
+  
+      console.log("User state updated:", data.user);
+  
+      // ✅ Use setTimeout to allow state update before navigation
+      setTimeout(() => {
+        if (data.user.userType === "admin") {
+          console.log("Navigating to /admin");
+          navigate("/admin");
+        } else {
+          console.log("Navigating to /home");
+          navigate("/home");
+        }
+      }, 100);
     } catch (err) {
       console.error("Login Error:", err.message);
       setError(err.message);
     }
   };
+  
 
   return (
     <div className="login-container">

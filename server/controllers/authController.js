@@ -35,22 +35,40 @@ const register = async (req, res) => {
 // 🔑 Login (เข้าสู่ระบบ)
 const login = async (req, res) => {
   try {
+    console.log("Login request received:", req.body);
+
     const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "Missing email or password" });
+    }
 
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(404).json({ message: "User not found." });
+    console.log("User found:", user); // 🔍 Check if user exists
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return res.status(401).json({ message: "Invalid password." });
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password." });
+    }
 
     const token = jwt.sign(
-      { userId: user.customer_id, email: user.email, userType: user.user_type }, 
-      process.env.JWT_SECRET, 
+      { userId: user.customer_id, email: user.email, userType: user.user_type },
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    return res.json({ message: "Login successful!", token, userType: user.user_type });
+    // ✅ Log what we are sending back
+    const responseData = { 
+      message: "Login successful!", 
+      token, 
+      user: { userType: user.user_type, email: user.email } 
+    };
+    console.log("Login Response:", responseData);
 
+    return res.json(responseData);
   } catch (error) {
     console.error("Login Error:", error.message);
     return res.status(500).json({ error: error.message });

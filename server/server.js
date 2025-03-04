@@ -18,11 +18,11 @@ const app = express();
 
 // ✅ PostgreSQL Connection (Ensure Docker is Running)
 const pool = new Pool({
-    user: process.env.DB_USERNAME || "postgres",
-    host: process.env.DB_HOST || "localhost",
-    database: process.env.DB_NAME || "your_database_name",
-    password: process.env.DB_PASSWORD || "your_database_password",
-    port: process.env.DB_PORT || 5432, // Default PostgreSQL port
+    user: process.env.DB_USERNAME,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
 });
 
 // 🛠️ Apply Global Middleware
@@ -36,38 +36,6 @@ app.use(requestLogger);
 
 // 🌱 Serve Static Files (Frontend)
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-// ✅ Login Route
-app.post("/api/auth/login", async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const userQuery = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-        const user = userQuery.rows[0];
-
-        if (!user) {
-            return res.status(401).json({ error: "User not found" });
-        }
-
-        // Compare hashed passwords (Assuming bcrypt is used)
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
-
-        // Generate JWT Token
-        const token = jwt.sign(
-            { userId: user.id, userType: user.user_type },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
-
-        res.json({ token, user });
-    } catch (error) {
-        console.error("Login Error:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
 
 // 🚀 API Routes
 const authRoutes = require("./routes/authRoutes");
@@ -84,15 +52,15 @@ app.use("/api/inventory", inventoryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 
-// 🛑 Error Handling Middleware (must be at the end)
+// Error Handling Middleware
 app.use(errorMiddleware);
 
-// 🌍 Handle unknown routes (serve frontend)
+// Handle unknown routes (serve frontend)
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
-// ✅ Start Server
+// Start Server
 const PORT = process.env.PORT || 4005;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on ${process.env.BACKEND_URL || `http://localhost:${PORT}`}`);
