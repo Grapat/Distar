@@ -53,7 +53,7 @@ const LoginPage = () => {
   
       console.log("User state updated:", data.user);
   
-      // ✅ Use setTimeout to allow state update before navigation
+      /* ✅ Use setTimeout to allow state update before navigation
       setTimeout(() => {
         if (data.user.userType === "admin") {
           console.log("Navigating to /admin");
@@ -62,7 +62,7 @@ const LoginPage = () => {
           console.log("Navigating to /home");
           navigate("/home");
         }
-      }, 100);
+      }, 100); */
     } catch (err) {
       console.error("Login Error:", err.message);
       setError(err.message);

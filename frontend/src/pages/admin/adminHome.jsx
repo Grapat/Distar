@@ -9,7 +9,7 @@ const AdminHome = () => {
     <div className="admin-home">
       <h2>หน้าแรกสำหรับผู้ดูแลระบบ</h2>
       <div className="admin-actions">
-        <button className="admin-btn" onClick={() => navigate("/admin/cart-overall")}>
+        <button className="admin-btn" onClick={() => navigate("/admin/cart-page")}>
           จัดการตะกร้าสินค้าทั้งหมด
         </button>
         <button className="admin-btn" onClick={() => navigate("/admin/orders-overall")}>

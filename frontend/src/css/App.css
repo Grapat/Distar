@@ -5,19 +5,18 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+body {
+  padding-top: 10vh; /* Same height as .header to prevent overlap */
 }
 
-.card {
-  padding: 2em;
+@media (max-width: 768px) {
+  body {
+    padding-top: 8vh; /* Adjust for smaller screens */
+  }
 }
 
-.read-the-docs {
-  color: #888;
+@media (max-width: 480px) {
+  body {
+    padding-top: 7vh; /* Adjust for mobile */
+  }
 }

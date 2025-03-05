@@ -1,12 +1,27 @@
 const { Cart, Vegetable, User } = require("../models");
 
-// 🛒 ดึงรายการสินค้าในตะกร้า (ตัด price ออกเพราะไม่ใช้ราคา)
+const getAllCarts = async (req, res) => {
+  try {
+    const carts = await Cart.findAll({
+      attributes: ["id", "quantity"],
+      include: [
+        { model: Vegetable, attributes: ["name"] },
+        { model: User, attributes: ["id", "name", "email"] }
+      ]
+    });
+    res.json(carts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const getCart = async (req, res) => {
   try {
     const { user_id } = req.query;
     const cart = await Cart.findAll({
       where: { user_id },
-      include: [{ model: Vegetable, attributes: ["name"] }] // ❌ เอา price ออก
+      attributes: ["id", "quantity"],
+      include: [{ model: Vegetable, attributes: ["name"] }]
     });
     res.json(cart);
   } catch (error) {
@@ -14,34 +29,27 @@ const getCart = async (req, res) => {
   }
 };
 
-// ➕ เพิ่มสินค้าเข้าตะกร้า (เช็คเครดิตก่อน)
 const addToCart = async (req, res) => {
   try {
     const { user_id, product_id, quantity } = req.body;
-
-    // ✅ เช็คว่าสินค้านี้มีอยู่ในตะกร้าอยู่แล้วหรือไม่
     const existingItem = await Cart.findOne({ where: { user_id, product_id } });
-
-    // ✅ ดึงรายการทั้งหมดในตะกร้า
     const cartItems = await Cart.findAll({ where: { user_id } });
-
-    // ✅ คำนวณจำนวนเครดิตที่ใช้ไปแล้ว
     let totalCreditsUsed = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    totalCreditsUsed += quantity; // ✅ บวกกับสินค้าที่กำลังเพิ่ม
 
-    // ❌ ถ้าเครดิตเกิน 10 ให้ปฏิเสธ
-    if (totalCreditsUsed > 10) {
-      return res.status(400).json({ message: "Not enough credits! Maximum is 10 credits per order." });
-    }
-
-    // ✅ ถ้ามีสินค้านี้อยู่แล้ว ให้เพิ่มจำนวนแทน
     if (existingItem) {
+      totalCreditsUsed += quantity;
+      if (totalCreditsUsed > 10) {
+        return res.status(400).json({ message: "Not enough credits!" });
+      }
       existingItem.quantity += quantity;
       await existingItem.save();
       return res.json(existingItem);
     }
 
-    // ✅ ถ้ายังไม่มีสินค้านี้ ให้เพิ่มเข้าไปใหม่
+    if (totalCreditsUsed + quantity > 10) {
+      return res.status(400).json({ message: "Not enough credits!" });
+    }
+
     const newItem = await Cart.create({ user_id, product_id, quantity });
     res.status(201).json(newItem);
   } catch (error) {
@@ -49,36 +57,64 @@ const addToCart = async (req, res) => {
   }
 };
 
-// ✏️ อัปเดตจำนวนสินค้าในตะกร้า (ต้องเช็คเครดิต)
 const updateCart = async (req, res) => {
   try {
     const { id } = req.params;
     const { quantity } = req.body;
-
     const cartItem = await Cart.findByPk(id);
     if (!cartItem) return res.status(404).json({ message: "Cart item not found" });
-
-    // ✅ ดึงรายการทั้งหมดในตะกร้า
+    
     const cartItems = await Cart.findAll({ where: { user_id: cartItem.user_id } });
+    let totalCreditsUsed = cartItems.map(item => item.id === id ? quantity : item.quantity).reduce((sum, qty) => sum + qty, 0);
 
-    // ✅ คำนวณเครดิตที่ใช้ไปทั้งหมด (รวมสินค้าที่อัปเดต)
-    let totalCreditsUsed = cartItems.reduce((sum, item) => sum + (item.id === id ? quantity : item.quantity), 0);
-
-    // ❌ ถ้าเครดิตเกิน 10 ให้ปฏิเสธ
     if (totalCreditsUsed > 10) {
-      return res.status(400).json({ message: "Not enough credits! Maximum is 10 credits per order." });
+      return res.status(400).json({ message: "Not enough credits!" });
     }
 
     cartItem.quantity = quantity;
     await cartItem.save();
-
     res.json(cartItem);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// ❌ ลบสินค้าออกจากตะกร้า
+const adminCreateCart = async (req, res) => {
+  try {
+    const { user_id, product_id, quantity } = req.body;
+    console.log("Received Data:", { user_id, product_id, quantity }); // ✅ Debug ข้อมูลที่ได้รับ
+
+    const user = await User.findByPk(user_id);
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    console.log("User Found:", user.name); // ✅ Debug User
+
+    const existingItem = await Cart.findOne({ where: { user_id, product_id } });
+
+    console.log("Existing Cart Item:", existingItem); // ✅ Debug ว่ามีสินค้านี้อยู่แล้วหรือไม่
+
+    const cartItems = await Cart.findAll({ where: { user_id } });
+    let totalCreditsUsed = cartItems.reduce((sum, item) => sum + item.quantity, 0) + quantity;
+
+    if (totalCreditsUsed > 10) {
+      return res.status(400).json({ message: "Not enough credits! Maximum is 10 credits per order." });
+    }
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      await existingItem.save();
+      return res.json(existingItem);
+    }
+
+    const newCart = await Cart.create({ user_id, product_id, quantity });
+    res.status(201).json(newCart);
+  } catch (error) {
+    console.error("Error in adminCreateCart:", error); // ✅ แสดง Error ใน Console
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 const removeFromCart = async (req, res) => {
   try {
     const { id } = req.params;
@@ -92,4 +128,14 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-module.exports = { getCart, addToCart, updateCart, removeFromCart };
+const clearUserCart = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    await Cart.destroy({ where: { user_id } });
+    res.json({ message: "All items removed from user's cart" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { getCart, addToCart, updateCart, getAllCarts, adminCreateCart, removeFromCart, clearUserCart };
