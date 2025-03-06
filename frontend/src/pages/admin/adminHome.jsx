@@ -12,7 +12,7 @@ const AdminHome = () => {
         <button className="admin-btn" onClick={() => navigate("/admin/cart-page")}>
           จัดการตะกร้าสินค้าทั้งหมด
         </button>
-        <button className="admin-btn" onClick={() => navigate("/admin/orders-overall")}>
+        <button className="admin-btn" onClick={() => navigate("/admin/orders-page")}>
           จัดการคำสั่งซื้อทั้งหมด
         </button>
         <button className="admin-btn" onClick={() => navigate("/admin/products-overall")}>

@@ -16,7 +16,10 @@ import AccountPage from "./pages/accountPage";
 import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import ForgotPasswordPage from "./pages/forgotPasswordPage";
+
 import AdminCartPage from "./pages/admin/adminCartPage";
+import AdminOrderPage from "./pages/admin/adminOrderPage";
+
 import Header from "./component/header";
 import BottomNav from "./component/bottomNav";
 import AdminRoute from "./AdminRoute";
@@ -73,7 +76,7 @@ function App() {
               {/* Admin Route */}
               <Route path="/admin" element={<AdminRoute><AdminHome /></AdminRoute>} />
               <Route path="/admin/cart-page" element={<AdminRoute><AdminCartPage /></AdminRoute>} />
-
+              <Route path="/admin/orders-page" element={<AdminRoute><AdminOrderPage /></AdminRoute>} />
               <Route path="/*" element={<WithNav><HomePage /></WithNav>} />
             </Routes>
           </main>
