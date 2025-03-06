@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Order_Item extends Model {
     static associate(models) {
       Order_Item.belongsTo(models.Order, { foreignKey: "order_id" });
-      Order_Item.belongsTo(models.Vegetable, { foreignKey: "product_id" });
+      Order_Item.belongsTo(models.Vegetable, { foreignKey: "vegetable_id" });
     }
   }
 
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true
       },
       order_id: DataTypes.INTEGER,
-      product_id: DataTypes.INTEGER,
+      vegetable_id: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER
     },
     {

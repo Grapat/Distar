@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext"; // ✅ ใช้ AuthContext เพื่อนำ Token
 import "../../css/adminCartPage.css";
 
 const AdminCartPage = () => {
@@ -6,15 +7,19 @@ const AdminCartPage = () => {
   const [userId, setUserId] = useState("");
   const [productId, setProductId] = useState("");
   const [quantity, setQuantity] = useState("");
+  const { user } = useAuth(); // ✅ ดึงข้อมูลผู้ใช้จาก Context
 
   useEffect(() => {
     fetchCartItems();
   }, []);
 
-  // ✅ ดึงข้อมูลตะกร้าของผู้ใช้ทั้งหมด
+  // ✅ ฟังก์ชันดึงข้อมูลตะกร้าทั้งหมด (ต้องใช้ Token)
   const fetchCartItems = async () => {
     try {
-      const response = await fetch("http://localhost:4005/api/cart/all");
+      const token = localStorage.getItem("token"); // ✅ ดึง Token จาก Local Storage
+      const response = await fetch("http://localhost:4005/api/cart/all", {
+        headers: { "Authorization": `Bearer ${token}` }, // ✅ เพิ่ม Token
+      });
       const data = await response.json();
       setCartItems(data);
     } catch (error) {
@@ -22,30 +27,41 @@ const AdminCartPage = () => {
     }
   };
 
-  // ✅ เพิ่มตะกร้าใหม่ให้ผู้ใช้
+  // ✅ ฟังก์ชันสร้างตะกร้าใหม่
   const createCart = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:4005/api/cart/admin-create", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // ✅ เพิ่ม Token
+        },
         body: JSON.stringify({ user_id: userId, product_id: productId, quantity }),
       });
 
       if (response.ok) {
+        alert("เพิ่มตะกร้าใหม่สำเร็จ!"); // ✅ แจ้งเตือน
         fetchCartItems(); // ✅ โหลดข้อมูลใหม่
+      } else {
+        alert("เกิดข้อผิดพลาดในการเพิ่มตะกร้า!");
       }
     } catch (error) {
       console.error("Error creating cart:", error);
     }
   };
 
-  // ✅ ลบตะกร้าทั้งหมดของผู้ใช้
+  // ✅ ฟังก์ชันลบตะกร้าของผู้ใช้
   const clearUserCart = async (user_id) => {
+    if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบตะกร้านี้?")) return; // ✅ เพิ่มการยืนยันก่อนลบ
     try {
+      const token = localStorage.getItem("token");
       await fetch(`http://localhost:4005/api/cart/clear/${user_id}`, {
         method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }, // ✅ เพิ่ม Token
       });
 
+      alert("ลบตะกร้าสำเร็จ!"); // ✅ แจ้งเตือน
       fetchCartItems(); // ✅ โหลดข้อมูลใหม่
     } catch (error) {
       console.error("Error clearing cart:", error);
@@ -67,10 +83,10 @@ const AdminCartPage = () => {
         ) : (
           cartItems.map((item) => (
             <div key={item.id} className="cart-item">
-              <h3>ผู้ใช้: {item.User.name} ({item.User.email})</h3>
-              <p>สินค้า: {item.Vegetable.name}</p>
+              <h3>ผู้ใช้: {item.User?.name} ({item.User?.email})</h3>
+              <p>สินค้า: {item.Vegetable?.name}</p>
               <p>จำนวน: {item.quantity}</p>
-              <button className="clear-cart-btn" onClick={() => clearUserCart(item.User.id)}>ลบตะกร้าทั้งหมด</button>
+              <button className="clear-cart-btn" onClick={() => clearUserCart(item.User?.id)}>ลบตะกร้าทั้งหมด</button>
             </div>
           ))
         )}
