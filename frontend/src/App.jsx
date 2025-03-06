@@ -19,6 +19,8 @@ import ForgotPasswordPage from "./pages/forgotPasswordPage";
 
 import AdminCartPage from "./pages/admin/adminCartPage";
 import AdminOrderPage from "./pages/admin/adminOrderPage";
+import AdminVegetablePage from "./pages/admin/adminVegetablePage";
+import AdminUserPage from "./pages/admin/adminUserPage";
 
 import Header from "./component/header";
 import BottomNav from "./component/bottomNav";
@@ -77,6 +79,8 @@ function App() {
               <Route path="/admin" element={<AdminRoute><AdminHome /></AdminRoute>} />
               <Route path="/admin/cart-page" element={<AdminRoute><AdminCartPage /></AdminRoute>} />
               <Route path="/admin/orders-page" element={<AdminRoute><AdminOrderPage /></AdminRoute>} />
+              <Route path="/admin/vegies-page" element={<AdminRoute><AdminVegetablePage /></AdminRoute>} />
+              <Route path="/admin/user-page" element={<AdminRoute><AdminUserPage /></AdminRoute>} />
               <Route path="/*" element={<WithNav><HomePage /></WithNav>} />
             </Routes>
           </main>

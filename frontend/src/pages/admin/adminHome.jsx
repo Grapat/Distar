@@ -15,10 +15,10 @@ const AdminHome = () => {
         <button className="admin-btn" onClick={() => navigate("/admin/orders-page")}>
           จัดการคำสั่งซื้อทั้งหมด
         </button>
-        <button className="admin-btn" onClick={() => navigate("/admin/products-overall")}>
+        <button className="admin-btn" onClick={() => navigate("/admin/vegies-page")}>
           จัดการสินค้าทั้งหมด
         </button>
-        <button className="admin-btn" onClick={() => navigate("/admin/users-overall")}>
+        <button className="admin-btn" onClick={() => navigate("/admin/user-page")}>
           จัดการผู้ใช้ทั้งหมด
         </button>
       </div>
