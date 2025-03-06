@@ -1,0 +1,51 @@
+.admin-users-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .user-card {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .user-card h3 {
+    margin: 0;
+  }
+  
+  .user-card p {
+    margin: 5px 0;
+  }
+  
+  .user-card button {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .user-card button:hover {
+    background-color: #c82333;
+  }
+  
