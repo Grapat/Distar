@@ -3,7 +3,10 @@ const { Vegetable } = require("../models");
 // 🥦 ดึงรายการผักทั้งหมด
 const getAllVegetables = async (req, res) => {
   try {
-    const vegetables = await Vegetable.findAll();
+    const vegetables = await Vegetable.findAll({
+      include: [{ model: Category, attributes: ["name"] }], // Include category name
+    });
+
     res.json(vegetables);
   } catch (error) {
     res.status(500).json({ error: error.message });

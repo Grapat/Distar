@@ -7,7 +7,7 @@ const getAllCarts = async (req, res) => {
       attributes: ["cart_id", "quantity"],
       include: [
         { model: Vegetable, attributes: ["name"] },
-        { model: User, attributes: ["customer_id", "name", "email"] } // ✅ แก้ `user` เป็น `User`
+        { model: User, attributes: ["user_id", "name", "email"] } // ✅ แก้ `user` เป็น `User`
       ]
     });
     res.json(carts);
