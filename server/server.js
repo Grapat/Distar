@@ -44,6 +44,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const inventoryRoutes = require("./routes/inventoryRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/vegs", vegRoutes);
@@ -51,6 +52,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/users", userRoutes);
 
 // Error Handling Middleware
 app.use(errorMiddleware);

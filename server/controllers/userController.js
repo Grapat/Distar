@@ -3,7 +3,7 @@ const { User } = require("../models");
 // 📋 Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: ["user_id", "name", "email", "role"] });
+    const users = await User.findAll({ attributes: ["user_id", "name", "email", "user_type"] });
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
