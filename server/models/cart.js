@@ -14,21 +14,21 @@ module.exports = (sequelize, DataTypes) => {
       cart_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       user_id: DataTypes.INTEGER,
       vegetable_id: DataTypes.INTEGER,
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 1
-      }
+        defaultValue: 1,
+      },
     },
     {
       sequelize,
       modelName: "Cart",
       tableName: "Cart",
-      timestamps: false
+      timestamps: false,
     }
   );
 

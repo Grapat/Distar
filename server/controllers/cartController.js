@@ -22,7 +22,7 @@ const getCart = async (req, res) => {
     const { user_id } = req.query;
     const cart = await Cart.findAll({
       where: { user_id },
-      attributes: ["cart_id", "quantity"], // ✅ เปลี่ยน `id` เป็น `cart_id`
+      attributes: ["cart_id", "quantity"],
       include: [{ model: Vegetable, attributes: ["name"] }]
     });
     res.json(cart);
@@ -34,29 +34,25 @@ const getCart = async (req, res) => {
 // ➕ เพิ่มสินค้าเข้าตะกร้า (ตรวจสอบเครดิต)
 const addToCart = async (req, res) => {
   try {
-    const { user_id, vegetable_id, quantity } = req.body; // ✅ เปลี่ยน `product_id` เป็น `vegetable_id`
+    const { user_id, vegetable_id, quantity } = req.body;
 
+    // ✅ Check if this vegetable is already in the user's cart
     const existingItem = await Cart.findOne({ where: { user_id, vegetable_id } });
-    const cartItems = await Cart.findAll({ where: { user_id } });
-
-    let totalCreditsUsed = cartItems.reduce((sum, item) => sum + item.quantity, 0) + quantity;
-
-    if (totalCreditsUsed > 10) {
-      return res.status(400).json({ message: "Not enough credits! Maximum is 10 credits per order." });
-    }
 
     if (existingItem) {
-      existingItem.quantity += quantity;
+      existingItem.quantity += quantity;  // ✅ Increase quantity if exists
       await existingItem.save();
       return res.json(existingItem);
     }
 
+    // ✅ If the vegetable is NOT in the cart, create a new entry
     const newItem = await Cart.create({ user_id, vegetable_id, quantity });
     res.status(201).json(newItem);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // ✏️ อัปเดตจำนวนสินค้าในตะกร้า (เช็คเครดิต)
 const updateCart = async (req, res) => {
