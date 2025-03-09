@@ -1,9 +1,19 @@
 const express = require("express");
-const { getCart, addToCart, updateCart, removeFromCart, getAllCarts, adminCreateCart, clearUserCart } = require("../controllers/cartController");
+const {
+  getCart,
+  addToCart,
+  updateCart,
+  removeFromCart,
+  getAllCarts,
+  adminCreateCart,
+  clearUserCart,
+  getUserCart,
+} = require("../controllers/cartController");
 const router = express.Router();
 
 router.get("/", getCart);
 router.get("/all", getAllCarts); // ✅ Admin ดูตะกร้าทั้งหมด
+router.get("/user/:user_id", getUserCart);
 router.post("/", addToCart);
 router.post("/admin-create", adminCreateCart); // ✅ Admin สร้างตะกร้าให้ผู้ใช้
 router.put("/:id", updateCart);
