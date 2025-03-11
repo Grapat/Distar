@@ -37,16 +37,17 @@ const getUserCart = async (req, res) => {
     const cart = await Cart.findAll({
       where: { user_id },
       attributes: ["cart_id", "vegetable_id", "quantity"],
+      include: [{ model: Vegetable, attributes: ["name"] }],
     });
 
-    res.json(cart.length > 0 ? cart : []); // ✅ Ensure always returns JSON (empty array if no cart)
+    res.json(cart.length > 0 ? cart : []);
   } catch (error) {
     console.error("Error fetching user cart:", error);
-    res.status(500).json({ error: error.message }); // ✅ Return JSON error instead of HTML
+    res.status(500).json({ error: error.message });
   }
 };
 
-// ➕ เพิ่มสินค้าเข้าตะกร้า (ตรวจสอบเครดิต)
+// ➕ เพิ่มสินค้าเข้าตะกร้า
 const addToCart = async (req, res) => {
   try {
     const { user_id, vegetable_id, quantity } = req.body;
@@ -70,7 +71,7 @@ const addToCart = async (req, res) => {
   }
 };
 
-// ✏️ อัปเดตจำนวนสินค้าในตะกร้า (เช็คเครดิต)
+// ✏️ อัปเดตจำนวนสินค้าในตะกร้า
 const updateCart = async (req, res) => {
   try {
     const { id } = req.params;
@@ -104,39 +105,32 @@ const updateCart = async (req, res) => {
 // 🛒 เพิ่มสินค้าเข้าตะกร้าผ่าน Admin
 const adminCreateCart = async (req, res) => {
   try {
-    const { user_id, vegetable_id, quantity } = req.body; // ✅ เปลี่ยน `product_id` เป็น `vegetable_id`
-    console.log("Received Data:", { user_id, vegetable_id, quantity });
+    const { user_id, vegetable_id, quantity } = req.body;
+
+    // ✅ Validate input
+    if (!user_id || !vegetable_id || !quantity || quantity < 1) {
+      return res.status(400).json({ message: "Invalid input data" });
+    }
 
     const user = await User.findByPk(user_id);
     if (!user) return res.status(404).json({ message: "User not found." });
 
-    console.log("User Found:", user.name);
-
-    const existingItem = await Cart.findOne({
-      where: { user_id, vegetable_id },
-    });
-
-    console.log("Existing Cart Item:", existingItem);
+    const existingItem = await Cart.findOne({ where: { user_id, vegetable_id } });
 
     const cartItems = await Cart.findAll({ where: { user_id } });
-    let totalCreditsUsed =
-      cartItems.reduce((sum, item) => sum + item.quantity, 0) + quantity;
+    let totalCreditsUsed = cartItems.reduce((sum, item) => sum + item.quantity, 0) + quantity;
 
     if (totalCreditsUsed > 10) {
-      return res
-        .status(400)
-        .json({
-          message: "Not enough credits! Maximum is 10 credits per order.",
-        });
+      return res.status(400).json({ message: "Not enough credits! Maximum is 10 per order." });
     }
-
+    
     if (existingItem) {
       existingItem.quantity += quantity;
       await existingItem.save();
       return res.json(existingItem);
     }
 
-    const newCart = await Cart.create({ user_id, vegetable_id, quantity });
+    const newCart = await Cart.create({ user_id, vegetable_id, quantity});
     res.status(201).json(newCart);
   } catch (error) {
     console.error("Error in adminCreateCart:", error);
