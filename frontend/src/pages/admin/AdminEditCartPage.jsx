@@ -41,7 +41,7 @@ const AdminEditCartPage = () => {
       );
 
       alert("✅ อัปเดตจำนวนสำเร็จ!");
-      navigate("/admin-cart");
+      navigate("/admin/cart-page");
     } catch (error) {
       console.error("Error updating cart:", error);
     }
@@ -73,7 +73,7 @@ const AdminEditCartPage = () => {
       )}
 
       <button onClick={updateCartItems}>💾 บันทึก</button>
-      <button onClick={() => navigate("/admin-cart")}>❌ ยกเลิก</button>
+      <button onClick={() => navigate("/admin/cart-page")}>❌ ยกเลิก</button>
     </div>
   );
 };
