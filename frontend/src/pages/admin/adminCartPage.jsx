@@ -120,6 +120,38 @@ const AdminCartPage = () => {
     return grouped;
   }, {});
 
+  const placeOrder = async (user_id) => {
+    if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อสินค้าให้ผู้ใช้นี้?")) return;
+  
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:4005/api/order/place/${user_id}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      // ✅ อ่านข้อความมาเป็น string ก่อน แล้วค่อยพยายาม parse เป็น JSON
+      const responseText = await response.text();
+      let data;
+      
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("❌ ไม่สามารถแปลง JSON:", responseText);
+        return alert("❌ เกิดข้อผิดพลาดจากฝั่งเซิร์ฟเวอร์ (response ไม่ใช่ JSON)");
+      }
+      
+      if (!response.ok) {
+        console.warn("🔍 Server Message:", data.message);
+        return alert(`❌ สั่งซื้อไม่สำเร็จ: ${data.message || "เกิดข้อผิดพลาด"}`);
+      }
+      
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์!");
+    }
+  };
+  
   return (
     <div className="admin-cart">
       <h2>จัดการตะกร้าของผู้ใช้</h2>
@@ -185,6 +217,10 @@ const AdminCartPage = () => {
 
             <button onClick={() => deleteUserCart(user.user_id)}>
               🗑️ ลบตะกร้าทั้งหมด
+            </button>
+            
+            <button onClick={() => placeOrder(user.user_id)}>
+              📦 สั่งซื้อสินค้า
             </button>
           </div>
         ))}

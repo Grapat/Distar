@@ -1,32 +1,23 @@
-const { Order, Order_Item, Vegetable, User } = require("../models");
+const { Cart, Order, Order_Item, Vegetable, User } = require("../models");
 
 // 📦 สร้างคำสั่งซื้อใหม่โดยใช้เครดิต
 const createOrder = async (req, res) => {
   try {
-    const { user_id, items } = req.body;
+    const { user_id } = req.params;
 
-    let totalCreditsUsed = 10;
-    const orderItems = [];
+    // ✅ 1. ดึงรายการสินค้าในตะกร้าของผู้ใช้
+    const cartItems = await Cart.findAll({ where: { user_id } });
+    console.log("Cart Items:", cartItems); // Log cart items for debugging
 
-    for (const item of items) {
-      totalCreditsUsed -= item.quantity; // ✅ 1 ชิ้นใช้ 1 เครดิต
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(400).json({ message: "ตะกร้าว่าง ไม่สามารถสั่งซื้อได้" });
     }
 
-    // ❌ เช็คว่าเครดิตเพียงพอหรือไม่
-    if (totalCreditsUsed < 1) {
-      return res
-        .status(400)
-        .json({ message: "Not enough credits! Each order has 10 credits." });
-    }
+    // ✅ 2. สร้าง Order ใหม่
+    const newOrder = await Order.create({ user_id });
 
-    // ✅ สร้างคำสั่งซื้อพร้อมเครดิตที่เหลืออยู่
-    const newOrder = await Order.create({
-      user_id,
-      credits_remaining: 10 - totalCreditsUsed,
-    });
-
-    // ✅ บันทึกสินค้าในคำสั่งซื้อ
-    for (const item of items) {
+    // ✅ 3. บันทึกรายการ Order_Item
+    for (const item of cartItems) {
       await Order_Item.create({
         order_id: newOrder.order_id,
         vegetable_id: item.vegetable_id,
@@ -34,10 +25,15 @@ const createOrder = async (req, res) => {
       });
     }
 
-    res
-      .status(201)
-      .json({ message: "Order created successfully!", order: newOrder });
+    // ✅ 4. ล้างตะกร้า
+    await Cart.destroy({ where: { user_id } });
+
+    res.status(201).json({
+      message: "📦 สร้างออเดอร์สำเร็จ!",
+      order_id: newOrder.order_id,
+    });
   } catch (error) {
+    console.error("❌ Error creating order:", error);
     res.status(400).json({ error: error.message });
   }
 };

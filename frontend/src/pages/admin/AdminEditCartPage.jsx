@@ -25,8 +25,14 @@ const AdminEditCartPage = () => {
 
   const updateCartItems = async () => {
     try {
+      const totalCredits = cartItems.reduce((sum, item) => sum + Number(item.quantity), 0);
+      if (totalCredits > 10) {
+        alert("❌ รวมเครดิตเกิน 10 หน่วย! กรุณาลดจำนวนสินค้า");
+        return; // ❌ หยุดไม่ให้ไป fetch ถ้าเกิน
+      }
+  
       const token = localStorage.getItem("token");
-
+  
       await Promise.all(
         cartItems.map(async (item) => {
           await fetch(`http://localhost:4005/api/cart/${item.cart_id}`, {
@@ -39,13 +45,15 @@ const AdminEditCartPage = () => {
           });
         })
       );
-
+  
       alert("✅ อัปเดตจำนวนสำเร็จ!");
       navigate("/admin/cart-page");
     } catch (error) {
       console.error("Error updating cart:", error);
+      alert("❌ เกิดข้อผิดพลาดในการอัปเดตตะกร้า");
     }
   };
+  
 
   return (
     <div className="admin-edit-cart">

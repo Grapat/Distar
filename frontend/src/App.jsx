@@ -17,6 +17,7 @@ import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import ForgotPasswordPage from "./pages/forgotPasswordPage";
 
+import AdminNav from "./component/adminNav"; // Import AdminNav component
 import AdminCartPage from "./pages/admin/adminCartPage";
 import AdminOrderPage from "./pages/admin/adminOrderPage";
 import AdminVegetablePage from "./pages/admin/adminVegetablePage";
@@ -77,11 +78,11 @@ function App() {
               } />
 
               {/* Admin Route */}
-              <Route path="/admin" element={<AdminRoute><AdminHome /></AdminRoute>} />
-              <Route path="/admin/cart-page" element={<AdminRoute><AdminCartPage /></AdminRoute>} />
-              <Route path="/admin/orders-page" element={<AdminRoute><AdminOrderPage /></AdminRoute>} />
-              <Route path="/admin/vegies-page" element={<AdminRoute><AdminVegetablePage /></AdminRoute>} />
-              <Route path="/admin/user-page" element={<AdminRoute><AdminUserPage /></AdminRoute>} />
+              <Route path="/admin" element={<AdminRoute><AdminNav /><AdminHome /></AdminRoute>} />
+              <Route path="/admin/cart-page" element={<AdminRoute><AdminNav /><AdminCartPage /></AdminRoute>} />
+              <Route path="/admin/orders-page" element={<AdminRoute><AdminNav /><AdminOrderPage /></AdminRoute>} />
+              <Route path="/admin/vegies-page" element={<AdminRoute><AdminNav /><AdminVegetablePage /></AdminRoute>} />
+              <Route path="/admin/user-page" element={<AdminRoute><AdminNav /><AdminUserPage /></AdminRoute>} />
               <Route path="/admin-edit-cart/:user_id" element={<AdminEditCartPage />} />
               <Route path="/*" element={<WithNav><HomePage /></WithNav>} />
             </Routes>

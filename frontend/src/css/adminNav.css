@@ -1,0 +1,65 @@
+.bottom-nav {
+  display: flex;
+  justify-content: space-between; /* Distribute items evenly */
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  background: white;
+  padding: 1.2vh 2vw; /* Responsive padding */
+  box-shadow: 0 -0.2vh 0.5vh rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensures it's always on top */
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* Make items take equal space */
+  text-align: center;
+  color: #333;
+  font-size: 1.2vw; /* Responsive font size */
+  cursor: pointer;
+  padding: 1.2vh 0;
+}
+
+.nav-item img {
+  width: 2.5vw; /* Adjust icon size dynamically */
+  height: 2.5vw;
+  margin-bottom: 0.4vh;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .bottom-nav {
+      padding: 1vh 1.5vw; /* Adjust padding for smaller screens */
+  }
+
+  .nav-item {
+      font-size: 1rem; /* Use rem for readability */
+      padding: 1vh 0;
+  }
+
+  .nav-item img {
+      width: 2rem;
+      height: 2rem; /* Scale down icons */
+  }
+}
+
+@media (max-width: 480px) {
+  .bottom-nav {
+      padding: 0.8vh 1vw; /* Further reduce padding */
+  }
+
+  .nav-item {
+      font-size: 0.9rem; /* Reduce text size */
+      padding: 0.8vh 0;
+  }
+
+  .nav-item img {
+      width: 1.8rem;
+      height: 1.8rem; /* Adjust icon size */
+  }
+}

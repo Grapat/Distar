@@ -9,7 +9,7 @@ const AdminOrderPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:4005/api/orders");
+        const response = await fetch("http://localhost:4005/api/order");
         const data = await response.json();
         setOrders(data);
       } catch (error) {
@@ -22,7 +22,7 @@ const AdminOrderPage = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await fetch(`http://localhost:4005/api/orders/${orderId}`, {
+      await fetch(`http://localhost:4005/api/order/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
