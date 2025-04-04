@@ -17,7 +17,7 @@ import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import ForgotPasswordPage from "./pages/forgotPasswordPage";
 
-import AdminNav from "./component/adminNav"; // Import AdminNav component
+import AdminNav from "./component/adminNav";
 import AdminCartPage from "./pages/admin/adminCartPage";
 import AdminOrderPage from "./pages/admin/adminOrderPage";
 import AdminVegetablePage from "./pages/admin/adminVegetablePage";
