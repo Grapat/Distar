@@ -1,15 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../css/HomePage.css";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   return (
     <div className="home-container">
       <div className="banner-carousel">
         <img src="/banner.png" alt="Banner" className="banner-image" />
         <div className="banner-text">
           <h2>ให้เราดูแลผัก ให้ผักดูแลคุณ</h2>
-          <button className="order-btn">สั่งเลย!</button>
+          <button className="order-btn" onClick={() => navigate("/veg")}>สั่งเลย!</button>
         </div>
       </div>
       <div className="product-section">

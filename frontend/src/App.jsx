@@ -84,7 +84,7 @@ function App() {
               <Route path="/admin/vegies-page" element={<AdminRoute><AdminNav /><AdminVegetablePage /></AdminRoute>} />
               <Route path="/admin/user-page" element={<AdminRoute><AdminNav /><AdminUserPage /></AdminRoute>} />
               <Route path="/admin-edit-cart/:user_id" element={<AdminEditCartPage />} />
-              <Route path="/*" element={<WithNav><HomePage /></WithNav>} />
+              <Route path="/*" element={<WithNav><LoginPage /></WithNav>} />
             </Routes>
           </main>
         </Router>

@@ -58,16 +58,24 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user.user_id, email: user.email, userType: user.user_type },
+      {
+        user_id: user.user_id,  // 👈 ชื่อตัวแปรเป็น camelCase
+        email: user.email,
+        userType: user.user_type
+      },
       process.env.JWT_SECRET,
-      { expiresIn: "7h" } // Token expires in 7 hours
+      { expiresIn: "7h" }
     );
 
     // ✅ Log what we are sending back
     const responseData = {
       message: "Login successful!",
       token,
-      user: { userType: user.user_type, email: user.email },
+      user: {
+        userType: user.user_type,
+        email: user.email,
+        user_id: user.user_id,
+      },
     };
     console.log("Login Response:", responseData);
 
