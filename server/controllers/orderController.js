@@ -125,9 +125,51 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+// 📋 ดึงคำสั่งซื้อสถานะ "Arrived"
+const getArrivedOrders = async (req, res) => {
+  try {
+    const orders = await Order.findAll({
+      where: { status: 'arrived' },
+      attributes: ["order_id", "status", "created_at"],
+    });
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        status: o.status,
+        date: o.created_at,
+        total: "N/A" // เพิ่มยอดรวมได้ถ้ามีข้อมูล
+      }))
+    );
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 📋 ดึงคำสั่งซื้อสถานะ "success"
+const getSuccessOrders = async (req, res) => {
+  try {
+    const orders = await Order.findAll({
+      where: { status: 'success' },
+      attributes: ["order_id", "status", "created_at"],
+    });
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        status: o.status,
+        date: o.created_at,
+        total: "N/A"
+      }))
+    );
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
+  getArrivedOrders,
+  getSuccessOrders,
   getOrderById,
   updateOrderStatus,
   deleteOrder,

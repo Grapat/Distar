@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext"; // ✅ ใช้ Auth
+import { useAuth } from "../context/AuthContext";
 import "../css/vegetable.css";
 
 export default function Vegetable() {
-  const { user } = useAuth(); // ✅ ดึง user_id
+  const { user } = useAuth();
   const [vegetables, setVegetables] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,8 @@ export default function Vegetable() {
 
         const data = await response.json();
         setVegetables(data);
-        // ✅ กำหนดจำนวนเริ่มต้นของแต่ละผักเป็น 1
+
+        // ตั้งค่าเริ่มต้นของจำนวนผักแต่ละชนิด = 1
         const defaultQty = {};
         data.forEach((veg) => {
           defaultQty[veg.vegetable_id] = 1;
@@ -42,16 +43,33 @@ export default function Vegetable() {
 
   const handleAddToCart = async (vegetable_id) => {
     try {
+      // ✅ 1. เช็คยอดรวมสินค้าจาก backend ก่อนเพิ่ม
+      const summaryRes = await fetch(`http://localhost:4005/api/cart/summary/${user.user_id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const summaryData = await summaryRes.json();
+      const totalQuantity = summaryData.totalQuantity || 0;
+      const newQuantity = quantities[vegetable_id];
+
+      if (totalQuantity + newQuantity > 10) {
+        alert("ไม่สามารถเพิ่มได้ เพราะจะเกิน 10 รายการในตะกร้าค่ะ 🚫");
+        return;
+      }
+
+      // ✅ 2. เพิ่มผักเข้า cart ได้
       const response = await fetch("http://localhost:4005/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // ถ้ามี auth
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           user_id: user.user_id,
           vegetable_id,
-          quantity: quantities[vegetable_id],
+          quantity: newQuantity,
         }),
       });
 
@@ -59,6 +77,11 @@ export default function Vegetable() {
 
       if (response.ok) {
         alert("เพิ่มเข้าตะกร้าแล้วค่ะ ✅");
+        // ✅ 3. รีเซตจำนวนกลับเป็น 1
+        setQuantities((prev) => ({
+          ...prev,
+          [vegetable_id]: 1,
+        }));
       } else {
         alert(result.message || "ไม่สามารถเพิ่มเข้าตะกร้าได้ค่ะ");
       }
@@ -76,21 +99,21 @@ export default function Vegetable() {
       <h1 className="title">รายการผัก</h1>
       <div className="grid">
         {vegetables.map((veg) => (
-            <div key={veg.id} className="card">
-              <img src={veg.image} alt={veg.name} className="veg-image" />
-              <div className="info">
-                <p className="veg-name">{veg.name}</p>
-                <div className="quantity-control">
-                  <button onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
-                  <span>{quantities[veg.vegetable_id]}</span>
-                  <button onClick={() => handleQuantityChange(veg.vegetable_id, 1)}>+</button>
-                </div>
-                <button className="add-btn" onClick={() => handleAddToCart(veg.id)}>
-                  🛒 เพิ่มเข้าตะกร้า
-                </button>
+          <div key={veg.vegetable_id} className="card">
+            <img src={veg.image} alt={veg.name} className="veg-image" />
+            <div className="info">
+              <p className="veg-name">{veg.name}</p>
+              <div className="quantity-control">
+                <button onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
+                <span>{quantities[veg.vegetable_id]}</span>
+                <button onClick={() => handleQuantityChange(veg.vegetable_id, 1)}>+</button>
               </div>
+              <button className="add-btn" onClick={() => handleAddToCart(veg.vegetable_id)}>
+                🛒 เพิ่มเข้าตะกร้า
+              </button>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );

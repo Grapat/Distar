@@ -4,7 +4,9 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
+      // เชื่อมกับ User
       Order.belongsTo(models.User, { foreignKey: "user_id" });
+      // เชื่อมกับ Order_Item
       Order.hasMany(models.Order_Item, { foreignKey: "order_id", as: "Order_Items" });
     }
   }
@@ -16,11 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      user_id: DataTypes.INTEGER,
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       credits_remaining: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 10 // ✅ แต่ละออเดอร์เริ่มที่ 10 เครดิต
+        defaultValue: 10
       },
       status: {
         type: DataTypes.ENUM("pending", "shipped", "delivered"),
@@ -32,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Order",
       tableName: "Orders",
-      timestamps: false,
+      timestamps: false, // ถ้าต้องการ createdAt ก็เปลี่ยนเป็น true ได้
     }
   );
 

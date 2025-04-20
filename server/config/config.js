@@ -9,15 +9,15 @@ console.log("DB_NAME:", process.env.DB_NAME);
 
 module.exports = {
   development: {
-    username: process.env.DB_USERNAME || "postgres",
-    password: process.env.DB_PASSWORD || "password",
-    database: process.env.DB_NAME || "distart_db",
-    host: process.env.DB_HOST || "localhost",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "postgres",
     logging: false,
-    jwtSecret: process.env.JWT_SECRET || "defaultsecret",  // ✅ เพิ่ม JWT_SECRET
-    jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1h"       // ✅ เพิ่ม JWT_EXPIRES_IN
+    jwtSecret: process.env.JWT_SECRET, // ✅ เพิ่ม JWT_SECRET
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN // ✅ เพิ่ม JWT_EXPIRES_IN
   },
   test: {
     username: process.env.DB_USERNAME,

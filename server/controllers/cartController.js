@@ -115,22 +115,27 @@ const adminCreateCart = async (req, res) => {
     const user = await User.findByPk(user_id);
     if (!user) return res.status(404).json({ message: "User not found." });
 
-    const existingItem = await Cart.findOne({ where: { user_id, vegetable_id } });
+    const existingItem = await Cart.findOne({
+      where: { user_id, vegetable_id },
+    });
 
     const cartItems = await Cart.findAll({ where: { user_id } });
-    let totalCreditsUsed = cartItems.reduce((sum, item) => sum + item.quantity, 0) + quantity;
+    let totalCreditsUsed =
+      cartItems.reduce((sum, item) => sum + item.quantity, 0) + quantity;
 
     if (totalCreditsUsed > 10) {
-      return res.status(400).json({ message: "Not enough credits! Maximum is 10 per order." });
+      return res
+        .status(400)
+        .json({ message: "Not enough credits! Maximum is 10 per order." });
     }
-    
+
     if (existingItem) {
       existingItem.quantity += quantity;
       await existingItem.save();
       return res.json(existingItem);
     }
 
-    const newCart = await Cart.create({ user_id, vegetable_id, quantity});
+    const newCart = await Cart.create({ user_id, vegetable_id, quantity });
     res.status(201).json(newCart);
   } catch (error) {
     console.error("Error in adminCreateCart:", error);
@@ -164,6 +169,21 @@ const clearUserCart = async (req, res) => {
   }
 };
 
+// 🧮 ดึงสรุปรวมจำนวนสินค้าทั้งหมดในตะกร้าของผู้ใช้
+const getCartSummary = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    const cartItems = await Cart.findAll({ where: { user_id } });
+    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    res.json({ totalQuantity });
+  } catch (error) {
+    console.error("Error fetching cart summary:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getCart,
   addToCart,
@@ -173,4 +193,5 @@ module.exports = {
   removeFromCart,
   clearUserCart,
   getUserCart,
+  getCartSummary,
 };
