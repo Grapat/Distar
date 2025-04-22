@@ -14,15 +14,10 @@ module.exports = {
         allowNull: false,
         references: {
           model: "Users", // ✅ ชื่อตารางต้องตรง
-          key: "id"
+          key: "customer_id"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
-      },
-      credits_remaining: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 10
       },
       status: {
         type: Sequelize.ENUM("pending", "shipped", "delivered"),

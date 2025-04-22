@@ -1,22 +1,20 @@
 const { Cart, Order, Order_Item, Vegetable, User } = require("../models");
 
-// 📦 สร้างคำสั่งซื้อใหม่โดยใช้เครดิต
+// 📦 สร้างคำสั่งซื้อใหม่โดยใช้ผักจากตะกร้า
 const createOrder = async (req, res) => {
   try {
     const { user_id } = req.params;
 
-    // ✅ 1. ดึงรายการสินค้าในตะกร้าของผู้ใช้
+    // ✅ 1. ดึงสินค้าในตะกร้าของผู้ใช้
     const cartItems = await Cart.findAll({ where: { user_id } });
-    console.log("Cart Items:", cartItems); // Log cart items for debugging
-
     if (!cartItems || cartItems.length === 0) {
       return res.status(400).json({ message: "ตะกร้าว่าง ไม่สามารถสั่งซื้อได้" });
     }
 
-    // ✅ 2. สร้าง Order ใหม่
+    // ✅ 2. สร้าง Order
     const newOrder = await Order.create({ user_id });
 
-    // ✅ 3. บันทึกรายการ Order_Item
+    // ✅ 3. สร้างรายการ Order_Item
     for (const item of cartItems) {
       await Order_Item.create({
         order_id: newOrder.order_id,
@@ -42,13 +40,7 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      attributes: [
-        "order_id",
-        "user_id",
-        "status",
-        "created_at",
-        "credits_remaining",
-      ], // ✅ Use `created_at`
+      attributes: ["order_id", "user_id", "status"],
       include: [
         { model: User, attributes: ["name", "email"] },
         {
@@ -64,7 +56,7 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-// 📦 ดึงคำสั่งซื้อโดย `id`
+// 📋 ดึงคำสั่งซื้อรายตัว
 const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -85,15 +77,14 @@ const getOrderById = async (req, res) => {
       order_id: order.order_id,
       user: order.User,
       status: order.status,
-      credits_remaining: order.credits_remaining,
-      items: order.Order_Items, // ✅ Use correct alias here
+      items: order.Order_Items,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// 🔄 อัปเดตสถานะคำสั่งซื้อ
+// 🔄 อัปเดตสถานะ
 const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,7 +96,7 @@ const updateOrderStatus = async (req, res) => {
     order.status = status;
     await order.save();
 
-    res.json({ message: "Order status updated!", order });
+    res.json({ message: "อัปเดตสถานะสำเร็จ!", order });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -119,25 +110,24 @@ const deleteOrder = async (req, res) => {
     if (!order) return res.status(404).json({ message: "Order not found" });
 
     await order.destroy();
-    res.json({ message: "Order deleted successfully" });
+    res.json({ message: "ลบคำสั่งซื้อแล้ว" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// 📋 ดึงคำสั่งซื้อสถานะ "Arrived"
+// 📋 ดึง order ที่ status = 'arrived'
 const getArrivedOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { status: 'arrived' },
-      attributes: ["order_id", "status", "created_at"],
+      attributes: ["order_id", "status"],
     });
     res.json(
       orders.map((o) => ({
         id: o.order_id,
         status: o.status,
-        date: o.created_at,
-        total: "N/A" // เพิ่มยอดรวมได้ถ้ามีข้อมูล
+        date: null, // ไม่มี timestamp แล้ว
       }))
     );
   } catch (error) {
@@ -145,19 +135,37 @@ const getArrivedOrders = async (req, res) => {
   }
 };
 
-// 📋 ดึงคำสั่งซื้อสถานะ "success"
+// 📋 ดึง order ที่ status = 'success'
 const getSuccessOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { status: 'success' },
-      attributes: ["order_id", "status", "created_at"],
+      attributes: ["order_id", "status"],
     });
     res.json(
       orders.map((o) => ({
         id: o.order_id,
         status: o.status,
-        date: o.created_at,
-        total: "N/A"
+        date: null,
+      }))
+    );
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 📋 ดึง order ที่ status = 'pending'
+const getPendingOrders = async (req, res) => {
+  try {
+    const orders = await Order.findAll({
+      where: { status: 'pending' },
+      attributes: ["order_id", "status"],
+    });
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        status: o.status,
+        date: null, // ไม่มี timestamp แล้ว
       }))
     );
   } catch (error) {
@@ -168,9 +176,10 @@ const getSuccessOrders = async (req, res) => {
 module.exports = {
   createOrder,
   getAllOrders,
-  getArrivedOrders,
-  getSuccessOrders,
   getOrderById,
   updateOrderStatus,
   deleteOrder,
+  getArrivedOrders,
+  getSuccessOrders,
+  getPendingOrders,
 };

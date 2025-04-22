@@ -22,11 +22,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      credits_remaining: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 10
-      },
       status: {
         type: DataTypes.ENUM("pending", "shipped", "delivered"),
         allowNull: false,
