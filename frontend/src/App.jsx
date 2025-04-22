@@ -8,7 +8,7 @@ import Vegetable from "./pages/vegetable";
 import VegDetail from "./pages/vegDetail";
 import PopularVegetables from "./pages/popularVegetables";
 import OrderNav from "./pages/orderNav";
-import OrderDeliver from "./pages/orderDeliver";
+import OrderPending from "./pages/orderPending";
 import OrderArrived from "./pages/orderArrived";
 import OrderSuccess from "./pages/orderSuccess";
 import Cart from "./pages/cart";
@@ -70,7 +70,7 @@ function App() {
                 <WithNav>
                   <OrderNav />
                   <Routes>
-                    <Route path="deliver" element={<OrderDeliver status="deliver" />} />
+                    <Route path="Pending" element={<OrderPending status="Pending" />} />
                     <Route path="arrived" element={<OrderArrived status="arrived" />} />
                     <Route path="success" element={<OrderSuccess status="success" />} />
                   </Routes>

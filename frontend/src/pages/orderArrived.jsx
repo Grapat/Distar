@@ -32,7 +32,6 @@ const OrderArrived = () => {
                 <h3>คำสั่งซื้อ #{order.id}</h3>
                 <p>สถานะ: <span className={`status ${order.status}`}>{order.status}</span></p>
                 <p>วันที่สั่งซื้อ: {order.date}</p>
-                <p>ยอดรวม: {order.total} บาท</p>
               </div>
             </li>
           ))}

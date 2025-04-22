@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import "../../css/adminOrderPage.css";
 
 const AdminOrderPage = () => {
   const [orders, setOrders] = useState([]);
-  const { user } = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -49,7 +47,7 @@ const AdminOrderPage = () => {
           orders.map((order) => (
             <div key={order.order_id} className="order-card">
               <h3>Order ID: {order.order_id}</h3>
-              <p>Customer: {order.user?.name || "Unknown"}</p>
+              <p>Customer: {order.User?.name || "Unknown"}</p>
               <p>Status: {order.status}</p>
               <label htmlFor={`status-${order.order_id}`}>Change Status:</label>
               <select

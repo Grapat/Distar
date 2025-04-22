@@ -130,27 +130,29 @@ const AdminCartPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      // ✅ อ่านข้อความมาเป็น string ก่อน แล้วค่อยพยายาม parse เป็น JSON
       const responseText = await response.text();
       let data;
-      
       try {
         data = JSON.parse(responseText);
       } catch (parseError) {
         console.error("❌ ไม่สามารถแปลง JSON:", responseText);
         return alert("❌ เกิดข้อผิดพลาดจากฝั่งเซิร์ฟเวอร์ (response ไม่ใช่ JSON)");
       }
-      
+  
       if (!response.ok) {
         console.warn("🔍 Server Message:", data.message);
         return alert(`❌ สั่งซื้อไม่สำเร็จ: ${data.message || "เกิดข้อผิดพลาด"}`);
       }
-      
+  
+      alert(`✅ สั่งซื้อสำเร็จ! รหัสออเดอร์: ${data.order_id}`);
+      fetchCartItems(); // 👈 โหลดข้อมูลตะกร้าใหม่
+  
     } catch (error) {
       console.error("Error placing order:", error);
       alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์!");
     }
   };
+  
   
   return (
     <div className="admin-cart">
