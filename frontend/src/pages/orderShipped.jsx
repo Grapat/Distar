@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext"; // ✅ ดึงข้อมูลผู้ใช้จาก context
 import "../css/order.css";
 
-const OrderPending = () => {
+const OrderShipped = ({ orderId }) => {
   const [orders, setOrders] = useState([]);
   const { user } = useAuth(); // ✅ ต้องใช้ AuthProvider ครอบ component นี้ไว้
   const user_id = user?.user_id; // ตรวจสอบว่า user พร้อมก่อนใช้งาน
@@ -10,10 +10,9 @@ const OrderPending = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        console.log("Fetching pending orders for user:", user_id); // 🔍 ตรวจสอบ user_id
         if (!user_id) return;
 
-        const response = await fetch(`http://localhost:4005/api/order/pending/user/${user_id}`);
+        const response = await fetch(`http://localhost:4005/api/order/arrived/user/${user_id}`);
         const data = await response.json();
         setOrders(data);
       } catch (error) {
@@ -27,7 +26,7 @@ const OrderPending = () => {
   return (
     <div className="order-container">
       <div className="order-content">
-        <h2>คำสั่งซื้อที่ยังไม่จัดส่ง</h2>
+        <h2>จัดส่งแล้ว</h2>
         {orders.length === 0 ? (
           <p className="no-orders">ไม่มีคำสั่งซื้อในขณะนี้</p>
         ) : (
@@ -54,4 +53,4 @@ const OrderPending = () => {
   );
 };
 
-export default OrderPending;
+export default OrderShipped;

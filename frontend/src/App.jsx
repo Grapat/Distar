@@ -7,10 +7,12 @@ import AdminHome from "./pages/admin/adminHome";
 import Vegetable from "./pages/vegetable";
 import VegDetail from "./pages/vegDetail";
 import PopularVegetables from "./pages/popularVegetables";
-import OrderNav from "./pages/orderNav";
+
+import OrderNav from "./component/orderNav";
 import OrderPending from "./pages/orderPending";
-import OrderArrived from "./pages/orderArrived";
-import OrderSuccess from "./pages/orderSuccess";
+import OrderSuccess from "./pages/orderDelivered";
+import OrderShipped from "./pages/orderShipped";
+
 import Cart from "./pages/cart";
 import AccountPage from "./pages/accountPage";
 import LoginPage from "./pages/loginPage";
@@ -36,42 +38,34 @@ const WithNav = ({ children }) => (
   </>
 );
 
-const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return user.userType === "admin" ? <Navigate to="/admin" replace /> : <WithNav>{children}</WithNav>;
-};
-
 function App() {
   return (
+    <Router>
     <AuthProvider>
       <div className="App">
-        <Router>
+
           <Header />
           <main>
             <Routes>
-              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+              <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/home" element={<WithNav><HomePage /></WithNav>} />
               <Route path="/veg" element={<WithNav><Vegetable /></WithNav>} />
               <Route path="/veg/:id" element={<WithNav><VegDetail /></WithNav>} />
               <Route path="/popular" element={<WithNav><PopularVegetables /></WithNav>} />
               <Route path="/cart" element={<WithNav><Cart /></WithNav>} />
               <Route path="/acc" element={<WithNav><AccountPage /></WithNav>} />
-              <Route path="/login" element={<LoginPage />} />
-              
+
               {/* Group Order Pages under one Route */}
               <Route path="/orders/*" element={
                 <WithNav>
                   <OrderNav />
                   <Routes>
-                    <Route path="Pending" element={<OrderPending status="Pending" />} />
-                    <Route path="arrived" element={<OrderArrived status="arrived" />} />
+                    <Route path="pending" element={<OrderPending status="Pending" />} />
+                    <Route path="shipped" element={<OrderShipped status="Shipped" />} />
                     <Route path="success" element={<OrderSuccess status="success" />} />
                   </Routes>
                 </WithNav>
@@ -83,13 +77,15 @@ function App() {
               <Route path="/admin/orders-page" element={<AdminRoute><AdminNav /><AdminOrderPage /></AdminRoute>} />
               <Route path="/admin/vegies-page" element={<AdminRoute><AdminNav /><AdminVegetablePage /></AdminRoute>} />
               <Route path="/admin/user-page" element={<AdminRoute><AdminNav /><AdminUserPage /></AdminRoute>} />
-              <Route path="/admin-edit-cart/:user_id" element={<AdminEditCartPage />} />
-              <Route path="/*" element={<WithNav><LoginPage /></WithNav>} />
+              <Route path="/admin-edit-cart/:user_id" element={<AdminRoute><AdminEditCartPage /></AdminRoute>} />
+
+              <Route path="/*" element={<LoginPage />} />
             </Routes>
           </main>
-        </Router>
+
       </div>
     </AuthProvider>
+    </Router>
   );
 }
 

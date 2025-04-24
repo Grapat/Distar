@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Order",
       tableName: "Orders",
-      timestamps: false, // ถ้าต้องการ createdAt ก็เปลี่ยนเป็น true ได้
+      timestamps: true,
     }
   );
 

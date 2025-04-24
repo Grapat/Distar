@@ -5,15 +5,15 @@ import "../css/orderNav.css";
 const OrderNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState("/orders/deliver");
+  const [activeTab, setActiveTab] = useState("/orders/Pending");
 
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location.pathname]);
 
   const tabs = [
-    { name: "ที่ต้องจัดส่ง", path: "/orders/deliver" },
-    { name: "ที่ต้องได้รับ", path: "/orders/arrived" },
+    { name: "ที่ต้องจัดส่ง", path: "/orders/Pending" },
+    { name: "ที่ต้องได้รับ", path: "/orders/Shipped" },
     { name: "สำเร็จ", path: "/orders/success" }
   ];
 

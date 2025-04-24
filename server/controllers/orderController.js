@@ -120,16 +120,54 @@ const deleteOrder = async (req, res) => {
 const getArrivedOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      where: { status: 'arrived' },
-      attributes: ["order_id", "status"],
+      where: { status: 'shipped' },
+      attributes: ["order_id", "status", "createdAt"],
+      include: [
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
     });
-    res.json(
-      orders.map((o) => ({
-        id: o.order_id,
-        status: o.status,
-        date: null, // ไม่มี timestamp แล้ว
-      }))
-    );
+
+    res.json(orders.map((o) => ({
+      id: o.order_id,
+      status: o.status,
+      date: o.createdAt,
+      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+      items: o.Order_Items,
+    })));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ ดึง order ที่ status = 'shipped' ตาม user_id
+const getArrivedOrdersByUserId = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const orders = await Order.findAll({
+      where: { user_id, status: 'shipped' },
+      attributes: ["order_id", "status", "createdAt"],
+      include: [
+        { model: User, attributes: ["name", "email"] },
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
+    });
+
+    res.json(orders.map((o) => ({
+      id: o.order_id,
+      user: o.User,
+      status: o.status,
+      date: o.createdAt,
+      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+      items: o.Order_Items,
+    })));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -139,16 +177,54 @@ const getArrivedOrders = async (req, res) => {
 const getSuccessOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      where: { status: 'success' },
-      attributes: ["order_id", "status"],
+      where: { status: 'delivered' },
+      attributes: ["order_id", "status", "createdAt"],
+      include: [
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
     });
-    res.json(
-      orders.map((o) => ({
-        id: o.order_id,
-        status: o.status,
-        date: null,
-      }))
-    );
+
+    res.json(orders.map((o) => ({
+      id: o.order_id,
+      status: o.status,
+      date: o.createdAt,
+      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+      items: o.Order_Items,
+    })));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ ดึง order ที่ status = 'delivered' ตาม user_id
+const getSuccessOrdersByUserId = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const orders = await Order.findAll({
+      where: { user_id, status: 'delivered' },
+      attributes: ["order_id", "status", "createdAt"],
+      include: [
+        { model: User, attributes: ["name", "email"] },
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
+    });
+
+    res.json(orders.map((o) => ({
+      id: o.order_id,
+      user: o.User,
+      status: o.status,
+      date: o.createdAt,
+      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+      items: o.Order_Items,
+    })));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -159,19 +235,62 @@ const getPendingOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { status: 'pending' },
-      attributes: ["order_id", "status"],
+      attributes: ["order_id", "status", "createdAt"],
+      include: [
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
     });
-    res.json(
-      orders.map((o) => ({
-        id: o.order_id,
-        status: o.status,
-        date: null, // ไม่มี timestamp แล้ว
-      }))
-    );
+
+    res.json(orders.map((o) => ({
+      id: o.order_id,
+      status: o.status,
+      date: o.createdAt,
+      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+      items: o.Order_Items,
+    })));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// ✅ ดึง order ที่ status = 'pending' ตาม user_id
+const getPendingOrdersByUserId = async (req, res) => {
+  try {
+    console.log("🔍 user_id from params:", req.params.user_id);
+
+    const { user_id } = req.params;
+    if (!user_id) return res.status(400).json({ error: "user_id is missing!" });
+    
+    const orders = await Order.findAll({
+      where: { user_id, status: 'pending' },
+      attributes: ["order_id", "status", "createdAt"],
+      include: [
+        { model: User, attributes: ["name", "email"] }, // ✅ เชื่อม User
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
+    });
+
+    res.json(orders.map((o) => ({
+      id: o.order_id,
+      user: o.User,
+      status: o.status,
+      date: o.createdAt,
+      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+      items: o.Order_Items,
+    })));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 module.exports = {
   createOrder,
@@ -180,6 +299,9 @@ module.exports = {
   updateOrderStatus,
   deleteOrder,
   getArrivedOrders,
+  getArrivedOrdersByUserId,
   getSuccessOrders,
+  getSuccessOrdersByUserId,
   getPendingOrders,
+  getPendingOrdersByUserId,
 };
