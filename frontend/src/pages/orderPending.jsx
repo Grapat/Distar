@@ -10,7 +10,6 @@ const OrderPending = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        console.log("Fetching pending orders for user:", user_id); // 🔍 ตรวจสอบ user_id
         if (!user_id) return;
 
         const response = await fetch(`http://localhost:4005/api/order/pending/user/${user_id}`);

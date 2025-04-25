@@ -158,7 +158,7 @@ const getUser = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // ค้นหาผู้ใช้จาก ID ที่ถอดรหัสจาก Token
-    const user = await User.findByPk(decoded.userId, {
+    const user = await User.findByPk(decoded.user_id, {
       attributes: ["user_id", "name", "email", "user_type"],
     });
 

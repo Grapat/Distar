@@ -88,6 +88,22 @@
   background-color: #388e3c;
 }
 
+.edit-btn, .save-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.cart-total {
+  font-size: 18px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
