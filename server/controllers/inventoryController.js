@@ -4,7 +4,7 @@ const { Inventory, Vegetable } = require("../models");
 const getAllInventory = async (req, res) => {
   try {
     const inventory = await Inventory.findAll({
-      include: [{ model: Vegetable, as: "vegetable" }],
+      include: [{ model: Vegetable }],
     });
     res.json(inventory);
   } catch (error) {

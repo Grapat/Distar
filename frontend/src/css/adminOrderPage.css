@@ -53,3 +53,17 @@
     border-color: #007bff;
   }
   
+  .order-veg-list {
+    margin-top: 10px;
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .order-veg-list ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  .order-veg-list li {
+    margin: 4px 0;
+  }
+  

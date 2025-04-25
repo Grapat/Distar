@@ -8,6 +8,7 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [editedItems, setEditedItems] = useState({});
   const [isEditing, setIsEditing] = useState(false);
+  const [deletedItems, setDeletedItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,12 +85,23 @@ const Cart = () => {
     });
   };
 
-
   const decreaseQuantity = (item) => {
     const currentQty = editedItems[item.cart_id] ?? item.quantity;
     if (currentQty > 1) {
       setEditedItems(prev => ({ ...prev, [item.cart_id]: currentQty - 1 }));
     }
+  };
+
+  const deleteCartItem = (cart_id) => {
+    if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้ออกจากตะกร้า?")) return;
+
+    setCartItems(prev => prev.filter(item => item.cart_id !== cart_id));
+    setEditedItems(prev => {
+      const updated = { ...prev };
+      delete updated[cart_id];
+      return updated;
+    });
+    setDeletedItems(prev => [...prev, cart_id]);
   };
 
   const calculateTotal = () => {
@@ -105,16 +117,28 @@ const Cart = () => {
       alert("พบรายการที่เกิน 10 ชิ้นค่ะ กรุณาตรวจสอบก่อนบันทึก");
       return;
     }
+
     if (calculateTotal() > 10) {
       alert("ยอดรวมเกิน 10 ชิ้นค่ะ กรุณาลดจำนวนก่อนบันทึก");
       return;
     }
+
+    // ✅ อัปเดตจำนวนรายการ
     const updates = Object.entries(editedItems);
     for (const [cart_id, quantity] of updates) {
       await updateCartQuantity(parseInt(cart_id), quantity);
     }
 
+    // ✅ ลบรายการที่ถูกลบออก
+    for (const cart_id of deletedItems) {
+      await fetch(`http://localhost:4005/api/cart/${cart_id}`, {
+        method: "DELETE",
+      });
+    }
+
+    // ✅ เคลียร์ state
     setEditedItems({});
+    setDeletedItems([]);
     setIsEditing(false);
   };
 
@@ -123,7 +147,7 @@ const Cart = () => {
       alert("ไม่สามารถสั่งซื้อได้เพราะตะกร้าว่างค่ะ");
       return;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:4005/api/order/place/${user.user_id}`, {
         method: "POST",
@@ -139,10 +163,10 @@ const Cart = () => {
           })),
         }),
       });
-  
+
       const responseText = await response.text(); // 👈 อ่านเป็นข้อความก่อน
       let result;
-  
+
       try {
         result = JSON.parse(responseText);
       } catch (error) {
@@ -150,13 +174,13 @@ const Cart = () => {
         alert("❌ เกิดข้อผิดพลาดจากฝั่งเซิร์ฟเวอร์ (response ไม่ใช่ JSON)");
         return;
       }
-  
+
       if (!response.ok) {
         console.warn("🔍 Server Message:", result.message);
         alert(`เกิดข้อผิดพลาด: ${result.message}`);
         return;
       }
-  
+
       alert("สั่งซื้อสำเร็จแล้วค่ะ 🎉");
       setCartItems([]);
     } catch (error) {
@@ -164,8 +188,6 @@ const Cart = () => {
       alert("เกิดข้อผิดพลาดขณะสั่งซื้อ");
     }
   };
-  
-
 
   return (
     <div className="cart">
@@ -191,6 +213,11 @@ const Cart = () => {
                 <span>{editedItems[item.cart_id] ?? item.quantity}</span>
                 {isEditing && (
                   <button className="quantity-btn" onClick={() => increaseQuantity(item)}>+</button>
+                )}
+                {isEditing && (
+                  <button className="delete-btn" onClick={() => deleteCartItem(item.cart_id)}>
+                    🗑️
+                  </button>
                 )}
               </div>
             </div>

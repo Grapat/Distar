@@ -37,6 +37,27 @@ const AdminOrderPage = () => {
     }
   };
 
+  const handleDeleteOrder = async (orderId) => {
+    if (!window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบ Order #${orderId}?`)) return;
+
+    try {
+      const response = await fetch(`http://localhost:4005/api/order/${orderId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        return alert(`ลบไม่สำเร็จ: ${result.message}`);
+      }
+
+      setOrders((prevOrders) => prevOrders.filter((order) => order.order_id !== orderId));
+      alert(`ลบ Order #${orderId} สำเร็จแล้วค่ะ`);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      alert("เกิดข้อผิดพลาดขณะลบคำสั่งซื้อ");
+    }
+  };
+
   return (
     <div className="admin-orders-container">
       <h1>Admin Order Management</h1>
@@ -59,6 +80,22 @@ const AdminOrderPage = () => {
                 <option value="shipped">Shipped</option>
                 <option value="delivered">Delivered</option>
               </select>
+              {/* ✅ รายการผัก */}
+              {order.Order_Items?.length > 0 && (
+                <div className="order-veg-list">
+                  <strong>🧾 รายการผัก:</strong>
+                  <ul>
+                    {order.Order_Items.map((item, index) => (
+                      <li key={item.order_item_id || index}>
+                        🥬 {item.Vegetable?.name || `#${item.vegetable_id}`} × {item.quantity} ชิ้น
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <button className="delete-btn" onClick={() => handleDeleteOrder(order.order_id)}>
+                🗑️ Delete
+              </button>
             </div>
           ))
         )}

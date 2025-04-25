@@ -1,4 +1,4 @@
-const { Cart, Order, Order_Item, Vegetable, User } = require("../models");
+const { Cart, Order, Order_Item, Vegetable, Inventory } = require("../models");
 
 // 📦 สร้างคำสั่งซื้อใหม่โดยใช้ผักจากตะกร้า
 const createOrder = async (req, res) => {
@@ -8,7 +8,9 @@ const createOrder = async (req, res) => {
     // ✅ 1. ดึงสินค้าในตะกร้าของผู้ใช้
     const cartItems = await Cart.findAll({ where: { user_id } });
     if (!cartItems || cartItems.length === 0) {
-      return res.status(400).json({ message: "ตะกร้าว่าง ไม่สามารถสั่งซื้อได้" });
+      return res
+        .status(400)
+        .json({ message: "ตะกร้าว่าง ไม่สามารถสั่งซื้อได้" });
     }
 
     // ✅ 2. สร้าง Order
@@ -21,6 +23,20 @@ const createOrder = async (req, res) => {
         vegetable_id: item.vegetable_id,
         quantity: item.quantity,
       });
+
+      // ✅ อัปเดตสต็อกและเพิ่ม inventory record
+      const vegetable = await Vegetable.findByPk(item.vegetable_id);
+      if (vegetable) {
+        vegetable.stock -= item.quantity;
+        await vegetable.save();
+
+        await Inventory.create({
+          vegetable_id: item.vegetable_id,
+          change: -item.quantity,
+          reason: "sale",
+          created_at: new Date(),
+        });
+      }
     }
 
     // ✅ 4. ล้างตะกร้า
@@ -120,7 +136,7 @@ const deleteOrder = async (req, res) => {
 const getArrivedOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      where: { status: 'shipped' },
+      where: { status: "shipped" },
       attributes: ["order_id", "status", "createdAt"],
       include: [
         {
@@ -131,13 +147,15 @@ const getArrivedOrders = async (req, res) => {
       ],
     });
 
-    res.json(orders.map((o) => ({
-      id: o.order_id,
-      status: o.status,
-      date: o.createdAt,
-      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
-      items: o.Order_Items,
-    })));
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        status: o.status,
+        date: o.createdAt,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -148,7 +166,7 @@ const getArrivedOrdersByUserId = async (req, res) => {
   try {
     const { user_id } = req.params;
     const orders = await Order.findAll({
-      where: { user_id, status: 'shipped' },
+      where: { user_id, status: "shipped" },
       attributes: ["order_id", "status", "createdAt"],
       include: [
         { model: User, attributes: ["name", "email"] },
@@ -160,14 +178,16 @@ const getArrivedOrdersByUserId = async (req, res) => {
       ],
     });
 
-    res.json(orders.map((o) => ({
-      id: o.order_id,
-      user: o.User,
-      status: o.status,
-      date: o.createdAt,
-      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
-      items: o.Order_Items,
-    })));
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        user: o.User,
+        status: o.status,
+        date: o.createdAt,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -177,7 +197,7 @@ const getArrivedOrdersByUserId = async (req, res) => {
 const getSuccessOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      where: { status: 'delivered' },
+      where: { status: "delivered" },
       attributes: ["order_id", "status", "createdAt"],
       include: [
         {
@@ -188,13 +208,15 @@ const getSuccessOrders = async (req, res) => {
       ],
     });
 
-    res.json(orders.map((o) => ({
-      id: o.order_id,
-      status: o.status,
-      date: o.createdAt,
-      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
-      items: o.Order_Items,
-    })));
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        status: o.status,
+        date: o.createdAt,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -205,7 +227,7 @@ const getSuccessOrdersByUserId = async (req, res) => {
   try {
     const { user_id } = req.params;
     const orders = await Order.findAll({
-      where: { user_id, status: 'delivered' },
+      where: { user_id, status: "delivered" },
       attributes: ["order_id", "status", "createdAt"],
       include: [
         { model: User, attributes: ["name", "email"] },
@@ -217,14 +239,16 @@ const getSuccessOrdersByUserId = async (req, res) => {
       ],
     });
 
-    res.json(orders.map((o) => ({
-      id: o.order_id,
-      user: o.User,
-      status: o.status,
-      date: o.createdAt,
-      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
-      items: o.Order_Items,
-    })));
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        user: o.User,
+        status: o.status,
+        date: o.createdAt,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -234,7 +258,7 @@ const getSuccessOrdersByUserId = async (req, res) => {
 const getPendingOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      where: { status: 'pending' },
+      where: { status: "pending" },
       attributes: ["order_id", "status", "createdAt"],
       include: [
         {
@@ -245,13 +269,15 @@ const getPendingOrders = async (req, res) => {
       ],
     });
 
-    res.json(orders.map((o) => ({
-      id: o.order_id,
-      status: o.status,
-      date: o.createdAt,
-      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
-      items: o.Order_Items,
-    })));
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        status: o.status,
+        date: o.createdAt,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -264,9 +290,9 @@ const getPendingOrdersByUserId = async (req, res) => {
 
     const { user_id } = req.params;
     if (!user_id) return res.status(400).json({ error: "user_id is missing!" });
-    
+
     const orders = await Order.findAll({
-      where: { user_id, status: 'pending' },
+      where: { user_id, status: "pending" },
       attributes: ["order_id", "status", "createdAt"],
       include: [
         { model: User, attributes: ["name", "email"] }, // ✅ เชื่อม User
@@ -278,19 +304,20 @@ const getPendingOrdersByUserId = async (req, res) => {
       ],
     });
 
-    res.json(orders.map((o) => ({
-      id: o.order_id,
-      user: o.User,
-      status: o.status,
-      date: o.createdAt,
-      total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
-      items: o.Order_Items,
-    })));
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        user: o.User,
+        status: o.status,
+        date: o.createdAt,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 module.exports = {
   createOrder,

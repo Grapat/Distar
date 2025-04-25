@@ -103,6 +103,18 @@
   font-weight: bold;
 }
 
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-left: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  background-color: #c82333;
+}
 
 
 /* Responsive Design */
