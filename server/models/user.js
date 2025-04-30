@@ -11,17 +11,31 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       user_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        type: DataTypes.STRING,
+        primaryKey: true
       },
       name: DataTypes.STRING,
-      email: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
+      },
       password: DataTypes.STRING,
       phone: DataTypes.STRING,
       address: DataTypes.TEXT,
+      alt_address: DataTypes.TEXT, // ✅ ที่อยู่สำรอง
+      province: DataTypes.STRING,
+      zipcode: DataTypes.STRING,
       user_type: DataTypes.ENUM("customer", "admin"),
-      created_at: DataTypes.DATE
+      credit: {
+        type: DataTypes.INTEGER,
+        defaultValue: 10
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
+      }
     },
     {
       sequelize,

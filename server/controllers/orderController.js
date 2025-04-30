@@ -1,4 +1,4 @@
-const { Cart, Order, Order_Item, Vegetable, Inventory } = require("../models");
+const { Cart, Order, Order_Item, Vegetable, Inventory, User } = require("../models");
 
 // 📦 สร้างคำสั่งซื้อใหม่โดยใช้ผักจากตะกร้า
 const createOrder = async (req, res) => {

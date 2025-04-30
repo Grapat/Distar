@@ -2,27 +2,30 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Orders", {
-      order_id: {
+    await queryInterface.createTable("Inventory", {
+      inventory_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      user_id: {
+      vegetable_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Users",
-          key: "customer_id"
+          model: "Vegetables",
+          key: "vegetable_id"
         },
         onDelete: "CASCADE"
       },
-      status: {
-        type: Sequelize.ENUM("pending", "shipped", "delivered"),
-        allowNull: false,
-        defaultValue: "pending"
+      change: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
-      created_at: {
+      reason: {
+        type: Sequelize.ENUM("restock", "sale", "correction"),
+        allowNull: false
+      },
+      createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       }
@@ -30,6 +33,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable("Orders");
+    await queryInterface.dropTable("Inventory");
   }
 };

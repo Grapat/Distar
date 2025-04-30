@@ -10,11 +10,11 @@ module.exports = {
         allowNull: false
       },
       user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
-          model: "Users", // ✅ ชื่อตารางต้องตรง
-          key: "customer_id"
+          model: "Users",
+          key: "user_id" // ✅ ต้องตรงกับ Users.user_id
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
