@@ -18,13 +18,19 @@ module.exports = (sequelize, DataTypes) => {
       vegetable_id: DataTypes.INTEGER,
       change: DataTypes.INTEGER,
       reason: DataTypes.ENUM("restock", "sale", "correction"),
-      created_at: DataTypes.DATE
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
+      }
     },
     {
       sequelize,
       modelName: "Inventory",
       tableName: "Inventory",
-      timestamps: false
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: false
     }
   );
 

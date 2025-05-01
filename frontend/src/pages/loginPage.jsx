@@ -14,7 +14,7 @@ const LoginPage = () => {
     if (user?.userType === "admin") {
       console.log("Redirecting to Admin Dashboard");
       navigate("/admin");
-    } else if (user) {
+    } else if (user?.userType === "customer") {
       console.log("Redirecting to Home Page");
       navigate("/home");
     }
@@ -31,45 +31,31 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password }),
       });
   
-      console.log("Raw Response:", response);
-  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Login failed: ${errorText}`);
       }
   
       const data = await response.json();
-      console.log("Parsed Login Response:", data);
+      console.log("✅ Login Success:", {
+        token: data.token,
+        user: data.user
+      });
   
-      // ✅ Ensure data contains a user object and token
-      if (!data.token || !data.user.userType) {
+      if (!data.token || !data.user?.userType) {
         throw new Error("Invalid response from server");
       }
   
       localStorage.setItem("token", data.token);
       localStorage.setItem("userType", data.user.userType);
+      setUser(data.user);
   
-      setUser(data.user); // ✅ Store full user object
-  
-      console.log("User state updated:", data.user);
-  
-      /* ✅ Use setTimeout to allow state update before navigation
-      setTimeout(() => {
-        if (data.user.userType === "admin") {
-          console.log("Navigating to /admin");
-          navigate("/admin");
-        } else {
-          console.log("Navigating to /home");
-          navigate("/home");
-        }
-      }, 100); */
     } catch (err) {
-      console.error("Login Error:", err.message);
-      setError(err.message);
+      console.error("❌ Login Error:", err.message);
+      setError("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
     }
   };
   
-
   return (
     <div className="login-container">
       <h2>เข้าสู่ระบบ</h2>
@@ -97,4 +83,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage; // ✅ Ensure this is present
+export default LoginPage;

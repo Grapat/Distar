@@ -21,13 +21,19 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT,
       stock: DataTypes.INTEGER,
       category_id: DataTypes.INTEGER,
-      created_at: DataTypes.DATE
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
+      }
     },
     {
       sequelize,
       modelName: "Vegetable",
       tableName: "Vegetables",
-      timestamps: false
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: false
     }
   );
 

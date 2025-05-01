@@ -5,6 +5,8 @@ import "../../css/adminVegetablePage.css";
 const AdminVegetablePage = () => {
   const [vegetables, setVegetables] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
+  const [editingCategory, setEditingCategory] = useState(null);
   const { user } = useAuth();
   const [newVegetable, setNewVegetable] = useState({
     name: "",
@@ -96,145 +98,245 @@ const AdminVegetablePage = () => {
     }
   };
 
+  const handleAddCategory = async () => {
+    try {
+      const response = await fetch("http://localhost:4005/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newCategory }),
+      });
+      const added = await response.json();
+      setCategories([...categories, added]);
+      setNewCategory("");
+    } catch (error) {
+      console.error("Error adding category:", error);
+    }
+  };
+
+  const handleUpdateCategory = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:4005/api/categories/${editingCategory.category_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: editingCategory.name }),
+        }
+      );
+      const updated = await response.json();
+      setCategories(
+        categories.map((cat) =>
+          cat.category_id === updated.category_id ? updated : cat
+        )
+      );
+      setEditingCategory(null);
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
+  };
+
+  const handleDeleteCategory = async (categoryId) => {
+    try {
+      await fetch(`http://localhost:4005/api/categories/${categoryId}`, {
+        method: "DELETE",
+      });
+      setCategories(categories.filter((cat) => cat.category_id !== categoryId));
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
+
+
   return (
-    <div className="admin-vegetables-container">
-      <h1>Admin Vegetable Management</h1>
+    <>
+      <div className="admin-vegetables-container">
+        <h1>Admin Vegetable Management</h1>
 
-      {/* Add New Vegetable Form */}
-      <div className="vegetable-form">
-        <h3>Add New Vegetable</h3>
-        <input
-          type="text"
-          placeholder="Name"
-          value={newVegetable.name}
-          onChange={(e) =>
-            setNewVegetable({ ...newVegetable, name: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={newVegetable.description}
-          onChange={(e) =>
-            setNewVegetable({ ...newVegetable, description: e.target.value })
-          }
-        />
-        <input
-          type="number"
-          placeholder="Stock"
-          value={newVegetable.stock}
-          onChange={(e) =>
-            setNewVegetable({ ...newVegetable, stock: e.target.value })
-          }
-        />
+        {/* Add New Vegetable Form */}
+        <div className="vegetable-form">
+          <h3>Add New Vegetable</h3>
+          <input
+            type="text"
+            placeholder="Name"
+            value={newVegetable.name}
+            onChange={(e) =>
+              setNewVegetable({ ...newVegetable, name: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={newVegetable.description}
+            onChange={(e) =>
+              setNewVegetable({ ...newVegetable, description: e.target.value })
+            }
+          />
+          <input
+            type="number"
+            placeholder="Stock"
+            value={newVegetable.stock}
+            onChange={(e) =>
+              setNewVegetable({ ...newVegetable, stock: e.target.value })
+            }
+          />
 
-        {/* Dropdown for Selecting Category Name */}
-        <select
-          value={newVegetable.category_id}
-          onChange={(e) =>
-            setNewVegetable({ ...newVegetable, category_id: e.target.value })
-          }
-        >
-          <option value="">Select Category</option>
-          {categories.map((category) => (
-            <option key={category.category_id} value={category.category_id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+          {/* Dropdown for Selecting Category Name */}
+          <select
+            value={newVegetable.category_id}
+            onChange={(e) =>
+              setNewVegetable({ ...newVegetable, category_id: e.target.value })
+            }
+          >
+            <option value="">Select Category</option>
+            {categories.map((category) => (
+              <option key={category.category_id} value={category.category_id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
 
-        <button onClick={handleAddVegetable}>Add</button>
-      </div>
+          <button onClick={handleAddVegetable}>Add</button>
+        </div>
 
-      {/* List of Vegetables */}
-      <div className="vegetable-list">
-        {vegetables.length === 0 ? (
-          <p>No vegetables found.</p>
-        ) : (
-          vegetables.map((vegetable) => (
-            <div key={vegetable.vegetable_id} className="vegetable-card">
-              {editingVegetable &&
-              editingVegetable.vegetable_id === vegetable.vegetable_id ? (
-                <div>
-                  <input
-                    type="text"
-                    value={editingVegetable.name}
-                    onChange={(e) =>
-                      setEditingVegetable({
-                        ...editingVegetable,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-                  <input
-                    type="text"
-                    value={editingVegetable.description}
-                    onChange={(e) =>
-                      setEditingVegetable({
-                        ...editingVegetable,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                  <input
-                    type="number"
-                    value={editingVegetable.stock}
-                    onChange={(e) =>
-                      setEditingVegetable({
-                        ...editingVegetable,
-                        stock: e.target.value,
-                      })
-                    }
-                  />
+        {/* List of Vegetables */}
+        <div className="vegetable-list">
+          {vegetables.length === 0 ? (
+            <p>No vegetables found.</p>
+          ) : (
+            vegetables.map((vegetable) => (
+              <div key={vegetable.vegetable_id} className="vegetable-card">
+                {editingVegetable &&
+                  editingVegetable.vegetable_id === vegetable.vegetable_id ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={editingVegetable.name}
+                      onChange={(e) =>
+                        setEditingVegetable({
+                          ...editingVegetable,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                    <input
+                      type="text"
+                      value={editingVegetable.description}
+                      onChange={(e) =>
+                        setEditingVegetable({
+                          ...editingVegetable,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                    <input
+                      type="number"
+                      value={editingVegetable.stock}
+                      onChange={(e) =>
+                        setEditingVegetable({
+                          ...editingVegetable,
+                          stock: e.target.value,
+                        })
+                      }
+                    />
 
-                  {/* Dropdown for Updating Category */}
-                  <select
-                    value={editingVegetable.category_id}
-                    onChange={(e) =>
-                      setEditingVegetable({
-                        ...editingVegetable,
-                        category_id: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category) => (
-                      <option
-                        key={category.category_id}
-                        value={category.category_id}
-                      >
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                    {/* Dropdown for Updating Category */}
+                    <select
+                      value={editingVegetable.category_id}
+                      onChange={(e) =>
+                        setEditingVegetable({
+                          ...editingVegetable,
+                          category_id: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Select Category</option>
+                      {categories.map((category) => (
+                        <option
+                          key={category.category_id}
+                          value={category.category_id}
+                        >
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
 
-                  <button onClick={handleUpdateVegetable}>Save</button>
-                  <button onClick={() => setEditingVegetable(null)}>
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  <h3>{vegetable.name}</h3>
-                  <p>{vegetable.description}</p>
-                  <p>Stock: {vegetable.stock}</p>
-                  <p>
-                    Category:{" "}
-                    {vegetable.Category ? vegetable.Category.name : "Unknown"}
-                  </p>
-                  <button onClick={() => setEditingVegetable(vegetable)}>
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(vegetable.vegetable_id)}>
+                    <button onClick={handleUpdateVegetable}>Save</button>
+                    <button onClick={() => setEditingVegetable(null)}>
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <h3>{vegetable.name}</h3>
+                    <p>{vegetable.description}</p>
+                    <p>Stock: {vegetable.stock}</p>
+                    <p>
+                      Category:{" "}
+                      {vegetable.Category ? vegetable.Category.name : "Unknown"}
+                    </p>
+                    <button onClick={() => setEditingVegetable(vegetable)}>
+                      Edit
+                    </button>
+                    <button onClick={() => handleDelete(vegetable.vegetable_id)}>
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="category-form">
+          <h3>Manage Categories</h3>
+
+          {/* Add or Edit Category */}
+          <div className="category-input-group">
+            {editingCategory ? (
+              <>
+                <input
+                  type="text"
+                  value={editingCategory.name}
+                  onChange={(e) =>
+                    setEditingCategory({ ...editingCategory, name: e.target.value })
+                  }
+                />
+                <button onClick={handleUpdateCategory}>Save</button>
+                <button onClick={() => setEditingCategory(null)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="New Category"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                />
+                <button onClick={handleAddCategory}>Add Category</button>
+              </>
+            )}
+          </div>
+
+          {/* Category Cards */}
+          <div className="category-list">
+            {categories.length === 0 ? (
+              <p>No categories found.</p>
+            ) : (
+              categories.map((cat) => (
+                <div key={cat.category_id} className="category-card">
+                  <h4>{cat.name}</h4>
+                  <button onClick={() => setEditingCategory(cat)}>Edit</button>
+                  <button onClick={() => handleDeleteCategory(cat.category_id)}>
                     Delete
                   </button>
                 </div>
-              )}
-            </div>
-          ))
-        )}
+              ))
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+
+    </>
   );
 };
 

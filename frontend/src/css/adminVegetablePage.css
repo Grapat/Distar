@@ -76,3 +76,56 @@
     color: white;
   }
   
+  .category-form {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+  }
+  
+  .category-form input {
+    margin-right: 0.5rem;
+  }
+  
+  .category-form ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .category-form li {
+    margin: 0.5rem 0;
+  }
+  .category-form {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #ccc;
+  }
+  
+  .category-input-group {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .category-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .category-card h4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-card button {
+    margin: 0 0.25rem;
+  }
+  

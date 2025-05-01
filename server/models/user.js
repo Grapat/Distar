@@ -12,13 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       user_id: {
         type: DataTypes.STRING,
-        primaryKey: true
+        primaryKey: true,
       },
       name: DataTypes.STRING,
       email: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       password: DataTypes.STRING,
       phone: DataTypes.STRING,
@@ -29,19 +29,21 @@ module.exports = (sequelize, DataTypes) => {
       user_type: DataTypes.ENUM("customer", "admin"),
       credit: {
         type: DataTypes.INTEGER,
-        defaultValue: 10
+        defaultValue: 10,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
-      }
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     },
     {
       sequelize,
       modelName: "User",
       tableName: "Users",
-      timestamps: false
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: false,
     }
   );
 

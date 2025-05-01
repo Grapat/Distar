@@ -9,6 +9,9 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [altAddress, setAltAddress] = useState("");
+  const [province, setProvince] = useState("");
+  const [zipcode, setZipcode] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -25,16 +28,26 @@ const RegisterPage = () => {
       const response = await fetch("http://localhost:4005/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, phone, address, user_type: "customer" }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          phone,
+          address,
+          alt_address: altAddress,
+          province,
+          zipcode,
+          user_type: "customer",
+        }),
       });
-      
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Registration failed");
       }
 
       console.log("Registration successful", data);
-      navigate("/login"); // Redirect to login after successful registration
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     }
@@ -44,48 +57,15 @@ const RegisterPage = () => {
     <div className="register-container">
       <h2>สมัครสมาชิก</h2>
       <form onSubmit={handleRegister}>
-        <input 
-          type="text" 
-          placeholder="ชื่อ" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
-          required 
-        />
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="รหัสผ่าน" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="ยืนยันรหัสผ่าน" 
-          value={confirmPassword} 
-          onChange={(e) => setConfirmPassword(e.target.value)} 
-          required 
-        />
-        <input 
-          type="tel" 
-          placeholder="เบอร์โทรศัพท์" 
-          value={phone} 
-          onChange={(e) => setPhone(e.target.value)} 
-          required
-        />
-        <input 
-          type="text" 
-          placeholder="ที่อยู่" 
-          value={address} 
-          onChange={(e) => setAddress(e.target.value)} 
-          required
-        />
+        <input type="text" placeholder="ชื่อ" value={name} onChange={(e) => setName(e.target.value)} required />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="รหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input type="password" placeholder="ยืนยันรหัสผ่าน" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+        <input type="tel" placeholder="เบอร์โทรศัพท์" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+        <input type="text" placeholder="ที่อยู่หลัก" value={address} onChange={(e) => setAddress(e.target.value)} required />
+        <input type="text" placeholder="ที่อยู่สำรอง (ถ้ามี)" value={altAddress} onChange={(e) => setAltAddress(e.target.value)} />
+        <input type="text" placeholder="จังหวัด" value={province} onChange={(e) => setProvince(e.target.value)} required />
+        <input type="text" placeholder="รหัสไปรษณีย์" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
         {error && <p className="error">{error}</p>}
         <button type="submit">สมัครสมาชิก</button>
       </form>
