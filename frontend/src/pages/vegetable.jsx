@@ -43,23 +43,38 @@ export default function Vegetable() {
 
   const handleAddToCart = async (vegetable_id) => {
     try {
-      // ✅ 1. เช็คยอดรวมสินค้าจาก backend ก่อนเพิ่ม
+      if (!user?.user_id) {
+        alert("ยังไม่มีข้อมูลผู้ใช้ กรุณาเข้าสู่ระบบก่อนค่ะ");
+        return;
+      }
+  
+      // ✅ ดึง user credit จาก API (อัปเดตล่าสุด)
+      const userRes = await fetch("http://localhost:4005/api/auth/user", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const userData = await userRes.json();
+      const currentCredit = userData.user?.credit ?? 0;
+  
+      // ✅ ดึงยอดรวมในตะกร้าปัจจุบัน
       const summaryRes = await fetch(`http://localhost:4005/api/cart/summary/${user.user_id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       const summaryData = await summaryRes.json();
       const totalQuantity = summaryData.totalQuantity || 0;
+  
       const newQuantity = quantities[vegetable_id];
-
-      if (totalQuantity + newQuantity > 10) {
-        alert("ไม่สามารถเพิ่มได้ เพราะจะเกิน 10 รายการในตะกร้าค่ะ 🚫");
+  
+      // ✅ เช็คเครดิตก่อนเพิ่ม
+      if (totalQuantity + newQuantity > currentCredit) {
+        alert(`เครดิตของคุณมี ${currentCredit} หน่วย ไม่พอสำหรับเพิ่มรายการนี้ค่ะ`);
         return;
       }
-
-      // ✅ 2. เพิ่มผักเข้า cart ได้
+  
+      // ✅ เพิ่มเข้าตะกร้าตามปกติ
       const response = await fetch("http://localhost:4005/api/cart", {
         method: "POST",
         headers: {
@@ -72,15 +87,14 @@ export default function Vegetable() {
           quantity: newQuantity,
         }),
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         alert("เพิ่มเข้าตะกร้าแล้วค่ะ ✅");
-        // ✅ 3. รีเซตจำนวนกลับเป็น 1
         setQuantities((prev) => ({
           ...prev,
-          [vegetable_id]: 1,
+          [vegetable_id]: 1, // reset
         }));
       } else {
         alert(result.message || "ไม่สามารถเพิ่มเข้าตะกร้าได้ค่ะ");
@@ -89,7 +103,7 @@ export default function Vegetable() {
       console.error("❌ เพิ่มเข้าตะกร้าล้มเหลว:", error);
       alert("เกิดข้อผิดพลาดขณะเพิ่มเข้าตะกร้าค่ะ");
     }
-  };
+  };  
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;

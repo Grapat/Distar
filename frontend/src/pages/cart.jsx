@@ -7,31 +7,42 @@ const Cart = () => {
   const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [editedItems, setEditedItems] = useState({});
+  const [userCredit, setUserCredit] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [deletedItems, setDeletedItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (typeof user.user_id !== "number") {
-      console.warn("⚠️ user ยังไม่พร้อมหรือ user_id ไม่ถูกต้อง");
-      return;
-    }
-
+    if (!user?.user_id) return;
+  
     const fetchCartItems = async () => {
       try {
-        console.log("🔍 [DEBUG] เรียก API ด้วย userId:", user.user_id);
         const response = await fetch(`http://localhost:4005/api/cart/user/${user.user_id}`);
         const data = await response.json();
-        console.log("📦 [DEBUG] ข้อมูลที่ได้จาก API:", data);
         setCartItems(data);
       } catch (error) {
         console.error("❌ Error fetching cart items:", error);
       }
     };
-
+  
+    const fetchUserCredit = async () => {
+      try {
+        const response = await fetch(`http://localhost:4005/api/auth/user`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setUserCredit(data.user?.credit ?? 0);
+      } catch (err) {
+        console.error("❌ ดึงเครดิตไม่สำเร็จ", err);
+      }
+    };
+  
     fetchCartItems();
-  }, [user.user_id]); // 👈 ใช้ userId จาก context
-
+    fetchUserCredit();
+  }, [user?.user_id]);
+  
 
   const updateCartQuantity = async (cart_id, newQuantity) => {
     try {
@@ -58,38 +69,36 @@ const Cart = () => {
   };
 
   const increaseQuantity = (item) => {
-    setEditedItems(prev => {
+    if (userCredit === null) return;
+  
+    setEditedItems((prev) => {
       const currentQty = prev[item.cart_id] ?? item.quantity;
       const newQty = currentQty + 1;
-
-      // 🔢 คำนวณยอดรวมที่กำลังจะได้ ถ้าเพิ่ม
-      const totalIfIncreased = cartItems.reduce((total, i) => {
-        if (i.cart_id === item.cart_id) {
-          return total + newQty;
-        } else {
-          return total + (prev[i.cart_id] ?? i.quantity);
-        }
+  
+      // สร้าง state ใหม่ที่ "เหมือนจะเปลี่ยนแล้ว"
+      const simulated = { ...prev, [item.cart_id]: newQty };
+      const total = cartItems.reduce((sum, i) => {
+        const q = simulated[i.cart_id] ?? i.quantity;
+        return sum + q;
       }, 0);
-
-      if (newQty > 10) {
-        alert("ไม่สามารถเพิ่มรายการนี้เกิน 10 ชิ้นได้ค่ะ");
+  
+      if (total > userCredit) {
+        alert(`เครดิตไม่พอ (คุณมี ${userCredit})`);
         return prev;
       }
-
-      if (totalIfIncreased > 10) {
-        alert("ยอดรวมในตะกร้าต้องไม่เกิน 10 ชิ้นค่ะ");
-        return prev;
-      }
-
-      return { ...prev, [item.cart_id]: newQty };
+  
+      return simulated;
     });
   };
 
   const decreaseQuantity = (item) => {
-    const currentQty = editedItems[item.cart_id] ?? item.quantity;
-    if (currentQty > 1) {
-      setEditedItems(prev => ({ ...prev, [item.cart_id]: currentQty - 1 }));
-    }
+    setEditedItems((prev) => {
+      const currentQty = prev[item.cart_id] ?? item.quantity;
+      if (currentQty <= 1) return prev;
+  
+      const newQty = currentQty - 1;
+      return { ...prev, [item.cart_id]: newQty };
+    });
   };
 
   const deleteCartItem = (cart_id) => {
@@ -112,31 +121,26 @@ const Cart = () => {
   };
 
   const saveChanges = async () => {
-    const invalidItems = Object.entries(editedItems).filter(([_, qty]) => qty > 10);
-    if (invalidItems.length > 0) {
-      alert("พบรายการที่เกิน 10 ชิ้นค่ะ กรุณาตรวจสอบก่อนบันทึก");
+    const newTotal = cartItems.reduce((total, item) => {
+      const qty = editedItems[item.cart_id] ?? item.quantity;
+      return total + qty;
+    }, 0);
+
+    if (newTotal > user.credit) {
+      alert(`รวมจำนวน ${newTotal} เกินเครดิตของคุณ (${user.credit}) ค่ะ`);
       return;
     }
 
-    if (calculateTotal() > 10) {
-      alert("ยอดรวมเกิน 10 ชิ้นค่ะ กรุณาลดจำนวนก่อนบันทึก");
-      return;
-    }
-
-    // ✅ อัปเดตจำนวนรายการ
-    const updates = Object.entries(editedItems);
-    for (const [cart_id, quantity] of updates) {
+    for (const [cart_id, quantity] of Object.entries(editedItems)) {
       await updateCartQuantity(parseInt(cart_id), quantity);
     }
 
-    // ✅ ลบรายการที่ถูกลบออก
     for (const cart_id of deletedItems) {
       await fetch(`http://localhost:4005/api/cart/${cart_id}`, {
         method: "DELETE",
       });
     }
 
-    // ✅ เคลียร์ state
     setEditedItems({});
     setDeletedItems([]);
     setIsEditing(false);
@@ -145,6 +149,12 @@ const Cart = () => {
   const placeOrder = async () => {
     if (cartItems.length === 0) {
       alert("ไม่สามารถสั่งซื้อได้เพราะตะกร้าว่างค่ะ");
+      return;
+    }
+
+    const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    if (total > user.credit) {
+      alert(`เครดิตของคุณ (${user.credit}) ไม่พอสำหรับยอดรวม ${total} หน่วยค่ะ`);
       return;
     }
 
@@ -164,19 +174,18 @@ const Cart = () => {
         }),
       });
 
-      const responseText = await response.text(); // 👈 อ่านเป็นข้อความก่อน
+      const responseText = await response.text();
       let result;
 
       try {
         result = JSON.parse(responseText);
       } catch (error) {
-        console.error("❌ ไม่สามารถแปลง JSON:", responseText); // 👈 log ข้อมูลจริงจาก server
+        console.error("❌ ไม่สามารถแปลง JSON:", responseText);
         alert("❌ เกิดข้อผิดพลาดจากฝั่งเซิร์ฟเวอร์ (response ไม่ใช่ JSON)");
         return;
       }
 
       if (!response.ok) {
-        console.warn("🔍 Server Message:", result.message);
         alert(`เกิดข้อผิดพลาด: ${result.message}`);
         return;
       }

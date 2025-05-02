@@ -168,9 +168,8 @@ const getUser = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findByPk(decoded.user_id, {
-      attributes: ["user_id", "name", "email", "user_type"],
-    });
+    // ✅ ดึงข้อมูลทุกคอลัมน์
+    const user = await User.findByPk(decoded.user_id);
 
     if (!user) return res.status(404).json({ message: "User not found." });
     res.json({ user });

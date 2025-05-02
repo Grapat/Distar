@@ -19,7 +19,6 @@ import Cart from "./pages/cart";
 import AccountPage from "./pages/accountPage";
 import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
-import ForgotPasswordPage from "./pages/forgotPasswordPage";
 
 import AdminNav from "./component/adminNav";
 import AdminCartPage from "./pages/admin/adminCartPage";
@@ -52,7 +51,6 @@ function App() {
               <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/home" element={<WithNav><HomePage /></WithNav>} />

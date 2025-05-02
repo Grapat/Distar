@@ -78,7 +78,6 @@ const LoginPage = () => {
         <button type="submit">เข้าสู่ระบบ</button>
       </form>
       <p>ยังไม่มีบัญชี? <a href="/register" onClick={(e) => { e.preventDefault(); navigate('/register'); }}>สมัครสมาชิก</a></p>
-      <p><a href="/forgot-password" onClick={(e) => { e.preventDefault(); navigate('/forgot-password'); }}>ลืมรหัสผ่าน?</a></p>
     </div>
   );
 };
