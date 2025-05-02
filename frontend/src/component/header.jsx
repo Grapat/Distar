@@ -21,7 +21,6 @@ const Header = () => {
       <div className="login-part">
         {user ? (
           <>
-            <p>Welcome, {user.name || "User"}</p>
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (

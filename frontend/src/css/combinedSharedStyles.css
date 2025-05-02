@@ -1,0 +1,29 @@
+.list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.section-box {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 900px;
+  padding: 20px;
+}
+
+.heading-centered {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.text-margin {
+  margin: 5px 0;
+}
+
+.text-title-bold {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}

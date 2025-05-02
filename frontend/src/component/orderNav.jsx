@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/orderNav.css";
 
 const OrderNav = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [activeTab, setActiveTab] = useState("/orders/Pending");
-
-  useEffect(() => {
-    setActiveTab(location.pathname);
-  }, [location.pathname]);
 
   const tabs = [
     { name: "ที่ต้องจัดส่ง", path: "/orders/Pending" },
@@ -18,7 +12,6 @@ const OrderNav = () => {
   ];
 
   const handleTabClick = (path) => {
-    setActiveTab(path);
     navigate(path);
   };
 
@@ -27,7 +20,7 @@ const OrderNav = () => {
       {tabs.map((tab) => (
         <button
           key={tab.path}
-          className={`nav-item ${activeTab === tab.path ? "active" : ""}`}
+          className="nav-item"
           onClick={() => handleTabClick(tab.path)}
         >
           {tab.name}

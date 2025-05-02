@@ -1,13 +1,17 @@
 .order-nav {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  width: 100vw;          /* 💡 ให้ครอบเต็มหน้าจอ */
+  position: fixed;       /* 💡 ให้อยู่เหนือ content เสมอ */
+  top: 10vh;             /* 💡 ปรับระยะจาก header (10vh จาก header.css) */
+  left: 0;
   padding: 10px 0;
+  background: white;
   border-bottom: 2px solid #ddd;
-  background: white; /* ✅ ป้องกัน Header บัง */
-  position: relative; /* ✅ ทำให้แน่ใจว่าอยู่เหนือ Header */
-  z-index: 10; /* ✅ เพิ่ม z-index ให้สูงกว่า Header ถ้าจำเป็น */
-  margin-top: 60px; /* ✅ ปรับให้ไม่โดน Header บัง (ค่าปรับได้ตาม Header ของคุณ) */
+  z-index: 1000;
 }
+
 
 .nav-item {
   font-size: 16px;
@@ -15,21 +19,13 @@
   background: #fff;
   color: #444;
   cursor: pointer;
-  padding: 5px 10px;
-  transition: color 0.3s;
+  padding: 10px 16px;
+  border: none;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.nav-item.active {
-  color: #8cc63f;
-}
-
-.nav-item.active::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 3px;
-  background-color: #8cc63f;
-  position: absolute;
-  bottom: -5px;
-  left: 0;
+/* ✅ เปลี่ยนเป็นสีเทาเมื่อ hover */
+.nav-item:hover {
+  background-color: #f0f0f0; /* เทาอ่อน */
+  color: #222;               /* สีตัวอักษรเข้มขึ้นเล็กน้อย */
 }

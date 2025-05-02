@@ -1,0 +1,741 @@
+#root {
+    margin: 0 auto;
+    max-width: 1280px;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  body {
+    /* Same height as .header to prevent overlap */
+    padding-top: 10vh;
+  }
+  
+  .cart {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .cart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .cart-item {
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  
+  .cart-image {
+    border-radius: 5px;
+    height: 40px;
+    height: 50px;
+    height: 60px;
+    width: 40px;
+    width: 50px;
+    width: 60px;
+  }
+  
+  .cart-info {
+    flex: 1;
+    padding-left: 15px;
+    padding: 10px 0;
+    text-align: center;
+    text-align: left;
+  }
+  
+  .cart-info h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .cart-info p {
+    color: #555;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .cart-quantity {
+    align-items: center;
+    display: flex;
+  }
+  
+  .quantity-btn {
+    background: #8bc34a;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-size: 16px;
+    padding: 4px 8px;
+    padding: 5px 10px;
+  }
+  
+  :hover {
+    background-color: #0056b3;
+    background-color: #388e3c;
+    background-color: #7cb342;
+    background-color: #c82333;
+    background: #4a9200;
+    background: #7cb342;
+    text-decoration: underline;
+  }
+  
+  .cart-quantity span {
+    font-size: 14px;
+    font-size: 16px;
+    margin: 0 10px;
+  }
+  
+  .place-order {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .place-order-btn {
+    background-color: #4caf50;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 24px;
+    transition: background-color 0.2s;
+  }
+  
+  .save-btn {
+    background-color: #007bff;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    padding: 10px 20px;
+  }
+  
+  .cart-total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 4px 8px;
+  }
+  
+  .vegetable-container {
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .veg-image {
+    border-radius: 10px;
+    border-radius: 5px;
+    height: 50px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 100%;
+    width: 50px;
+  }
+  
+  .info {
+    padding: 5px;
+  }
+  
+  .veg-name {
+    color: #213547;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .quantity-control {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+  }
+  
+  .quantity-control button {
+    background: #ddd;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px 10px;
+  }
+  
+  .quantity-control span {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .veg-detail-container {
+    background-color: #fff;
+    font-family: "Inter", sans-serif;
+    margin: auto;
+    max-width: 400px;
+    padding: 20px;
+  }
+  
+  .veg-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+  
+  .veg-logo {
+    align-items: center;
+    display: flex;
+  }
+  
+  .veg-logo img {
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .veg-info {
+    text-align: left;
+  }
+  
+  .veg-badge {
+    background-color: #ff4d4d;
+    border-radius: 10px;
+    color: white;
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 5px;
+    padding: 4px 8px;
+  }
+  
+  .veg-rating {
+    align-items: center;
+    color: #666;
+    display: flex;
+    margin: 10px 0;
+  }
+  
+  .veg-rating span {
+    font-size: 14px;
+    margin-left: 5px;
+  }
+  
+  .veg-counter {
+    align-items: center;
+    background: #f3f3f3;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+  }
+  
+  .veg-counter button {
+    background: #58a700;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px 15px;
+  }
+  
+  .veg-description {
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+  
+  .veg-benefits {
+    margin-top: 15px;
+  }
+  
+  .veg-benefits h3 {
+    color: #213547;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .veg-benefits ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .veg-benefits li {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .related-vegs {
+    margin-top: 20px;
+  }
+  
+  .related-vegs h3 {
+    color: #213547;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .related-veg-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .related-veg-item {
+    text-align: center;
+    width: 100px;
+  }
+  
+  .related-veg-item img {
+    border-radius: 10px;
+    width: 100%;
+  }
+  
+  .navbar {
+    background: white;
+    bottom: 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+  }
+  
+  .navbar-icon {
+    color: #333;
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .navbar-icon img {
+    height: 24px;
+    margin-bottom: 5px;
+    width: 24px;
+  }
+  
+  .cart-badge {
+    background-color: red;
+    background: red;
+    border-radius: 50%;
+    color: white;
+    font-size: 10px;
+    font-size: 12px;
+    padding: 2px 6px;
+    padding: 3px 6px;
+    position: absolute;
+    right: -10px;
+    right: 5px;
+    top: -6px;
+    top: 5px;
+  }
+  
+  .popular-vegetables {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .veg-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .veg-item {
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    margin: 10px 0;
+    padding: 10px;
+  }
+  
+  .veg-info h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .veg-info p {
+    color: #555;
+    font-size: 12px;
+    margin: 0;
+  }
+  
+  .header {
+    /* Ensures the header has enough height */
+    box-sizing: border-box;
+    /* Prevents content overflow */;
+    /* Pushes elements apart */
+    align-items: center;
+    align-items: center;
+    background-color: white;
+    display: flex;
+    height: 10vh;
+    justify-content: center;
+    justify-content: space-between;
+    left: 0;
+    padding: 2vh 2vw;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .logo {
+    /* Adjust logo for mobile */
+    /* Adjusts for smaller screens */
+    /* Limits logo size */
+    height: 100%;
+    height: 85%;
+    height: 90%;
+    max-width: 100%;
+    max-width: 100px;
+    max-width: 120px;
+    max-width: 150px;
+  }
+  
+  .login-part {
+    /* Prevents text wrapping */
+    margin-left: auto;
+    /* Pushes login section to the right */;
+    /* Reduce spacing */;
+    /* Spacing between text and button */
+    white-space: nowrap;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    gap: 5px;
+  }
+  
+  .login-part p {
+    /* Adjusts text size */
+    /* Reduce text size */
+    font-size: 12px;
+    font-size: 14px;
+    font-size: 16px;
+    margin: 0;
+  }
+  
+  .login-part button {
+    /* Prevents button overflow */
+    overflow: hidden;
+    background-color: #007bff;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 10px;
+    font-size: 12px;
+    font-size: 14px;
+    max-width: 100px;
+    padding: 3px 6px;
+    padding: 4px 8px;
+    padding: 5px 10px;
+    text-overflow: ellipsis;
+  }
+  
+  .bottom-nav {
+    /* Distribute items evenly */
+    align-items: center;
+    /* Ensures it's always on top */;
+    /* Full width */
+    background: white;
+    /* Responsive padding */
+    box-shadow: 0 -0.2vh 0.5vh rgba(0, 0, 0, 0.1);
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    left: 0;
+    padding: 1.2vh 2vw;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .nav-item {
+    /* Make items take equal space */
+    text-align: center;
+    /* Reduce text size */
+        padding: 0.8vh 0;
+    /* Responsive font size */
+    cursor: pointer;
+    /* Use rem for readability */
+        padding: 1vh 0;
+    align-items: center;
+    background: #fff;
+    color: #333;
+    color: #444;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    font-size: 0.9rem;
+    font-size: 1.2vw;
+    font-size: 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    justify-content: center;
+    padding: 1.2vh 0;
+    padding: 5px 10px;
+    transition: color 0.3s;
+  }
+  
+  .nav-item img {
+    /* Adjust icon size */
+    /* Adjust icon size dynamically */
+    height: 2.5vw;
+    /* Scale down icons */;
+    height: 1.8rem;
+    height: 2rem;
+    margin-bottom: 0.4vh;
+    width: 1.8rem;
+    width: 2.5vw;
+    width: 2rem;
+  }
+  
+  .cart-icon-wrapper {
+    position: relative;
+  }
+  
+  .container {
+    /* Ensure it fills the entire viewport */
+      padding: 2vh;
+    /* Responsive padding */
+      background-color: white;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    left: 0;
+    min-height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .content {
+    /* Adjust spacing dynamically */
+    margin-top: 5vh;
+    margin-top: 8vh;
+    text-align: center;
+  }
+  
+  .button-group {
+    /* Adjust button width */
+    /* Adjust max width dynamically */
+    /* Allow full width for small screens */
+    display: flex;
+    flex-direction: column;
+    margin-top: 3vh;
+    max-width: 40vw;
+    max-width: 50vw;
+    max-width: 80vw;
+    width: 100%;
+  }
+  
+  .login-container {
+    align-items: center;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 320px;
+    width: 100%;
+  }
+  
+  input {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  
+  button {
+    background-color: #8bc34a;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 10px;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 14px;
+    margin-top: 15px;
+  }
+  
+  a {
+    color: #8bc34a;
+    text-decoration: none;
+  }
+  
+  .register-container {
+    align-items: center;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .order-container {
+    align-items: center;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .order-content {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    padding: 20px;
+    width: 90%;
+  }
+  
+  .no-orders {
+    color: #888;
+    text-align: center;
+  }
+  
+  .order-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .order-item {
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    padding: 12px;
+    padding: 15px;
+  }
+  
+  .order-info h3 {
+    color: #222;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .order-info p {
+    color: #666;
+    font-size: 12px;
+    margin: 5px 0;
+  }
+  
+  .status {
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 3px 8px;
+  }
+  
+  .pending {
+    background-color: #ffcc00;
+    color: #fff;
+  }
+  
+  .completed {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .cancelled {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .order-nav {
+    /* ✅ ทำให้แน่ใจว่าอยู่เหนือ Header */
+    z-index: 10;
+    /* ✅ ปรับให้ไม่โดน Header บัง (ค่าปรับได้ตาม Header ของคุณ) */;
+    /* ✅ ป้องกัน Header บัง */
+    position: relative;
+    /* ✅ เพิ่ม z-index ให้สูงกว่า Header ถ้าจำเป็น */
+    margin-top: 60px;
+    background: white;
+    border-bottom: 2px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  .active {
+    color: #8cc63f;
+  }
+  
+  ::after {
+    background-color: #8cc63f;
+    bottom: -5px;
+    content: "";
+    display: block;
+    height: 3px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
