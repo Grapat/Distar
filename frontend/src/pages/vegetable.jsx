@@ -47,7 +47,7 @@ export default function Vegetable() {
         alert("ยังไม่มีข้อมูลผู้ใช้ กรุณาเข้าสู่ระบบก่อนค่ะ");
         return;
       }
-  
+
       // ✅ ดึง user credit จาก API (อัปเดตล่าสุด)
       const userRes = await fetch("http://localhost:4005/api/auth/user", {
         headers: {
@@ -56,7 +56,7 @@ export default function Vegetable() {
       });
       const userData = await userRes.json();
       const currentCredit = userData.user?.credit ?? 0;
-  
+
       // ✅ ดึงยอดรวมในตะกร้าปัจจุบัน
       const summaryRes = await fetch(`http://localhost:4005/api/cart/summary/${user.user_id}`, {
         headers: {
@@ -65,15 +65,15 @@ export default function Vegetable() {
       });
       const summaryData = await summaryRes.json();
       const totalQuantity = summaryData.totalQuantity || 0;
-  
+
       const newQuantity = quantities[vegetable_id];
-  
+
       // ✅ เช็คเครดิตก่อนเพิ่ม
       if (totalQuantity + newQuantity > currentCredit) {
         alert(`เครดิตของคุณมี ${currentCredit} หน่วย ไม่พอสำหรับเพิ่มรายการนี้ค่ะ`);
         return;
       }
-  
+
       // ✅ เพิ่มเข้าตะกร้าตามปกติ
       const response = await fetch("http://localhost:4005/api/cart", {
         method: "POST",
@@ -87,9 +87,9 @@ export default function Vegetable() {
           quantity: newQuantity,
         }),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         alert("เพิ่มเข้าตะกร้าแล้วค่ะ ✅");
         setQuantities((prev) => ({
@@ -103,31 +103,38 @@ export default function Vegetable() {
       console.error("❌ เพิ่มเข้าตะกร้าล้มเหลว:", error);
       alert("เกิดข้อผิดพลาดขณะเพิ่มเข้าตะกร้าค่ะ");
     }
-  };  
+  };
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;
 
   return (
-    <div className="vegetable-container">
-      <h1 className="title">รายการผัก</h1>
-      <div className="grid">
-        {vegetables.map((veg) => (
-          <div key={veg.vegetable_id} className="card">
-            <img src={veg.image} alt={veg.name} className="veg-image" />
-            <div className="info">
-              <p className="veg-name">{veg.name}</p>
-              <div className="quantity-control">
-                <button onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
-                <span>{quantities[veg.vegetable_id]}</span>
-                <button onClick={() => handleQuantityChange(veg.vegetable_id, 1)}>+</button>
+    <div className="veg-container">
+      <div className="veg-box-container">
+        <h2>รายการผัก</h2>
+        <div className="veg-grid">
+          {vegetables.map((veg) => (
+            <div key={veg.vegetable_id} className="veg-card">
+              <div className="veg-img-container">
+                <img
+                  src={veg.image_url || "/images/vegs/default.png"}
+                  alt={veg.name}
+                  className="veg-img"
+                />
               </div>
-              <button className="add-btn" onClick={() => handleAddToCart(veg.vegetable_id)}>
-                🛒 เพิ่มเข้าตะกร้า
-              </button>
+              <div className="veg-info">
+                <div className="veg-quantity">
+                  <button className="minus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
+                  <span>{quantities[veg.vegetable_id]}</span>
+                  <button className="plus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, 1)}>+</button>
+                </div>
+                <button className="add-btn" onClick={() => handleAddToCart(veg.vegetable_id)}>
+                  เพิ่มเข้าตะกร้า
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

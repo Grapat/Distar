@@ -5,11 +5,12 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%; /* Full width */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.2vh 2vw;
   background: white;
-  padding: 1.2vh 2vw; /* Responsive padding */
   box-shadow: 0 -0.2vh 0.5vh rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensures it's always on top */
+  z-index: 1000;
 }
 
 .nav-item {
@@ -17,18 +18,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 20%; /* Each item takes up 20% of the width */
   flex: 1; /* Make items take equal space */
   text-align: center;
   color: #333;
   font-size: 1.2vw; /* Responsive font size */
   cursor: pointer;
   padding: 1.2vh 0;
-}
-
-.nav-item img {
-  width: 2.5vw; /* Adjust icon size dynamically */
-  height: 2.5vw;
-  margin-bottom: 0.4vh;
 }
 
 .cart-icon-wrapper {

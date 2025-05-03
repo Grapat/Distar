@@ -29,12 +29,13 @@ const getVegetableById = async (req, res) => {
 // 🌱 เพิ่มผักใหม่
 const createVegetable = async (req, res) => {
   try {
-    const { name, description, stock, category_id } = req.body;
+    const { name, description, stock, category_id, image_url } = req.body;
     const newVegetable = await Vegetable.create({
       name,
       description,
       stock,
       category_id,
+      image_url, // ✅ เพิ่ม image_url
     });
     res.status(201).json(newVegetable);
   } catch (error) {
@@ -46,13 +47,19 @@ const createVegetable = async (req, res) => {
 const updateVegetable = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, stock, category_id } = req.body;
+    const { name, description, stock, category_id, image_url } = req.body;
 
     const vegetable = await Vegetable.findByPk(id);
     if (!vegetable)
       return res.status(404).json({ message: "Vegetable not found" });
 
-    await vegetable.update({ name, description, stock, category_id });
+    await vegetable.update({
+      name,
+      description,
+      stock,
+      category_id,
+      image_url, // ✅ เพิ่ม image_url
+    });
     res.json(vegetable);
   } catch (error) {
     res.status(400).json({ error: error.message });

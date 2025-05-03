@@ -179,6 +179,14 @@ const AdminVegetablePage = () => {
               setNewVegetable({ ...newVegetable, stock: e.target.value })
             }
           />
+          <input
+            type="text"
+            placeholder="Image URL"
+            value={newVegetable.image_url || ""}
+            onChange={(e) =>
+              setNewVegetable({ ...newVegetable, image_url: e.target.value })
+            }
+          />
 
           {/* Dropdown for Selecting Category Name */}
           <select
@@ -267,19 +275,27 @@ const AdminVegetablePage = () => {
                   </div>
                 ) : (
                   <div>
+                    {vegetable.image_url && (
+                      <img
+                        src={vegetable.image_url}
+                        alt={vegetable.name}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                          marginBottom: "10px"
+                        }}
+                      />
+                    )}
                     <h3>{vegetable.name}</h3>
                     <p>{vegetable.description}</p>
                     <p>Stock: {vegetable.stock}</p>
                     <p>
-                      Category:{" "}
-                      {vegetable.Category ? vegetable.Category.name : "Unknown"}
+                      Category: {vegetable.Category ? vegetable.Category.name : "Unknown"}
                     </p>
-                    <button onClick={() => setEditingVegetable(vegetable)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDelete(vegetable.vegetable_id)}>
-                      Delete
-                    </button>
+                    <button onClick={() => setEditingVegetable(vegetable)}>Edit</button>
+                    <button onClick={() => handleDelete(vegetable.vegetable_id)}>Delete</button>
                   </div>
                 )}
               </div>
@@ -299,6 +315,17 @@ const AdminVegetablePage = () => {
                   value={editingCategory.name}
                   onChange={(e) =>
                     setEditingCategory({ ...editingCategory, name: e.target.value })
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Image URL"
+                  value={editingVegetable.image_url || ""}
+                  onChange={(e) =>
+                    setEditingVegetable({
+                      ...editingVegetable,
+                      image_url: e.target.value,
+                    })
                   }
                 />
                 <button onClick={handleUpdateCategory}>Save</button>

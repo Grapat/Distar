@@ -38,7 +38,12 @@ const getUserCart = async (req, res) => {
     const cart = await Cart.findAll({
       where: { user_id },
       attributes: ["cart_id", "vegetable_id", "quantity"],
-      include: [{ model: Vegetable, attributes: ["name"] }],
+      include: [
+        {
+          model: Vegetable,
+          attributes: ["name", "image_url"], // ✅ เพิ่ม image_url ที่นี่
+        },
+      ],
     });
 
     res.json(cart.length > 0 ? cart : []);

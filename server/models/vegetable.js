@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT,
       stock: DataTypes.INTEGER,
       category_id: DataTypes.INTEGER,
+      image_url: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,

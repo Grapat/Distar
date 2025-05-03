@@ -2,7 +2,7 @@ import React from "react";
 import "./css/App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { CartProvider } from "./context/CartContext"; // 👈 เพิ่มตรงนี้
+import { CartProvider } from "./context/CartContext";
 
 import HomePage from "./pages/homePage";
 import AdminHome from "./pages/admin/adminHome";

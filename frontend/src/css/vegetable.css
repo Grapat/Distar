@@ -1,58 +1,126 @@
-.vegetable-container {
-    text-align: center;
-    padding: 1rem;
+.veg-container {
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+}
+
+h2 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.veg-box-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1000px;
+}
+
+.veg-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 คอลัมน์ถาวร */
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.veg-card {
+  width: 160px;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: sans-serif;
+  padding-bottom: 1rem;
+  justify-content: space-between;
+  height: 100%; /* สำคัญถ้ามีหลายกล่องเท่ากัน */
+  animation: fadeGrow 0.3s ease;
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
+}
+
+.veg-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.veg-img-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.veg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.veg-info {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.veg-quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+
+.minus-btn,
+.plus-btn {
+  background-color: #8bc34a;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.minus-btn:hover,
+.plus-btn:hover {
+  background-color: #7cb342;
+}
+
+.add-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;               /* ✅ เต็มกรอบ container */
+  box-sizing: border-box;    /* ✅ ป้องกัน padding ทำให้ล้น */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-btn:hover {
+  background-color: #43a047;
+}
+
+@keyframes fadeGrow {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
   }
-  
-  .title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+  to {
+    opacity: 1;
+    transform: scaleY(1);
   }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  
-  .card {
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    text-align: center;
-  }
-  
-  .veg-image {
-    width: 100%;
-    border-radius: 5px;
-  }
-  
-  .info {
-    padding: 5px;
-  }
-  
-  .veg-name {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .quantity-control {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .quantity-control button {
-    background: #ddd;
-    border: none;
-    padding: 5px 10px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .quantity-control span {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-  
+}

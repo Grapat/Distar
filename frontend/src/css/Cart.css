@@ -1,45 +1,61 @@
-.cart {
-  padding: 20px;
-  text-align: center;
+
+body {
+  align-items: baseline;
 }
 
-.cart-container {
+.cart {
+  margin: 0;
+  width: 100%;
+  height: auto;
+  max-width: 80rem;
+  margin-top: 1rem;
+}
+
+.cart-container-user {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1rem;
+  width: 100%;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  margin-bottom: 5rem;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
 }
 
 .cart-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 0.625rem;
+  border-radius: 0.625rem;
   background: #f9f9f9;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0.125rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;   /* 🟢 ทำให้การขยาย-ย่อ smooth */
+  overflow: hidden;                   /* ป้องกัน overflow ตอน animation */
 }
 
 .cart-image {
-  width: 60px;
-  height: 60px;
-  border-radius: 5px;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 0.3125rem;
 }
 
 .cart-info {
   flex: 1;
   text-align: left;
-  padding-left: 15px;
+  padding-left: 0.9375rem;
 }
 
 .cart-info h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
 }
 
 .cart-info p {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #555;
 }
 
@@ -48,115 +64,159 @@
   align-items: center;
 }
 
-.quantity-btn {
-  background: #8bc34a;
-  border: none;
-  padding: 5px 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-}
-
-.quantity-btn:hover {
-  background: #7cb342;
-}
-
 .cart-quantity span {
-  margin: 0 10px;
-  font-size: 16px;
+  margin: 0 0.625rem;
+  font-size: 1rem;
 }
 
 .place-order {
-  margin-top: 20px;
   text-align: center;
+}
+
+.cart-total {
+  font-size: 1.125rem;
+  margin-top: 0.625rem;
+  font-weight: bold;
+}
+
+/* ปุ่มทั้งหมดขนาดเท่ากัน */
+.edit-btn,
+.save-btn,
+.cancel-btn,
+.place-order-btn,
+.add-more-btn,
+.quantity-btn,
+.delete-btn {
+  width: 100%;
+  max-width: 15rem;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.3125rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.action-buttons .save-btn,
+.action-buttons .cancel-btn {
+  flex: 1 1 50%;
+  max-width: 50%;
+}
+
+.edit-btn svg,
+.save-btn svg,
+.cancel-btn svg,
+.place-order-btn svg,
+.add-more-btn svg,
+.quantity-btn svg,
+.delete-btn svg {
+  width: 0.8rem;           /* ประมาณ 14px */
+  height: 0.8rem;
+  margin-right: 0.25rem;     /* ระยะห่างจากข้อความ */
+  vertical-align: middle;    /* ให้ตรงกับแนวตัวอักษร */
+}
+
+/* สีปุ่มหลัก */
+.edit-btn {
+  background-color: #f0ad4e;
+  color: white;
+}
+.edit-btn:hover {
+  background-color: #ec971f;
+}
+
+.save-btn,
+.cancel-btn,
+.add-more-btn {
+  background-color: #8bc34a;
+  color: white;
 }
 
 .place-order-btn {
   background-color: #4caf50;
   color: white;
-  padding: 12px 24px;
-  font-size: 18px;
   font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .place-order-btn:hover {
   background-color: #388e3c;
 }
 
-.edit-btn, .save-btn {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
+.quantity-btn {
+  background-color: #8bc34a;
   color: white;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
+  padding: 0.3125rem 0.625rem;
 }
-.cart-total {
-  font-size: 18px;
-  margin-top: 10px;
-  font-weight: bold;
+
+.quantity-btn:hover {
+  background-color: #7cb342;
 }
 
 .delete-btn {
   background-color: #dc3545;
   color: white;
-  border: none;
-  border-radius: 5px;
-  margin-left: 8px;
-  padding: 4px 8px;
-  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
 }
+
 .delete-btn:hover {
   background-color: #c82333;
 }
 
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .cart-item {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
+@keyframes fadeGrow {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
   }
-  
-  .cart-image {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .cart-info {
-    padding: 10px 0;
-    text-align: center;
+  to {
+    opacity: 1;
+    transform: scaleY(1);
   }
 }
 
-@media (max-width: 480px) {
-  .cart {
-    padding: 10px;
-  }
-  
-  .cart-item {
-    padding: 10px;
-  }
-  
-  .cart-image {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .quantity-btn {
-    padding: 4px 8px;
-    font-size: 14px;
-  }
-  
-  .cart-quantity span {
-    font-size: 14px;
-  }
+.cart-container-user {
+  animation: fadeGrow 0.3s ease;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 25rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.modal-quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }

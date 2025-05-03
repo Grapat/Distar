@@ -25,14 +25,14 @@ const OrderDeliver = ({ orderId }) => {
 
   return (
     <div className="order-container">
-      <div className="order-content">
+      <div className="order-box">
         <h2>จัดส่งสำเร็จ</h2>
         {orders.length === 0 ? (
           <p className="no-orders">ไม่มีคำสั่งซื้อในขณะนี้</p>
         ) : (
           <ul className="order-list">
             {orders.map((order) => (
-              <li key={order.order_id} className="order-item">
+              <li key={order.id} className="order-item">
                 <div className="order-info">
                   <h3>คำสั่งซื้อ #{order.order_id}</h3>
                   <p>สถานะ: <span className={`status ${order.status}`}>{order.status}</span></p>
