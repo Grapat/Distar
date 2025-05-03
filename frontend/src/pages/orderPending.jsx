@@ -25,7 +25,7 @@ const OrderPending = () => {
 
   return (
     <div className="order-container">
-      <div className="order-content">
+      <div className="order-box">
         <h2>คำสั่งซื้อที่ยังไม่จัดส่ง</h2>
         {orders.length === 0 ? (
           <p className="no-orders">ไม่มีคำสั่งซื้อในขณะนี้</p>

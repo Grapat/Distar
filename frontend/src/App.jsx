@@ -8,7 +8,6 @@ import HomePage from "./pages/homePage";
 import AdminHome from "./pages/admin/adminHome";
 import Vegetable from "./pages/vegetable";
 import VegDetail from "./pages/vegDetail";
-import PopularVegetables from "./pages/popularVegetables";
 
 import OrderNav from "./component/orderNav";
 import OrderPending from "./pages/orderPending";
@@ -56,7 +55,6 @@ function App() {
                 <Route path="/home" element={<WithNav><HomePage /></WithNav>} />
                 <Route path="/veg" element={<WithNav><Vegetable /></WithNav>} />
                 <Route path="/veg/:id" element={<WithNav><VegDetail /></WithNav>} />
-                <Route path="/popular" element={<WithNav><PopularVegetables /></WithNav>} />
                 <Route path="/cart" element={<WithNav><Cart /></WithNav>} />
                 <Route path="/acc" element={<WithNav><AccountPage /></WithNav>} />
 

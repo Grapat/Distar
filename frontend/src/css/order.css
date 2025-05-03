@@ -1,9 +1,10 @@
 .order-container {
-  background: #f0f8ff;
+  background: #fcfcfc;
   padding: 2rem;
   min-height: 100vh;
   display: flex;
   justify-content: center;
+  margin-top: 3rem;
 }
 
 .order-box {

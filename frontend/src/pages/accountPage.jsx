@@ -44,16 +44,23 @@ const AccountPage = () => {
   if (!userData) return <div className="account-container">กำลังโหลดข้อมูลผู้ใช้...</div>;
 
   return (
-    <div className="account-container">
-      <h2>บัญชีของฉัน</h2>
-      <div className="account-info">
-        <img src={userData.profileImage} alt="Profile" className="profile-pic" />
-        <h3>{userData.name}</h3>
-        <p>Email: {userData.email}</p>
-        <p>เบอร์โทร: {userData.phone}</p>
-      </div>
-      <button className="logout-btn" onClick={handleLogout}>ออกจากระบบ</button>
+<div className="account-container">
+  <div className="account-box">
+    <h2>บัญชีของฉัน</h2>
+    <div className="account-info">
+      <p><strong>รหัสผู้ใช้:</strong> {userData.user_id}</p>
+      <p><strong>ชื่อ-นามสกุล:</strong> {userData.name}</p>
+      <p><strong>Email:</strong> {userData.email}</p>
+      <p><strong>เบอร์โทร:</strong> {userData.phone}</p>
+      <p><strong>ที่อยู่:</strong> {userData.address}</p>
+      <p><strong>จังหวัด:</strong> {userData.province}</p>
+      <p><strong>รหัสไปรษณีย์:</strong> {userData.zipcode}</p>
+      <p><strong>ประเภทผู้ใช้:</strong> {userData.user_type}</p>
     </div>
+      <button className="logout-btn" onClick={handleLogout}>ออกจากระบบ</button>
+  </div>
+</div>
+
   );
 };
 

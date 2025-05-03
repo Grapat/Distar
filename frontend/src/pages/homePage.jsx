@@ -1,39 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/HomePage.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const bannerImages = ["/images/farm/5.png", "/images/farm/DSF-006.png", "/images/farm/12.png"];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+
   return (
-    <div className="home-container">
-      <div className="banner-carousel">
-        <img src="/banner.png" alt="Banner" className="banner-image" />
-        <div className="banner-text">
-          <h2>ให้เราดูแลผัก ให้ผักดูแลคุณ</h2>
-          <button className="order-btn" onClick={() => navigate("/veg")}>สั่งเลย!</button>
+    <div className="home-wrapper">
+      <div className="carousel-box">
+        <div className="carousel-slide">
+          <img src={bannerImages[currentIndex]} alt="Banner" className="carousel-img" />
+          <div className="carousel-text">
+            <h2>ให้เราดูแลผัก<br />ให้ผักดูแลคุณ</h2>
+            <button className="order-btn" onClick={() => navigate("/veg")}>
+              สั่งเลย! <span className="arrow">➤</span>
+            </button>
+          </div>
+        </div>
+        <div className="carousel-dots">
+          {bannerImages.map((_, index) => (
+            <span
+              key={index}
+              className={`dot ${index === currentIndex ? "active" : ""}`}
+              onClick={() => setCurrentIndex(index)}
+            ></span>
+          ))}
         </div>
       </div>
-      <div className="product-section">
-        <div className="product">
-          <img src="/superfood.png" alt="Super Food" />
-          <p>คุณค่าทางโภชนาการสูง</p>
-          <span>Super Food</span>
-        </div>
-        <div className="product">
-          <img src="/salad.png" alt="Salad Vegetable" />
-          <p>ความสดชื่นจากธรรมชาติ</p>
-          <span>Salad Vegetable</span>
+
+      <div className="home-card">
+        <h3>ประเภทผักแนะนำ</h3>
+        <div className="product-section">
+          <div className="product">
+            <div className="product-img-container">
+              <img src="/images/vegs/1.png" alt="Super Food" />
+            </div>
+            <p>คุณค่าทางโภชนาการสูง</p>
+            <span>Super Food</span>
+
+          </div>
+          <div className="product">
+            <div className="product-img-container">
+              <img src="/images/vegs/7.png" alt="Salad Vegetable" />
+            </div>
+            <p>ความสดชื่นจากธรรมชาติ</p>
+            <span>Salad Vegetable</span>
+
+          </div>
         </div>
       </div>
-      <div className="menu-section">
-        <div className="menu-item">ผักที่ได้รับความนิยม</div>
-        <div className="menu-item">รายการผัก</div>
-        <div className="menu-item">ติดตามคำสั่งซื้อ</div>
+
+      <div className="home-card">
+        <h3>เมนูทางลัด</h3>
+        <div className="menu-section">
+          <div className="menu-item">ผักที่ได้รับความนิยม</div>
+          <div className="menu-item">รายการผัก</div>
+          <div className="menu-item">ติดตามคำสั่งซื้อ</div>
+        </div>
       </div>
-      {/*<div className="promo-section">
-        <p>ของดีเมืองนนท์</p>
-        <img src="/promo.png" alt="Promotion" />
-      </div>*/}
     </div>
   );
 };

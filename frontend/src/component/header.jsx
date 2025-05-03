@@ -21,7 +21,9 @@ const Header = () => {
       <div className="login-part">
         {user ? (
           <>
-            <button onClick={handleLogout}>Logout</button>
+            {user.userType !== "customer" && (
+              <button onClick={handleLogout}>Logout</button>
+            )}
           </>
         ) : (
           <p>Please log in</p>

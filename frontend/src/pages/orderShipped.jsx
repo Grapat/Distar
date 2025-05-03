@@ -25,7 +25,7 @@ const OrderShipped = ({ orderId }) => {
 
   return (
     <div className="order-container">
-      <div className="order-content">
+      <div className="order-box">
         <h2>จัดส่งแล้ว</h2>
         {orders.length === 0 ? (
           <p className="no-orders">ไม่มีคำสั่งซื้อในขณะนี้</p>

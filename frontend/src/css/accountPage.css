@@ -1,39 +1,58 @@
-.header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2vh 2vw;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    z-index: 1000;
-    height: 10vh;
+.account-container {
+  background: #fcfcfc;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.account-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  animation: fadeGrow 0.3s ease;
+  animation-fill-mode: both;
+}
+
+.account-info {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-pic {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.logout-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+@keyframes fadeGrow {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
   }
-  
-  .logo {
-    height: 100%;
-    max-width: 100%;
+  to {
+    opacity: 1;
+    transform: scaleY(1);
   }
-  
-  @media (max-width: 768px) {
-    .header {
-      padding: 1.5vh 3vw;
-      height: 8vh;
-    }
-    .logo {
-      height: 90%;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .header {
-      padding: 1.2vh 3vw;
-      height: 7vh;
-    }
-    .logo {
-      height: 85%;
-    }
-  }
-  
+}
