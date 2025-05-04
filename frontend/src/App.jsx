@@ -5,7 +5,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
 import HomePage from "./pages/homePage";
-import AdminHome from "./pages/admin/adminHome";
+import AdminHome from "./pages/admin/adminDashboard";
 import Vegetable from "./pages/vegetable";
 import VegDetail from "./pages/vegDetail";
 

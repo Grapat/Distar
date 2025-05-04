@@ -122,14 +122,14 @@ const AdminCartPage = () => {
 
   const placeOrder = async (user_id) => {
     if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อสินค้าให้ผู้ใช้นี้?")) return;
-  
+
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`http://localhost:4005/api/order/place/${user_id}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       const responseText = await response.text();
       let data;
       try {
@@ -138,22 +138,22 @@ const AdminCartPage = () => {
         console.error("❌ ไม่สามารถแปลง JSON:", responseText);
         return alert("❌ เกิดข้อผิดพลาดจากฝั่งเซิร์ฟเวอร์ (response ไม่ใช่ JSON)");
       }
-  
+
       if (!response.ok) {
         console.warn("🔍 Server Message:", data.message);
         return alert(`❌ สั่งซื้อไม่สำเร็จ: ${data.message || "เกิดข้อผิดพลาด"}`);
       }
-  
+
       alert(`✅ สั่งซื้อสำเร็จ! รหัสออเดอร์: ${data.order_id}`);
       fetchCartItems(); // 👈 โหลดข้อมูลตะกร้าใหม่
-  
+
     } catch (error) {
       console.error("Error placing order:", error);
       alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์!");
     }
   };
-  
-  
+
+
   return (
     <div className="admin-cart">
       <h2>จัดการตะกร้าของผู้ใช้</h2>
@@ -205,27 +205,25 @@ const AdminCartPage = () => {
       </div>
 
       <div className="cart-container">
-        {Object.values(groupedCart).map(({ user, vegetables }) => (
-          <div key={user?.user_id || "unknown"} className="cart-item">
-            <h3>🧑 ผู้ใช้: {user?.name || "ไม่พบผู้ใช้"} ({user?.email})</h3>
-
-            {vegetables.map((vegItem) => (
-              <p key={vegItem.cart_id}>🥦 {vegItem.Vegetable?.name || "ไม่พบสินค้า"} - {vegItem.quantity} ชิ้น</p>
-            ))}
-
-            <button onClick={() => navigate(`/admin-edit-cart/${user.user_id}`)}>
-              ✏️ แก้ไขตะกร้า
-            </button>
-
-            <button onClick={() => deleteUserCart(user.user_id)}>
-              🗑️ ลบตะกร้าทั้งหมด
-            </button>
-            
-            <button onClick={() => placeOrder(user.user_id)}>
-              📦 สั่งซื้อสินค้า
-            </button>
+        {Object.keys(groupedCart).length === 0 ? (
+          <div className="cart-empty-box">
+            <p className="empty-cart-admin">ยังไม่มีตะกร้าของผู้ใช้ใดเลยค่ะ 🧺</p>
           </div>
-        ))}
+        ) : (
+          Object.values(groupedCart).map(({ user, vegetables }) => (
+            <div key={user?.user_id || "unknown"} className="cart-item">
+              <h3>🧑 ผู้ใช้: {user?.name || "ไม่พบผู้ใช้"} ({user?.email})</h3>
+              {vegetables.map((vegItem) => (
+                <p key={vegItem.cart_id}>
+                  🥦 {vegItem.Vegetable?.name || "ไม่พบสินค้า"} - {vegItem.quantity} ชิ้น
+                </p>
+              ))}
+              <button onClick={() => navigate(`/admin-edit-cart/${user.user_id}`)}>✏️ แก้ไขตะกร้า</button>
+              <button onClick={() => deleteUserCart(user.user_id)}>🗑️ ลบตะกร้าทั้งหมด</button>
+              <button onClick={() => placeOrder(user.user_id)}>📦 สั่งซื้อสินค้า</button>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

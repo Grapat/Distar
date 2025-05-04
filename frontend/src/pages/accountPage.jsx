@@ -52,10 +52,6 @@ const AccountPage = () => {
       <p><strong>ชื่อ-นามสกุล:</strong> {userData.name}</p>
       <p><strong>Email:</strong> {userData.email}</p>
       <p><strong>เบอร์โทร:</strong> {userData.phone}</p>
-      <p><strong>ที่อยู่:</strong> {userData.address}</p>
-      <p><strong>จังหวัด:</strong> {userData.province}</p>
-      <p><strong>รหัสไปรษณีย์:</strong> {userData.zipcode}</p>
-      <p><strong>ประเภทผู้ใช้:</strong> {userData.user_type}</p>
     </div>
       <button className="logout-btn" onClick={handleLogout}>ออกจากระบบ</button>
   </div>

@@ -16,6 +16,7 @@ body {
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  min-width: 350px;
   background: white;
   padding: 1.25rem;
   border-radius: 0.625rem;

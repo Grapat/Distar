@@ -18,7 +18,7 @@ const HomePage = () => {
 
   return (
     <div className="home-wrapper">
-      <div className="carousel-box">
+      <div className="home-section carousel-box">
         <div className="carousel-slide">
           <img src={bannerImages[currentIndex]} alt="Banner" className="carousel-img" />
           <div className="carousel-text">
@@ -39,7 +39,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="home-card">
+      <div className="home-section home-card">
         <h3>ประเภทผักแนะนำ</h3>
         <div className="product-section">
           <div className="product">
@@ -48,7 +48,6 @@ const HomePage = () => {
             </div>
             <p>คุณค่าทางโภชนาการสูง</p>
             <span>Super Food</span>
-
           </div>
           <div className="product">
             <div className="product-img-container">
@@ -56,17 +55,16 @@ const HomePage = () => {
             </div>
             <p>ความสดชื่นจากธรรมชาติ</p>
             <span>Salad Vegetable</span>
-
           </div>
         </div>
       </div>
 
-      <div className="home-card">
-        <h3>เมนูทางลัด</h3>
-        <div className="menu-section">
-          <div className="menu-item">ผักที่ได้รับความนิยม</div>
-          <div className="menu-item">รายการผัก</div>
-          <div className="menu-item">ติดตามคำสั่งซื้อ</div>
+      <div className="home-section jumbotron">
+        <div className="jumbotron-content">
+          <h2>เยี่ยมชมเว็บไซต์หลักของเรา</h2>
+          <a href="https://www.distarfresh.com/" target="_blank" rel="noopener noreferrer" className="jumbotron-btn">
+            ไปที่ Distar Fresh
+          </a>
         </div>
       </div>
     </div>

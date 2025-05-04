@@ -1,37 +1,152 @@
 .admin-home {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9;
-    min-height: 100vh;
-  }
-  
-  h2 {
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .admin-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 90%;
-    max-width: 400px;
-  }
-  
-  .admin-btn {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .admin-btn:hover {
-    background-color: #0056b3;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.admin-btn {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-btn:hover {
+  background-color: #0056b3;
+}
+
+/* 🔳 Layout 3 คอลัมน์ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 40px;
+  max-width: 1200px;
+}
+
+/* 🔹 กล่องในแต่ละคอลัมน์ (User / Order / Veg) */
+.admin-section {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: left;
+}
+
+.admin-section h3 {
+  margin-top: 0;
+  color: #007bff;
+}
+
+.admin-section p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.admin-section:hover {
+  background-color: #f3f8ff;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+.veg-list-container {
+  width: 100%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 1200px;
+}
+
+.veg-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-width: 500px;
+  max-width: 520px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.veg-list-item:hover {
+  transform: translateY(-2px);
+}
+
+.veg-list-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ✅ ทำให้เนื้อหาภายในชิดซ้าย */
+}
+
+.veg-list-left h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.veg-list-left p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.veg-stock {
+  font-weight: bold;
+  color: #007bff;
+  font-size: 16px;
+}
+
+.veg-filter-box {
+  background-color: #fefefe;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 0 auto 30px;
+  max-width: 500px;
+  max-height: 150px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.veg-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.veg-filter-bar input,
+.veg-filter-bar select {
+  padding: 8px 12px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  min-width: 180px;
+}
