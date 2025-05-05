@@ -1,4 +1,3 @@
-
 body {
   align-items: baseline;
 }
@@ -24,7 +23,7 @@ body {
   box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
 }
 
-.cart-item {
+.cart-item-user {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,8 +31,8 @@ body {
   border-radius: 0.625rem;
   background: #f9f9f9;
   box-shadow: 0.125rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;   /* 🟢 ทำให้การขยาย-ย่อ smooth */
-  overflow: hidden;                   /* ป้องกัน overflow ตอน animation */
+  transition: all 0.3s ease-in-out; /* 🟢 ทำให้การขยาย-ย่อ smooth */
+  overflow: hidden; /* ป้องกัน overflow ตอน animation */
 }
 
 .cart-image {
@@ -119,10 +118,10 @@ body {
 .add-more-btn svg,
 .quantity-btn svg,
 .delete-btn svg {
-  width: 0.8rem;           /* ประมาณ 14px */
+  width: 0.8rem; /* ประมาณ 14px */
   height: 0.8rem;
-  margin-right: 0.25rem;     /* ระยะห่างจากข้อความ */
-  vertical-align: middle;    /* ให้ตรงกับแนวตัวอักษร */
+  margin-right: 0.25rem; /* ระยะห่างจากข้อความ */
+  vertical-align: middle; /* ให้ตรงกับแนวตัวอักษร */
 }
 
 /* สีปุ่มหลัก */
@@ -135,10 +134,18 @@ body {
 }
 
 .save-btn,
-.cancel-btn,
 .add-more-btn {
   background-color: #8bc34a;
   color: white;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
 }
 
 .place-order-btn {
@@ -220,4 +227,12 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.btn-toggle-visible {
+  visibility: visible;
+}
+
+.btn-toggle-hidden {
+  visibility: hidden;
 }

@@ -22,7 +22,7 @@ h2 {
 
 .admin-btn {
   padding: 10px;
-  background-color: #007bff;
+  background-color: #8bc34a;
   color: white;
   border: none;
   border-radius: 5px;
@@ -49,14 +49,14 @@ h2 {
 .admin-section {
   background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   padding: 20px;
   text-align: left;
 }
 
 .admin-section h3 {
   margin-top: 0;
-  color: #007bff;
+  color: #8bc34a;
 }
 
 .admin-section p {
@@ -67,7 +67,7 @@ h2 {
 
 .admin-section:hover {
   background-color: #f3f8ff;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   transform: translateY(-2px);
   cursor: pointer;
 }
@@ -91,7 +91,7 @@ h2 {
   background-color: #fff;
   border-radius: 10px;
   padding: 16px 20px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
 }
 
@@ -120,7 +120,7 @@ h2 {
 
 .veg-stock {
   font-weight: bold;
-  color: #007bff;
+  color: #8bc34a;
   font-size: 16px;
 }
 
@@ -132,7 +132,7 @@ h2 {
   margin: 0 auto 30px;
   max-width: 500px;
   max-height: 150px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .veg-filter-bar {

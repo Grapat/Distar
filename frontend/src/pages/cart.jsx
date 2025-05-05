@@ -209,7 +209,7 @@ const Cart = () => {
           </div>
         ) : (
           cartItems.map((item) => (
-            <div key={item.cart_id} className="cart-item">
+            <div key={item.cart_id} className="cart-item-user">
               <img
                 src={item.Vegetable.image_url || "/images/vegs/default.png"}
                 alt={item.Vegetable?.name || "vegetable"}
@@ -219,18 +219,25 @@ const Cart = () => {
                 <h3>{item.Vegetable?.name || `#${item.vegetable_id}`}</h3>
               </div>
               <div className="cart-quantity">
-                {isEditing && (
-                  <button className="quantity-btn" onClick={() => decreaseQuantity(item)}>-</button>
-                )}
+                <button
+                  className={`quantity-btn ${isEditing ? "btn-toggle-visible" : "btn-toggle-hidden"}`}
+                  onClick={() => decreaseQuantity(item)}
+                >
+                  -
+                </button>
                 <span>{editedItems[item.cart_id] ?? item.quantity}</span>
-                {isEditing && (
-                  <button className="quantity-btn" onClick={() => increaseQuantity(item)}>+</button>
-                )}
-                {isEditing && (
-                  <button className="delete-btn" onClick={() => deleteCartItem(item.cart_id)}>
-                    🗑️
-                  </button>
-                )}
+                <button
+                  className={`quantity-btn ${isEditing ? "btn-toggle-visible" : "btn-toggle-hidden"}`}
+                  onClick={() => increaseQuantity(item)}
+                >
+                  +
+                </button>
+                <button
+                  className={`delete-btn ${isEditing ? "btn-toggle-visible" : "btn-toggle-hidden"}`}
+                  onClick={() => deleteCartItem(item.cart_id)}
+                >
+                  🗑️
+                </button>
               </div>
             </div>
           ))
@@ -285,7 +292,7 @@ const Cart = () => {
           </button>
         </div>
         <div className="place-order">
-          <button className="place-order-btn" onClick={placeOrder}>
+          <button className={`place-order-btn ${isEditing ? "btn-toggle-hidden" : "btn-toggle-visible"}`} onClick={placeOrder}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
               <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
             </svg>

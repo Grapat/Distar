@@ -76,102 +76,33 @@ const AdminUserPage = () => {
   };
 
   return (
-    <div className="admin-users-container">
-      <h1>Admin User Management</h1>
-
-      {/* Create User Form */}
-      <form onSubmit={handleCreateUser} className="user-form">
-        <h3>Create New User</h3>
-        <input
-          type="text"
-          placeholder="Name"
-          value={newUser.name}
-          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={newUser.email}
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-          required
-        />
-        <select value={newUser.user_type} onChange={(e) => setNewUser({ ...newUser, user_type: e.target.value })}>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button type="submit">Create User</button>
-      </form>
-
-      {/* Edit User Form */}
-      {editingUser && (
-        <form onSubmit={handleUpdateUser} className="user-form">
-          <h3>Edit User</h3>
+    <div className="admin-user-page-grid">
+      <div className="user-controller">
+        <h2>จัดการผู้ใช้</h2>
+        <form onSubmit={handleCreateUser} className="user-form">
+          <h3>Create New User</h3>
           <input
             type="text"
             placeholder="Name"
-            value={editingUser.name}
-            onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+            value={newUser.name}
+            onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
             required
           />
           <input
             type="email"
             placeholder="Email"
-            value={editingUser.email}
-            onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
             required
           />
-          <input
-            type="text"
-            placeholder="Phone"
-            value={editingUser.phone || ""}
-            onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Address"
-            value={editingUser.address || ""}
-            onChange={(e) => setEditingUser({ ...editingUser, address: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Alt Address"
-            value={editingUser.alt_address || ""}
-            onChange={(e) => setEditingUser({ ...editingUser, alt_address: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Province"
-            value={editingUser.province || ""}
-            onChange={(e) => setEditingUser({ ...editingUser, province: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Zipcode"
-            value={editingUser.zipcode || ""}
-            onChange={(e) => setEditingUser({ ...editingUser, zipcode: e.target.value })}
-          />
-          <input
-            type="number"
-            placeholder="Credit"
-            value={editingUser.credit ?? ""}
-            min="0"
-            onChange={(e) => setEditingUser({ ...editingUser, credit: parseInt(e.target.value) || 0 })}
-          />
-          <select
-            value={editingUser.user_type}
-            onChange={(e) => setEditingUser({ ...editingUser, user_type: e.target.value })}
-          >
+          <select value={newUser.user_type} onChange={(e) => setNewUser({ ...newUser, user_type: e.target.value })}>
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
-
-          <button type="submit">Update User</button>
-          <button type="button" onClick={() => setEditingUser(null)}>Cancel</button>
+          <button type="submit">Create User</button>
         </form>
-      )}
+      </div>
 
-      {/* User List */}
       <div className="user-list">
         {users.length === 0 ? (
           <p>No users found.</p>
@@ -187,8 +118,74 @@ const AdminUserPage = () => {
               <p>Zipcode: {user.zipcode}</p>
               <p>Credit: {user.credit}</p>
               <button onClick={() => handleEditUser(user)}>Edit</button>
-              <button onClick={() => handleDeleteUser(user.user_id)}>Delete</button>
+              {editingUser && (
+                <form onSubmit={handleUpdateUser} className="user-form">
+                  <h3>Edit User</h3>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={editingUser.name}
+                    onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                    required
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={editingUser.email}
+                    onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Phone"
+                    value={editingUser.phone || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Address"
+                    value={editingUser.address || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, address: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Alt Address"
+                    value={editingUser.alt_address || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, alt_address: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Province"
+                    value={editingUser.province || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, province: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Zipcode"
+                    value={editingUser.zipcode || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, zipcode: e.target.value })}
+                  />
+                  <input
+                    type="number"
+                    placeholder="Credit"
+                    value={editingUser.credit ?? ""}
+                    min="0"
+                    onChange={(e) => setEditingUser({ ...editingUser, credit: parseInt(e.target.value) || 0 })}
+                  />
+                  <select
+                    value={editingUser.user_type}
+                    onChange={(e) => setEditingUser({ ...editingUser, user_type: e.target.value })}
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+
+                  <button type="submit">Update User</button>
+                  <button type="button" onClick={() => setEditingUser(null)}>Cancel</button>
+                </form>
+              )}
             </div>
+
           ))
         )}
       </div>

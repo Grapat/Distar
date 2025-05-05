@@ -1,131 +1,222 @@
-.admin-vegetables-container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .vegetable-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  .vegetable-form input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .vegetable-form button {
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .vegetable-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .vegetable-card {
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .vegetable-card h3 {
-    margin: 0 0 10px 0;
-  }
-  
-  .vegetable-card p {
-    margin: 5px 0;
-  }
-  
-  .vegetable-card button {
-    margin-right: 10px;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .vegetable-card button:first-of-type {
-    background-color: #ffc107;
-    color: black;
-  }
-  
-  .vegetable-card button:last-of-type {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .category-form {
-    margin-top: 2rem;
-    padding: 1rem;
-    border-top: 1px solid #ccc;
-  }
-  
-  .category-form input {
-    margin-right: 0.5rem;
-  }
-  
-  .category-form ul {
-    list-style: none;
-    padding-left: 0;
-  }
-  .category-form li {
-    margin: 0.5rem 0;
-  }
-  .category-form {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 2px solid #ccc;
-  }
-  
-  .category-input-group {
-    margin-bottom: 1rem;
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  
-  .category-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  
-  .category-card {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .category-card h4 {
-    margin-bottom: 0.5rem;
-  }
-  
-  .category-card button {
-    margin: 0 0.25rem;
-  }
-  
+/* ------------------------ Layout Structure ------------------------ */
+.admin-vegetable-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1:2 layout */
+  gap: 2rem;
+  padding: 2rem;
+  align-items: start;
+}
+
+/* ------------------------ Controller Form ------------------------ */
+.veg-controller {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.veg-controller textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.veg-controller-add-button {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #8bc34a;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.veg-controller-add-button:hover {
+  background-color: #7cb342;
+}
+
+.veg-controller-add-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ------------------------ Vegetable Card Grid ------------------------ */
+.veg-items {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin-bottom: 4rem;
+  background-color: #fff;
+}
+
+.veg-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.veg-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* ------------------------ Details + Button Layout ------------------------ */
+.veg-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: bolder;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.button-row button {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #8bc34a;
+  cursor: pointer;
+}
+
+.button-row button:hover {
+  background-color: #7cb342;
+}
+
+.button-row-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.button-row-edit button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.button-row-edit button:first-of-type {
+  background-color: #8bc34a;
+}
+
+.button-row-edit button:first-of-type:hover {
+  background-color: #7cb342;
+}
+
+.button-row-edit button:last-of-type {
+  background-color: #dc3545;
+}
+
+.button-row-edit button:last-of-type:hover {
+  background-color: #c82333;
+}
+
+.button-row-edit svg {
+  width: 20px;
+  height: 20px;
+}
+
+.veg-row-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.veg-edit-panel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.5s ease-in-out;
+
+  padding: 0;
+  margin: 0;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ✅ แสดงฟอร์มด้วย slide effect */
+.veg-edit-panel.active {
+  max-height: 500px; /* ปรับให้ครอบความสูงที่จำเป็น */
+  opacity: 1;
+  transform: translateY(0);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.veg-edit-panel.active textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* ------------------------ Others ------------------------ */
+hr {
+  border: none;
+  border-top: 2px solid #ddd;
+}
+
+.veg-empty-box {
+  padding: 2rem;
+  background-color: #fefefe;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  text-align: center;
+  color: #888;
+}
+
+.empty-veg {
+  font-size: 16px;
+  font-weight: 500;
+}

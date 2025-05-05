@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import "../../css/adminVegetablePage.css";
 
 const AdminVegetablePage = () => {
@@ -7,7 +6,6 @@ const AdminVegetablePage = () => {
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState(null);
-  const { user } = useAuth();
   const [newVegetable, setNewVegetable] = useState({
     name: "",
     description: "",
@@ -15,6 +13,16 @@ const AdminVegetablePage = () => {
     category_id: "",
   });
   const [editingVegetable, setEditingVegetable] = useState(null);
+  const [search, setSearch] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+
+  const filteredVegetables = vegetables.filter((veg) =>
+    veg.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredCategories = categories.filter((cat) =>
+    cat.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   useEffect(() => {
     fetchVegetables();
@@ -43,19 +51,7 @@ const AdminVegetablePage = () => {
     }
   };
 
-  // Handle Delete Vegetable
-  const handleDelete = async (vegetableId) => {
-    try {
-      await fetch(`http://localhost:4005/api/vegs/${vegetableId}`, {
-        method: "DELETE",
-      });
-      setVegetables((prevVegetables) =>
-        prevVegetables.filter((veg) => veg.vegetable_id !== vegetableId)
-      );
-    } catch (error) {
-      console.error("Error deleting vegetable:", error);
-    }
-  };
+
 
   // Handle Add Vegetable
   const handleAddVegetable = async () => {
@@ -70,6 +66,20 @@ const AdminVegetablePage = () => {
       setNewVegetable({ name: "", description: "", stock: 0, category_id: "" });
     } catch (error) {
       console.error("Error adding vegetable:", error);
+    }
+  };
+  const handleAddCategory = async () => {
+    try {
+      const response = await fetch("http://localhost:4005/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newCategory }),
+      });
+      const added = await response.json();
+      setCategories([...categories, added]);
+      setNewCategory("");
+    } catch (error) {
+      console.error("Error adding category:", error);
     }
   };
 
@@ -97,22 +107,6 @@ const AdminVegetablePage = () => {
       console.error("Error updating vegetable:", error);
     }
   };
-
-  const handleAddCategory = async () => {
-    try {
-      const response = await fetch("http://localhost:4005/api/categories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newCategory }),
-      });
-      const added = await response.json();
-      setCategories([...categories, added]);
-      setNewCategory("");
-    } catch (error) {
-      console.error("Error adding category:", error);
-    }
-  };
-
   const handleUpdateCategory = async () => {
     try {
       const response = await fetch(
@@ -135,6 +129,19 @@ const AdminVegetablePage = () => {
     }
   };
 
+  // Handle Delete Vegetable
+  const handleDelete = async (vegetableId) => {
+    try {
+      await fetch(`http://localhost:4005/api/vegs/${vegetableId}`, {
+        method: "DELETE",
+      });
+      setVegetables((prevVegetables) =>
+        prevVegetables.filter((veg) => veg.vegetable_id !== vegetableId)
+      );
+    } catch (error) {
+      console.error("Error deleting vegetable:", error);
+    }
+  };
   const handleDeleteCategory = async (categoryId) => {
     try {
       await fetch(`http://localhost:4005/api/categories/${categoryId}`, {
@@ -148,222 +155,229 @@ const AdminVegetablePage = () => {
 
 
   return (
-    <>
-      <div className="admin-vegetables-container">
-        <h1>Admin Vegetable Management</h1>
+    <div className="admin-vegetable-page-grid">
+      {/* 🎛️ ส่วนควบคุม (1 ส่วน) */}
+      <div className="veg-controller">
+        <h2>จัดการผัก</h2>
 
-        {/* Add New Vegetable Form */}
-        <div className="vegetable-form">
-          <h3>Add New Vegetable</h3>
-          <input
-            type="text"
-            placeholder="Name"
-            value={newVegetable.name}
-            onChange={(e) =>
-              setNewVegetable({ ...newVegetable, name: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Description"
-            value={newVegetable.description}
-            onChange={(e) =>
-              setNewVegetable({ ...newVegetable, description: e.target.value })
-            }
-          />
-          <input
-            type="number"
-            placeholder="Stock"
-            value={newVegetable.stock}
-            onChange={(e) =>
-              setNewVegetable({ ...newVegetable, stock: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={newVegetable.image_url || ""}
-            onChange={(e) =>
-              setNewVegetable({ ...newVegetable, image_url: e.target.value })
-            }
-          />
+        {/* 🔍 ช่องค้นหา */}
+        <input
+          type="text"
+          placeholder="ค้นหาผัก..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-          {/* Dropdown for Selecting Category Name */}
-          <select
-            value={newVegetable.category_id}
-            onChange={(e) =>
-              setNewVegetable({ ...newVegetable, category_id: e.target.value })
-            }
-          >
-            <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option key={category.category_id} value={category.category_id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+        <h2>เพิ่มผักใหม่</h2>
 
-          <button onClick={handleAddVegetable}>Add</button>
-        </div>
+        <input
+          type="text"
+          placeholder="ชื่อผัก"
+          value={newVegetable.name}
+          onChange={(e) =>
+            setNewVegetable({ ...newVegetable, name: e.target.value })
+          }
+        />
 
-        {/* List of Vegetables */}
-        <div className="vegetable-list">
-          {vegetables.length === 0 ? (
-            <p>No vegetables found.</p>
-          ) : (
-            vegetables.map((vegetable) => (
-              <div key={vegetable.vegetable_id} className="vegetable-card">
-                {editingVegetable &&
-                  editingVegetable.vegetable_id === vegetable.vegetable_id ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={editingVegetable.name}
-                      onChange={(e) =>
-                        setEditingVegetable({
-                          ...editingVegetable,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                    <input
-                      type="text"
-                      value={editingVegetable.description}
-                      onChange={(e) =>
-                        setEditingVegetable({
-                          ...editingVegetable,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                    <input
-                      type="number"
-                      value={editingVegetable.stock}
-                      onChange={(e) =>
-                        setEditingVegetable({
-                          ...editingVegetable,
-                          stock: e.target.value,
-                        })
-                      }
-                    />
+        <textarea
+          placeholder="รายละเอียดผัก"
+          value={newVegetable.description}
+          onChange={(e) =>
+            setNewVegetable({ ...newVegetable, description: e.target.value })
+          }
+        />
 
-                    {/* Dropdown for Updating Category */}
-                    <select
-                      value={editingVegetable.category_id}
-                      onChange={(e) =>
-                        setEditingVegetable({
-                          ...editingVegetable,
-                          category_id: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Select Category</option>
-                      {categories.map((category) => (
-                        <option
-                          key={category.category_id}
-                          value={category.category_id}
-                        >
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
+        <input
+          type="number"
+          placeholder="จำนวนคงเหลือ"
+          min={0}
+          value={newVegetable.stock}
+          onChange={(e) =>
+            setNewVegetable({ ...newVegetable, stock: Number(e.target.value) })
+          }
+        />
 
-                    <button onClick={handleUpdateVegetable}>Save</button>
-                    <button onClick={() => setEditingVegetable(null)}>
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    {vegetable.image_url && (
-                      <img
-                        src={vegetable.image_url}
-                        alt={vegetable.name}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                          marginBottom: "10px"
-                        }}
-                      />
-                    )}
-                    <h3>{vegetable.name}</h3>
-                    <p>{vegetable.description}</p>
-                    <p>Stock: {vegetable.stock}</p>
-                    <p>
-                      Category: {vegetable.Category ? vegetable.Category.name : "Unknown"}
-                    </p>
-                    <button onClick={() => setEditingVegetable(vegetable)}>Edit</button>
-                    <button onClick={() => handleDelete(vegetable.vegetable_id)}>Delete</button>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
+        <select
+          value={newVegetable.category_id}
+          onChange={(e) =>
+            setNewVegetable({ ...newVegetable, category_id: e.target.value })
+          }
+        >
+          <option value="">เลือกหมวดหมู่</option>
+          {categories.map((cat) => (
+            <option key={cat.category_id} value={cat.category_id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
 
-        <div className="category-form">
-          <h3>Manage Categories</h3>
-
-          {/* Add or Edit Category */}
-          <div className="category-input-group">
-            {editingCategory ? (
-              <>
-                <input
-                  type="text"
-                  value={editingCategory.name}
-                  onChange={(e) =>
-                    setEditingCategory({ ...editingCategory, name: e.target.value })
-                  }
-                />
-                <input
-                  type="text"
-                  placeholder="Image URL"
-                  value={editingVegetable.image_url || ""}
-                  onChange={(e) =>
-                    setEditingVegetable({
-                      ...editingVegetable,
-                      image_url: e.target.value,
-                    })
-                  }
-                />
-                <button onClick={handleUpdateCategory}>Save</button>
-                <button onClick={() => setEditingCategory(null)}>Cancel</button>
-              </>
-            ) : (
-              <>
-                <input
-                  type="text"
-                  placeholder="New Category"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                />
-                <button onClick={handleAddCategory}>Add Category</button>
-              </>
-            )}
-          </div>
-
-          {/* Category Cards */}
-          <div className="category-list">
-            {categories.length === 0 ? (
-              <p>No categories found.</p>
-            ) : (
-              categories.map((cat) => (
-                <div key={cat.category_id} className="category-card">
-                  <h4>{cat.name}</h4>
-                  <button onClick={() => setEditingCategory(cat)}>Edit</button>
-                  <button onClick={() => handleDeleteCategory(cat.category_id)}>
-                    Delete
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+        <button onClick={handleAddVegetable} className="veg-controller-add-button">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          เพิ่มผักใหม่
+        </button>
       </div>
 
-    </>
+      {/* 🧺 รายการผัก (2 ส่วน) */}
+      <div className="veg-items">
+        {filteredVegetables.length === 0 ? (
+          <div className="veg-empty-box">
+            <p className="empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
+          </div>
+        ) : (
+          filteredVegetables.map((veg) => (
+            <div key={veg.vegetable_id} className="veg-row-wrapper">
+              <div className="veg-row">
+                <img src={veg.image_url || "/images/placeholder.jpg"} alt={veg.name} className="veg-image" />
+                <div className="veg-text">
+                  <h3>{veg.name}</h3>
+                  <p>{veg.Category?.name}</p>
+                  <p>คงเหลือ: {veg.stock} หน่วย</p>
+                </div>
+                <div className="button-row">
+                  <button onClick={() => setEditingVegetable(veg)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                  </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* 👇 แสดงฟอร์มเฉพาะถ้า veg คือรายการที่กำลังแก้ */}
+              {editingVegetable?.vegetable_id === veg.vegetable_id && (
+                <div className={`veg-edit-panel ${editingVegetable?.vegetable_id === veg.vegetable_id ? "active" : ""}`}>
+                  <input
+                    type="text"
+                    value={editingVegetable.name}
+                    onChange={(e) =>
+                      setEditingVegetable({ ...editingVegetable, name: e.target.value })
+                    }
+                  />
+                  <textarea
+                    value={editingVegetable.description}
+                    onChange={(e) =>
+                      setEditingVegetable({ ...editingVegetable, description: e.target.value })
+                    }
+                  />
+                  <input
+                    type="number"
+                    value={editingVegetable.stock}
+                    min={0}
+                    onChange={(e) =>
+                      setEditingVegetable({ ...editingVegetable, stock: Number(e.target.value) })
+                    }
+                  />
+                  <select
+                    value={editingVegetable.category_id}
+                    onChange={(e) =>
+                      setEditingVegetable({ ...editingVegetable, category_id: e.target.value })
+                    }
+                  >
+                    <option value="">เลือกหมวดหมู่</option>
+                    {categories.map((cat) => (
+                      <option key={cat.category_id} value={cat.category_id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="button-row-edit">
+                    <button onClick={handleUpdateVegetable}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                    </svg>
+                      บันทึก
+                    </button>
+                    <button onClick={() => setEditingVegetable(null)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                      ยกเลิก
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+      {/* 🎛️ ส่วนควบคุม (1 ส่วน) */}
+      <div className="veg-controller">
+        <h2>จัดการประเภท</h2>
+
+        {/* 🔍 ช่องค้นหา */}
+        <input
+          type="text"
+          placeholder="ค้นหาประเภท..."
+          value={searchCategory}
+          onChange={(e) => setSearchCategory(e.target.value)}
+        />
+
+        <h2>เพิ่มประเภทใหม่</h2>
+
+        <input
+          type="text"
+          placeholder="ชื่อประเภท"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+        />
+
+        <button onClick={handleAddCategory} className="veg-controller-add-button">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          เพิ่มประเภทใหม่
+        </button>
+      </div>
+      {/* 🧺 catagory(2 ส่วน) */}
+      <div className="veg-items">
+        {filteredCategories.length === 0 ? (
+          <div className="veg-empty-box">
+            <p className="empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
+          </div>
+        ) : (
+          filteredCategories.map((cat) => (
+            <div key={cat.category_id} className="veg-row-wrapper">
+              <div className="veg-row">
+                <div className="veg-text">
+                  <h3>{cat.name}</h3>
+                </div>
+                <div className="button-row">
+                  <button onClick={() => setEditingCategory(cat)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* ✅ ฟอร์มแก้ไขชื่อหมวดหมู่ */}
+              {editingCategory?.category_id === cat.category_id && (
+                <div className="veg-edit-panel active">
+                  <input
+                    type="text"
+                    value={editingCategory.name}
+                    onChange={(e) =>
+                      setEditingCategory({ ...editingCategory, name: e.target.value })
+                    }
+                  />
+                  <div className="button-row-edit">
+                    <button onClick={handleUpdateCategory}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                    </svg>
+                      บันทึก</button>
+                    <button onClick={() => setEditingCategory(null)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                      ยกเลิก</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+
+    </div >
+
   );
 };
 

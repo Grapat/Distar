@@ -6,7 +6,7 @@ const getAllCarts = async (req, res) => {
     const carts = await Cart.findAll({
       attributes: ["cart_id", "quantity"],
       include: [
-        { model: Vegetable, attributes: ["name"] },
+        { model: Vegetable, attributes: ["name", "image_url"] },
         { model: User, attributes: ["user_id", "name", "email"] }, // ✅ แก้ `user` เป็น `User`
       ],
     });
@@ -23,7 +23,7 @@ const getCart = async (req, res) => {
     const cart = await Cart.findAll({
       where: { user_id },
       attributes: ["cart_id", "quantity"],
-      include: [{ model: Vegetable, attributes: ["name"] }],
+      include: [{ model: Vegetable, attributes: ["name", "image_url"] }],
     });
     res.json(cart);
   } catch (error) {
@@ -41,7 +41,7 @@ const getUserCart = async (req, res) => {
       include: [
         {
           model: Vegetable,
-          attributes: ["name", "image_url"], // ✅ เพิ่ม image_url ที่นี่
+          attributes: ["name", "image_url"],
         },
       ],
     });
@@ -72,14 +72,19 @@ const addToCart = async (req, res) => {
     const cartItems = await Cart.findAll({ where: { user_id } });
 
     // ✅ เช็คว่ามีผักนี้อยู่แล้วไหม
-    const existingItem = cartItems.find((item) => item.vegetable_id === vegetable_id);
+    const existingItem = cartItems.find(
+      (item) => item.vegetable_id === vegetable_id
+    );
 
-    let totalQuantity = cartItems.reduce((sum, item) => {
-      if (existingItem && item.vegetable_id === vegetable_id) {
-        return sum + (item.quantity + quantity); // ถ้าจะเพิ่มบนของเดิม
-      }
-      return sum + item.quantity;
-    }, existingItem ? 0 : quantity); // ถ้ายังไม่มี บวกของใหม่เพิ่มไปเลย
+    let totalQuantity = cartItems.reduce(
+      (sum, item) => {
+        if (existingItem && item.vegetable_id === vegetable_id) {
+          return sum + (item.quantity + quantity); // ถ้าจะเพิ่มบนของเดิม
+        }
+        return sum + item.quantity;
+      },
+      existingItem ? 0 : quantity
+    ); // ถ้ายังไม่มี บวกของใหม่เพิ่มไปเลย
 
     // ✅ ตรวจสอบว่าเกิน credit หรือไม่
     if (totalQuantity > currentCredit) {
@@ -174,15 +179,20 @@ const adminCreateCart = async (req, res) => {
 
     // ✅ ดึงรายการในตะกร้าของ user
     const cartItems = await Cart.findAll({ where: { user_id } });
-    const existingItem = cartItems.find(item => item.vegetable_id === vegetable_id);
+    const existingItem = cartItems.find(
+      (item) => item.vegetable_id === vegetable_id
+    );
 
     // ✅ คำนวณยอดรวม
-    let totalQuantity = cartItems.reduce((sum, item) => {
-      if (existingItem && item.vegetable_id === vegetable_id) {
-        return sum + (item.quantity + quantity); // กรณีเพิ่มเข้าอันเดิม
-      }
-      return sum + item.quantity;
-    }, existingItem ? 0 : quantity); // ถ้ายังไม่มี บวกเพิ่มในยอดรวมเลย
+    let totalQuantity = cartItems.reduce(
+      (sum, item) => {
+        if (existingItem && item.vegetable_id === vegetable_id) {
+          return sum + (item.quantity + quantity); // กรณีเพิ่มเข้าอันเดิม
+        }
+        return sum + item.quantity;
+      },
+      existingItem ? 0 : quantity
+    ); // ถ้ายังไม่มี บวกเพิ่มในยอดรวมเลย
 
     // ✅ ตรวจสอบ credit ก่อนบันทึก
     if (totalQuantity > currentCredit) {
@@ -238,7 +248,10 @@ const getCartSummary = async (req, res) => {
     const { user_id } = req.params;
 
     const cartItems = await Cart.findAll({ where: { user_id } });
-    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const totalQuantity = cartItems.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
 
     res.json({ totalQuantity });
   } catch (error) {
