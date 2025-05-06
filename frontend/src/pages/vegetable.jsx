@@ -1,19 +1,36 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 import "../css/vegetable.css";
 
 export default function Vegetable() {
   const { user } = useAuth();
   const [vegetables, setVegetables] = useState([]);
   const [quantities, setQuantities] = useState({});
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  const query = useQuery();
+  const initialCategory = query.get("category") || "ทั้งหมด";
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:4005/api/vegs");
         if (!response.ok) throw new Error("Network response was not ok");
+
+        const catRes = await fetch("http://localhost:4005/api/categories");
+        if (!catRes.ok) throw new Error("Network response was not ok");
+
+        const catData = await catRes.json();
+        setCategories(catData);
 
         const data = await response.json();
         setVegetables(data);
@@ -105,24 +122,54 @@ export default function Vegetable() {
     }
   };
 
+  const filteredVegetables = vegetables.filter((v) => {
+    const matchName = v.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchCategory =
+      selectedCategory === "ทั้งหมด" || v.Category?.name === selectedCategory;
+    return matchName && matchCategory;
+  });
+
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;
 
   return (
-    <div className="veg-container">
-      <div className="veg-box-container">
-        <h2>รายการผัก</h2>
-        <div className="veg-grid">
-          {vegetables.map((veg) => (
+    <>
+
+      <h2>รายการผัก</h2>
+
+      <div className="vegetable-page-grid">
+        <div className="veg-controller">
+          <h2>ค้นหาผัก</h2>
+          <input
+            type="text"
+            placeholder="ค้นหาชื่อผัก..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <label htmlFor="category-filter">ประเภทผัก:</label>
+          <select
+            id="category-filter"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="ทั้งหมด">ทั้งหมด</option>
+            {categories.map((cat) => (
+              <option key={cat.category_id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="veg-items">
+          {filteredVegetables.map((veg) => (
             <div key={veg.vegetable_id} className="veg-card">
-              <div className="veg-img-container">
-                <img
-                  src={veg.image_url || "/images/vegs/default.png"}
-                  alt={veg.name}
-                  className="veg-img"
-                />
-              </div>
-              <div className="veg-info">
+              <img
+                src={veg.image_url || "/images/vegs/default.png"}
+                alt={veg.name}
+                className="veg-image"
+              />
+              <div className="veg-text">
                 <div className="veg-quantity">
                   <button className="minus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
                   <span>{quantities[veg.vegetable_id]}</span>
@@ -135,7 +182,7 @@ export default function Vegetable() {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </div >
+    </>
   );
 }

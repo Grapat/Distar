@@ -8,7 +8,9 @@
   left: 0;
   padding: 10px 0;
   background: white;
+  border-top: 2px solid #ddd;
   border-bottom: 2px solid #ddd;
+  border-radius: 0 0 10px 10px; /* มุมล่างซ้าย-ขวาโค้ง */
   z-index: 1000;
 }
 

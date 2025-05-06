@@ -5,8 +5,8 @@ import "../css/header.css";
 import logo from "../img/L1.png";
 
 const Header = () => {
-  const { user, setUser } = useAuth(); // ✅ Fetch user & setUser
-  const navigate = useNavigate(); // ✅ Initialize navigation
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -17,17 +17,17 @@ const Header = () => {
 
   return (
     <header className="header">
-      <img src={logo} alt="Distar Fresh Logo" className="logo" />
-      <div className="login-part">
-        {user ? (
-          <>
-            {user.userType !== "customer" && (
+      <div className="nav-container">
+        <img src={logo} alt="Distar Fresh Logo" className="logo" />
+        <div className="login-part">
+          {user ? (
+            user.userType !== "customer" && (
               <button onClick={handleLogout}>Logout</button>
-            )}
-          </>
-        ) : (
-          <p>Please log in</p>
-        )}
+            )
+          ) : (
+            <p>Please log in</p>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -15,10 +15,17 @@ const AdminVegetablePage = () => {
   const [editingVegetable, setEditingVegetable] = useState(null);
   const [search, setSearch] = useState("");
   const [searchCategory, setSearchCategory] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
-  const filteredVegetables = vegetables.filter((veg) =>
-    veg.name.toLowerCase().includes(search.toLowerCase())
-  );
+
+  const filteredVegetables = vegetables
+    .filter((veg) =>
+      veg.name.toLowerCase().includes(search.toLowerCase())
+    )
+    .filter((veg) =>
+      categoryFilter === "all" ? true : String(veg.category_id) === categoryFilter
+    );
+
 
   const filteredCategories = categories.filter((cat) =>
     cat.name.toLowerCase().includes(search.toLowerCase())
@@ -51,8 +58,6 @@ const AdminVegetablePage = () => {
     }
   };
 
-
-
   // Handle Add Vegetable
   const handleAddVegetable = async () => {
     try {
@@ -68,6 +73,7 @@ const AdminVegetablePage = () => {
       console.error("Error adding vegetable:", error);
     }
   };
+
   const handleAddCategory = async () => {
     try {
       const response = await fetch("http://localhost:4005/api/categories", {
@@ -153,11 +159,10 @@ const AdminVegetablePage = () => {
     }
   };
 
-
   return (
     <div className="admin-vegetable-page-grid">
       {/* 🎛️ ส่วนควบคุม (1 ส่วน) */}
-      <div className="veg-controller">
+      <div className="admin-veg-controller">
         <h2>จัดการผัก</h2>
 
         {/* 🔍 ช่องค้นหา */}
@@ -167,6 +172,17 @@ const AdminVegetablePage = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="all">ทุกหมวดหมู่</option>
+          {categories.map((cat) => (
+            <option key={cat.category_id} value={cat.category_id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
 
         <h2>เพิ่มผักใหม่</h2>
 
@@ -211,7 +227,7 @@ const AdminVegetablePage = () => {
           ))}
         </select>
 
-        <button onClick={handleAddVegetable} className="veg-controller-add-button">
+        <button onClick={handleAddVegetable} className="admin-veg-controller-add-button">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
@@ -220,22 +236,22 @@ const AdminVegetablePage = () => {
       </div>
 
       {/* 🧺 รายการผัก (2 ส่วน) */}
-      <div className="veg-items">
+      <div className="admin-veg-items">
         {filteredVegetables.length === 0 ? (
-          <div className="veg-empty-box">
-            <p className="empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
+          <div className="admin-veg-empty-box">
+            <p className="admin-empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
           </div>
         ) : (
           filteredVegetables.map((veg) => (
-            <div key={veg.vegetable_id} className="veg-row-wrapper">
-              <div className="veg-row">
-                <img src={veg.image_url || "/images/placeholder.jpg"} alt={veg.name} className="veg-image" />
-                <div className="veg-text">
+            <div key={veg.vegetable_id} className="admin-veg-row-wrapper">
+              <div className="admin-veg-row">
+                <img src={veg.image_url || "/images/placeholder.jpg"} alt={veg.name} className="admin-veg-image" />
+                <div className="admin-veg-text">
                   <h3>{veg.name}</h3>
                   <p>{veg.Category?.name}</p>
                   <p>คงเหลือ: {veg.stock} หน่วย</p>
                 </div>
-                <div className="button-row">
+                <div className="admin-button-row">
                   <button onClick={() => setEditingVegetable(veg)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                   </svg>
@@ -245,7 +261,7 @@ const AdminVegetablePage = () => {
 
               {/* 👇 แสดงฟอร์มเฉพาะถ้า veg คือรายการที่กำลังแก้ */}
               {editingVegetable?.vegetable_id === veg.vegetable_id && (
-                <div className={`veg-edit-panel ${editingVegetable?.vegetable_id === veg.vegetable_id ? "active" : ""}`}>
+                <div className={`admin-veg-edit-panel ${editingVegetable?.vegetable_id === veg.vegetable_id ? "active" : ""}`}>
                   <input
                     type="text"
                     value={editingVegetable.name}
@@ -281,7 +297,7 @@ const AdminVegetablePage = () => {
                     ))}
                   </select>
 
-                  <div className="button-row-edit">
+                  <div className="admin-button-row-edit">
                     <button onClick={handleUpdateVegetable}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                     </svg>
@@ -299,8 +315,9 @@ const AdminVegetablePage = () => {
           ))
         )}
       </div>
+
       {/* 🎛️ ส่วนควบคุม (1 ส่วน) */}
-      <div className="veg-controller">
+      <div className="admin-veg-controller">
         <h2>จัดการประเภท</h2>
 
         {/* 🔍 ช่องค้นหา */}
@@ -320,27 +337,28 @@ const AdminVegetablePage = () => {
           onChange={(e) => setNewCategory(e.target.value)}
         />
 
-        <button onClick={handleAddCategory} className="veg-controller-add-button">
+        <button onClick={handleAddCategory} className="admin-veg-controller-add-button">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
           เพิ่มประเภทใหม่
         </button>
       </div>
+
       {/* 🧺 catagory(2 ส่วน) */}
-      <div className="veg-items">
+      <div className="admin-veg-items">
         {filteredCategories.length === 0 ? (
-          <div className="veg-empty-box">
-            <p className="empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
+          <div className="admin-veg-empty-box">
+            <p className="admin-empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
           </div>
         ) : (
           filteredCategories.map((cat) => (
-            <div key={cat.category_id} className="veg-row-wrapper">
-              <div className="veg-row">
-                <div className="veg-text">
+            <div key={cat.category_id} className="admin-veg-row-wrapper">
+              <div className="admin-veg-row">
+                <div className="admin-veg-text">
                   <h3>{cat.name}</h3>
                 </div>
-                <div className="button-row">
+                <div className="admin-button-row">
                   <button onClick={() => setEditingCategory(cat)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -351,7 +369,7 @@ const AdminVegetablePage = () => {
 
               {/* ✅ ฟอร์มแก้ไขชื่อหมวดหมู่ */}
               {editingCategory?.category_id === cat.category_id && (
-                <div className="veg-edit-panel active">
+                <div className="admin-veg-edit-panel active">
                   <input
                     type="text"
                     value={editingCategory.name}
@@ -359,7 +377,7 @@ const AdminVegetablePage = () => {
                       setEditingCategory({ ...editingCategory, name: e.target.value })
                     }
                   />
-                  <div className="button-row-edit">
+                  <div className="admin-button-row-edit">
                     <button onClick={handleUpdateCategory}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                     </svg>

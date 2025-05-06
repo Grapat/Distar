@@ -10,6 +10,7 @@ const AdminDashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [stockFilter, setStockFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [categories, setCategories] = useState([]);
 
 
   useEffect(() => {
@@ -17,26 +18,34 @@ const AdminDashboard = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // 🟢 1. Users
+        // ✅ Users
         const userRes = await fetch("http://localhost:4005/api/users", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         const userData = await userRes.json();
         setUsers(userData);
 
-        // 🟢 2. Orders
+        // ✅ Orders
         const orderRes = await fetch("http://localhost:4005/api/order", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         const orderData = await orderRes.json();
         setOrders(orderData);
 
-        // 🟢 3. Vegetables
+        // ✅ Vegetables
         const vegRes = await fetch("http://localhost:4005/api/vegs", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         const vegData = await vegRes.json();
         setVegetables(vegData);
+
+        // ✅ Categories
+        const catRes = await fetch("http://localhost:4005/api/categories", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const catData = await catRes.json();
+        setCategories(catData);
+
       } catch (error) {
         console.error("โหลดข้อมูลล้มเหลว:", error);
       }
@@ -83,7 +92,7 @@ const AdminDashboard = () => {
           >
             <h3>รายการผัก</h3>
             <p>รวมทั้งหมด: {vegetables.length} รายการ</p>
-            <p>หมวดหมู่: {Object.keys(groupedByCategory).length} ประเภท</p>
+            <p>หมวดหมู่: {categories.length} ประเภท</p>
           </div>
         </div>
         <div className="dashboard-grid">

@@ -42,14 +42,14 @@ const HomePage = () => {
       <div className="home-section home-card">
         <h3>ประเภทผักแนะนำ</h3>
         <div className="product-section">
-          <div className="product">
+          <div className="product"   onClick={() => navigate("/veg?category=Super Foods")}>
             <div className="product-img-container">
               <img src="/images/vegs/1.png" alt="Super Food" />
             </div>
             <p>คุณค่าทางโภชนาการสูง</p>
             <span>Super Food</span>
           </div>
-          <div className="product">
+          <div className="product" onClick={() => navigate("/veg?category=Salad Greens")}>
             <div className="product-img-container">
               <img src="/images/vegs/7.png" alt="Salad Vegetable" />
             </div>

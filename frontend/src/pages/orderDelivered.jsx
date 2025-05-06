@@ -34,7 +34,7 @@ const OrderDeliver = ({ orderId }) => {
             {orders.map((order) => (
               <li key={order.id} className="order-item">
                 <div className="order-info">
-                  <h3>คำสั่งซื้อ #{order.order_id}</h3>
+                  <h3>คำสั่งซื้อ #{order.id}</h3>
                   <p>สถานะ: <span className={`status ${order.status}`}>{order.status}</span></p>
                   <p>วันที่สั่งซื้อ: {new Date(order.date).toLocaleString("th-TH", {
                     year: "numeric",

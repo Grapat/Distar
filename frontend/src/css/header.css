@@ -1,6 +1,6 @@
 .header {
   display: flex;
-  justify-content: space-between; /* Pushes elements apart */
+  justify-content: center; /* center nav-container */
   align-items: center;
   padding: 2vh 2vw;
   position: fixed;
@@ -9,21 +9,30 @@
   width: 100%;
   background-color: white;
   z-index: 1000;
-  height: 10vh; /* Ensures the header has enough height */
-  box-sizing: border-box; /* Prevents content overflow */
+  height: 10vh;
+  box-sizing: border-box;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
 }
 
 .logo {
   height: 100%;
-  max-width: 150px; /* Limits logo size */
+  max-width: 150px;
 }
 
 .login-part {
   display: flex;
   align-items: center;
-  gap: 10px; /* Spacing between text and button */
-  white-space: nowrap; /* Prevents text wrapping */
-  margin-left: auto; /* Pushes login section to the right */
+  gap: 10px;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .login-part p {
@@ -39,7 +48,7 @@
   cursor: pointer;
   border-radius: 5px;
   font-size: 14px;
-  max-width: 100px; /* Prevents button overflow */
+  max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -48,16 +57,23 @@
   background-color: #0056b3;
 }
 
+.logo-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Tablet */
 @media (max-width: 768px) {
   .header {
     padding: 1.5vh 3vw;
     height: 8vh;
   }
   .logo {
-    max-width: 120px; /* Adjusts for smaller screens */
+    max-width: 120px;
   }
   .login-part p {
-    font-size: 14px; /* Adjusts text size */
+    font-size: 14px;
   }
   .login-part button {
     font-size: 12px;
@@ -65,22 +81,63 @@
   }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
   .header {
-    padding: 1.2vh 3vw;
     height: 7vh;
   }
+
+  .nav-container {
+    justify-content: center; /* Center everything */
+  }
+
   .logo {
-    max-width: 100px; /* Adjust logo for mobile */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100px;
   }
+
   .login-part {
-    gap: 5px; /* Reduce spacing */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 5px;
   }
+
   .login-part p {
-    font-size: 12px; /* Reduce text size */
+    font-size: 12px;
   }
+
   .login-part button {
     font-size: 10px;
     padding: 3px 6px;
+  }
+
+  .nav-container {
+    justify-content: space-between;
+  }
+
+  .logo-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    pointer-events: none; /* 🔒 ป้องกันการรบกวนปุ่มด้านหลัง */
+  }
+
+  .logo {
+    max-width: 100px;
+    height: auto;
+    pointer-events: auto; /* ✅ อนุญาตให้กดโลโก้ได้ */
+  }
+
+  .login-part {
+    position: relative;
+    z-index: 1;
   }
 }
