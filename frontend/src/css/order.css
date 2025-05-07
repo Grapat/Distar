@@ -13,6 +13,7 @@
   padding: 2rem;
   border-radius: 1.25rem;
   width: 100%;
+  min-width: 250px;
   box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
 }
 
