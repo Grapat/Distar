@@ -68,6 +68,19 @@ const AdminUserPage = () => {
     }
   };
 
+  // ✅ ฟิลเตอร์ก่อนแสดงผล
+  const filteredUsers = users.filter((user) => {
+    const search = searchTerm.toLowerCase();
+    const matchNameOrEmail =
+      user.name.toLowerCase().includes(search) ||
+      user.email.toLowerCase().includes(search);
+
+    const matchRole =
+      roleFilter === "all" || user.user_type.toLowerCase() === roleFilter.toLowerCase();
+
+    return matchNameOrEmail && matchRole;
+  });
+
   return (
     <div className="admin-user-page-grid">
       {/* 🎛️ ส่วนควบคุม (1 ส่วน) */}
@@ -83,7 +96,7 @@ const AdminUserPage = () => {
 
           <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
             <option value="all">ทุกบทบาท</option>
-            <option value="user">User</option>
+            <option value="customer">User</option>
             <option value="admin">Admin</option>
           </select>
         </div>
@@ -93,7 +106,7 @@ const AdminUserPage = () => {
         {users.length === 0 ? (
           <p>No users found.</p>
         ) : (
-          users.map((user) => (
+          filteredUsers.slice(0, 20).map((user) => (
             <div key={user.user_id} className="user-row-wrapper">
               <div className="user-row">
                 <h3>{user.name}</h3>

@@ -125,7 +125,7 @@ const AdminOrderPage = () => {
           </svg>
           <h3>
             รอดำเนินการ (Pending)</h3>
-          {filteredOrders.filter((o) => o.status === "pending").map(renderOrder)}
+          {filteredOrders.slice(0, 20).filter((o) => o.status === "pending").map(renderOrder)}
         </div>
         <div className="order-column shipped">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -133,7 +133,7 @@ const AdminOrderPage = () => {
           </svg>
           <h3>
             จัดส่งแล้ว (Shipped)</h3>
-          {filteredOrders.filter((o) => o.status === "shipped").map(renderOrder)}
+          {filteredOrders.slice(0, 20).filter((o) => o.status === "shipped").map(renderOrder)}
         </div>
 
         <div className="order-column delivered">
@@ -142,7 +142,7 @@ const AdminOrderPage = () => {
           </svg>
           <h3>
             ส่งสำเร็จ (Delivered)</h3>
-          {filteredOrders.filter((o) => o.status === "delivered").map(renderOrder)}
+          {filteredOrders.slice(0, 20).filter((o) => o.status === "delivered").map(renderOrder)}
         </div>
       </div>
     </div>

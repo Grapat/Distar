@@ -8,6 +8,7 @@ const AdminCartPage = () => {
   const [vegetables, setVegetables] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [searchVeg, setSearchVeg] = useState("");
+  const [userSearch, setUserSearch] = useState("");
   const [selectedVegetables, setSelectedVegetables] = useState([]);
   const [quantityMap, setQuantityMap] = useState({});
   const navigate = useNavigate();
@@ -165,9 +166,23 @@ const AdminCartPage = () => {
     }
   };
 
+  const filteredCart = Object.values(groupedCart).filter(({ user }) => {
+    const name = user?.name?.toLowerCase() || "";
+    const id = user?.user_id?.toString().toLowerCase() || "";
+    return name.includes(userSearch) || id.includes(userSearch);
+  });
+
+
   return (
     <div className="admin-cart-grid">
       <div className="cart-actions">
+        <h3>หาตะกร้าของผู้ใช้</h3>
+        <input
+          type="text"
+          placeholder="ค้นหาชื่อหรือ ID ผู้ใช้..."
+          value={userSearch}
+          onChange={(e) => setUserSearch(e.target.value.toLowerCase())}
+        />
         <h3>จัดการตะกร้าของผู้ใช้</h3>
         <input
           list="user-list"
@@ -230,12 +245,12 @@ const AdminCartPage = () => {
       </div>
 
       <div className="cart-container">
-        {Object.keys(groupedCart).length === 0 ? (
+        {filteredCart.length === 0 ? (
           <div className="cart-empty-box">
             <p className="empty-cart-admin">ยังไม่มีตะกร้าของผู้ใช้ใดเลยค่ะ 🧺</p>
           </div>
         ) : (
-          Object.values(groupedCart).map(({ user, vegetables }) => (
+          filteredCart.slice(0, 20).map(({ user, vegetables }) => (
             <div key={user?.user_id || "unknown"} className="cart-item-user">
               <div className="cart-info">
                 <h3>ผู้ใช้: {user?.name || "ไม่พบผู้ใช้"} ({user?.email})</h3>
