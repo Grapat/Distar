@@ -161,27 +161,29 @@ export default function Vegetable() {
       </div>
       <div className="vegetable-page-grid">
         <div className="veg-items">
-          {filteredVegetables.map((veg) => (
-            <div key={veg.vegetable_id} className="veg-card">
-              <img
-                src={veg.image_url || "/images/vegs/default.png"}
-                alt={veg.name}
-                className="veg-image"
-                onClick={() => navigate(`/veg/${veg.vegetable_id}`)} // ✅ navigate ไปยังหน้า detail
-                style={{ cursor: "pointer" }} // ✅ เพิ่ม mouse pointer
-              />
-              <div className="veg-text">
-                <div className="veg-quantity">
-                  <button className="minus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
-                  <span>{quantities[veg.vegetable_id]}</span>
-                  <button className="plus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, 1)}>+</button>
+          {filteredVegetables
+            .sort((a, b) => b.stock - a.stock) // ✅ เรียงจากมากไปน้อย
+            .map((veg) => (
+              <div key={veg.vegetable_id} className="veg-card">
+                <img
+                  src={veg.image_url || "/images/vegs/default.png"}
+                  alt={veg.name}
+                  className="veg-image"
+                  onClick={() => navigate(`/veg/${veg.vegetable_id}`)} // ✅ navigate ไปยังหน้า detail
+                  style={{ cursor: "pointer" }} // ✅ เพิ่ม mouse pointer
+                />
+                <div className="veg-text">
+                  <div className="veg-quantity">
+                    <button className="minus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, -1)}>-</button>
+                    <span>{quantities[veg.vegetable_id]}</span>
+                    <button className="plus-btn" onClick={() => handleQuantityChange(veg.vegetable_id, 1)}>+</button>
+                  </div>
+                  <button className="add-btn" onClick={() => handleAddToCart(veg.vegetable_id)}>
+                    เพิ่มเข้าตะกร้า
+                  </button>
                 </div>
-                <button className="add-btn" onClick={() => handleAddToCart(veg.vegetable_id)}>
-                  เพิ่มเข้าตะกร้า
-                </button>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </>

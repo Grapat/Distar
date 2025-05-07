@@ -242,7 +242,9 @@ const AdminVegetablePage = () => {
             <p className="admin-empty-veg">ไม่มีหมวดหมู่ในระบบค่ะ 📂</p>
           </div>
         ) : (
-          filteredVegetables.map((veg) => (
+          filteredVegetables
+          .sort((a, b) => a.stock - b.stock)
+          .map((veg) => (
             <div key={veg.vegetable_id} className="admin-veg-row-wrapper">
               <div className="admin-veg-row">
                 <img src={veg.image_url || "/images/placeholder.jpg"} alt={veg.name} className="admin-veg-image" />
