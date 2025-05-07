@@ -1,58 +1,55 @@
 .account-container {
   background: #fcfcfc;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 1rem 1rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  box-sizing: border-box;
+  min-width: 20rem; /* ✅ ป้องกันไม่ให้เล็กเกินไป */
 }
 
 .account-box {
   background: white;
-  padding: 2rem;
-  border-radius: 1.25rem;
-  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.05);
   width: 100%;
-  text-align: center;
-  animation: fadeGrow 0.3s ease;
-  animation-fill-mode: both;
+  max-width: 800px;          /* ✅ จาก 500px → 768px ให้กว้างขึ้น */
+  text-align: left;          /* ✅ ชิดซ้าย */
+  font-size: 2rem;        /* ✅ อ่านง่ายขึ้น */
+  box-sizing: border-box;
 }
 
-.account-info {
-  margin-top: 1.5rem;
+.account-box h2 {
+  font-size: 1.75rem;
   margin-bottom: 1.5rem;
 }
 
-.profile-pic {
-  width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
+.account-info {
+  margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
 .logout-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
 }
 
-.logout-btn:hover {
-  background-color: #d32f2f;
+/* ✅ Responsive */
+@media (max-width: 480px) {
+  .account-box {
+    padding: 1.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .logout-btn {
+    font-size: 0.95rem;
+    padding: 0.7rem;
+  }
 }
 
-@keyframes fadeGrow {
-  from {
-    opacity: 0;
-    transform: scaleY(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scaleY(1);
-  }
-}

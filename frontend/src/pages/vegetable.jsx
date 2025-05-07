@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../css/vegetable.css";
 
 export default function Vegetable() {
@@ -10,6 +10,7 @@ export default function Vegetable() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   function useQuery() {
@@ -136,31 +137,29 @@ export default function Vegetable() {
     <>
 
       <h2>รายการผัก</h2>
-
+      <div className="veg-controller">
+        <h2>ค้นหาผัก</h2>
+        <input
+          type="text"
+          placeholder="ค้นหาชื่อผัก..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <label htmlFor="category-filter">ประเภทผัก:</label>
+        <select
+          id="category-filter"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="ทั้งหมด">ทั้งหมด</option>
+          {categories.map((cat) => (
+            <option key={cat.category_id} value={cat.name}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="vegetable-page-grid">
-        <div className="veg-controller">
-          <h2>ค้นหาผัก</h2>
-          <input
-            type="text"
-            placeholder="ค้นหาชื่อผัก..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <label htmlFor="category-filter">ประเภทผัก:</label>
-          <select
-            id="category-filter"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option value="ทั้งหมด">ทั้งหมด</option>
-            {categories.map((cat) => (
-              <option key={cat.category_id} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div className="veg-items">
           {filteredVegetables.map((veg) => (
             <div key={veg.vegetable_id} className="veg-card">
@@ -168,6 +167,8 @@ export default function Vegetable() {
                 src={veg.image_url || "/images/vegs/default.png"}
                 alt={veg.name}
                 className="veg-image"
+                onClick={() => navigate(`/veg/${veg.vegetable_id}`)} // ✅ navigate ไปยังหน้า detail
+                style={{ cursor: "pointer" }} // ✅ เพิ่ม mouse pointer
               />
               <div className="veg-text">
                 <div className="veg-quantity">
@@ -182,7 +183,7 @@ export default function Vegetable() {
             </div>
           ))}
         </div>
-      </div >
+      </div>
     </>
   );
 }

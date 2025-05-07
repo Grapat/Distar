@@ -1,176 +1,97 @@
 .veg-detail-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    font-family: "Inter", sans-serif;
-    background-color: #fff;
+  padding: 1rem;
+  background: #fff;
+  font-family: "Inter", sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin-bottom: 3rem;
+}
+
+.veg-detail-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.veg-image-section img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.veg-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #213547;
+  margin-bottom: 0.5rem;
+}
+
+.veg-badge {
+  display: inline-block;
+  background-color: #ff4d4d;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.veg-rating {
+  display: flex;
+  align-items: center;
+  color: #444;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+.veg-counter {
+  display: flex;
+  justify-content: center; /* ✅ จัดแนวนอนให้อยู่กลาง */
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.counter-btn {
+  background: #8bc34a;
+  color: white;
+  font-size: 18px;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.counter-value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.veg-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #333;
+}
+
+@media (min-width: 768px) {
+  .veg-detail-content {
+    flex-direction: row;
+    align-items: flex-start;
   }
-  
-  .veg-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
+
+  .veg-image-section {
+    flex: 1;
+    padding-right: 1.5rem;
   }
-  
-  .veg-logo {
-    display: flex;
-    align-items: center;
+
+  .veg-info-section {
+    flex: 1;
+    text-align: center;
   }
-  
-  .veg-logo img {
-    height: 30px;
-    margin-right: 10px;
-  }
-  
-  .veg-image {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 15px;
-  }
-  
-  .veg-info {
-    text-align: left;
-  }
-  
-  .veg-name {
-    font-size: 22px;
-    font-weight: bold;
-    color: #213547;
-  }
-  
-  .veg-badge {
-    display: inline-block;
-    background-color: #ff4d4d;
-    color: white;
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 10px;
-    margin-left: 5px;
-  }
-  
-  .veg-rating {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-    color: #666;
-  }
-  
-  .veg-rating span {
-    margin-left: 5px;
-    font-size: 14px;
-  }
-  
+
   .veg-counter {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f3f3f3;
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 10px;
+    justify-content: flex-start;
   }
-  
-  .veg-counter button {
-    background: #58a700;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .veg-counter button:hover {
-    background: #4a9200;
-  }
-  
-  .veg-description {
-    margin-top: 20px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #333;
-  }
-  
-  .veg-benefits {
-    margin-top: 15px;
-  }
-  
-  .veg-benefits h3 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #213547;
-  }
-  
-  .veg-benefits ul {
-    list-style-type: disc;
-    padding-left: 20px;
-  }
-  
-  .veg-benefits li {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .related-vegs {
-    margin-top: 20px;
-  }
-  
-  .related-vegs h3 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #213547;
-    margin-bottom: 10px;
-  }
-  
-  .related-veg-list {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-  }
-  
-  .related-veg-item {
-    width: 100px;
-    text-align: center;
-  }
-  
-  .related-veg-item img {
-    width: 100%;
-    border-radius: 10px;
-  }
-  
-  .navbar {
-    display: flex;
-    justify-content: space-around;
-    padding: 15px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: white;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .navbar-icon {
-    text-align: center;
-    font-size: 12px;
-    color: #333;
-  }
-  
-  .navbar-icon img {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 5px;
-  }
-  
-  .cart-badge {
-    position: absolute;
-    background: red;
-    color: white;
-    font-size: 10px;
-    padding: 3px 6px;
-    border-radius: 50%;
-    top: 5px;
-    right: 5px;
-  }
-  
+}

@@ -119,19 +119,8 @@
     justify-content: space-between;
   }
 
-  .logo-wrapper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: center;
-    pointer-events: none; /* 🔒 ป้องกันการรบกวนปุ่มด้านหลัง */
-  }
-
   .logo {
-    max-width: 100px;
+    max-width: 150px;
     height: auto;
     pointer-events: auto; /* ✅ อนุญาตให้กดโลโก้ได้ */
   }

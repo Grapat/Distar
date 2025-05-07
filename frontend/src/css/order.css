@@ -1,11 +1,11 @@
 .order-container {
   background: #fcfcfc;
-  padding: 2rem;
+  padding: 2rem 1rem;
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  min-width: 500px;
   margin-top: 3rem;
+  box-sizing: border-box;
 }
 
 .order-box {
@@ -92,5 +92,37 @@ h2 {
   to {
     opacity: 1;
     transform: scaleY(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .order-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .order-box {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .order-item {
+    padding: 1rem;
+  }
+
+  .order-info h3 {
+    font-size: 1rem;
+  }
+
+  .order-info p {
+    font-size: 0.875rem;
+  }
+
+  .status {
+    font-size: 0.75rem;
+    padding: 2px 5px;
+  }
+
+  h2 {
+    font-size: 1.25rem;
   }
 }

@@ -15,12 +15,12 @@ body.login-page {
   background-color: #f9f9f9;
   padding: 20px;
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .login-logo {
-  max-width: 100%;
-  margin-bottom: 20px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .login-logo img {
@@ -33,6 +33,7 @@ body.login-page {
 h2 {
   color: #333;
   margin-bottom: 20px;
+  font-size: 24px;
 }
 
 form {
@@ -59,6 +60,7 @@ button {
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -74,6 +76,7 @@ button:hover {
 p {
   margin-top: 15px;
   font-size: 14px;
+  color: #555;
 }
 
 a {
@@ -83,4 +86,29 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  input, button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .login-logo img {
+    max-width: 150px;
+  }
+
+  p {
+    font-size: 13px;
+    text-align: center;
+  }
 }

@@ -54,22 +54,25 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>สมัครสมาชิก</h2>
-      <form onSubmit={handleRegister}>
-        <input type="text" placeholder="ชื่อ" value={name} onChange={(e) => setName(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="รหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <input type="password" placeholder="ยืนยันรหัสผ่าน" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-        <input type="tel" placeholder="เบอร์โทรศัพท์" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-        <input type="text" placeholder="ที่อยู่หลัก" value={address} onChange={(e) => setAddress(e.target.value)} required />
-        <input type="text" placeholder="ที่อยู่สำรอง (ถ้ามี)" value={altAddress} onChange={(e) => setAltAddress(e.target.value)} />
-        <input type="text" placeholder="จังหวัด" value={province} onChange={(e) => setProvince(e.target.value)} required />
-        <input type="text" placeholder="รหัสไปรษณีย์" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
-        {error && <p className="error">{error}</p>}
-        <button type="submit">สมัครสมาชิก</button>
-      </form>
-      <p>มีบัญชีอยู่แล้ว? <a href="/login">เข้าสู่ระบบ</a></p>
+    <div className="register-page">
+
+      <div className="register-container">
+        <h2>สมัครสมาชิก</h2>
+        <form onSubmit={handleRegister}>
+          <input type="text" placeholder="ชื่อ" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="รหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input type="password" placeholder="ยืนยันรหัสผ่าน" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+          <input type="tel" placeholder="เบอร์โทรศัพท์" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+          <input type="text" placeholder="ที่อยู่หลัก" value={address} onChange={(e) => setAddress(e.target.value)} required />
+          <input type="text" placeholder="ที่อยู่สำรอง (ถ้ามี)" value={altAddress} onChange={(e) => setAltAddress(e.target.value)} />
+          <input type="text" placeholder="จังหวัด" value={province} onChange={(e) => setProvince(e.target.value)} required />
+          <input type="text" placeholder="รหัสไปรษณีย์" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
+          {error && <p className="error">{error}</p>}
+          <button type="submit">สมัครสมาชิก</button>
+        </form>
+        <p>มีบัญชีอยู่แล้ว? <a href="/login">เข้าสู่ระบบ</a></p>
+      </div>
     </div>
   );
 };

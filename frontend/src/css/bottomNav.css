@@ -18,13 +18,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 20%; /* Each item takes up 20% of the width */
-  flex: 1; /* Make items take equal space */
+  width: 20%;
+  flex: 1;
   text-align: center;
   color: #333;
-  font-size: 1.2vw; /* Responsive font size */
+  font-size: 1.2vw;
   cursor: pointer;
   padding: 1.2vh 0;
+}
+
+.nav-item svg {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
 }
 
 .cart-icon-wrapper {
@@ -42,36 +48,32 @@
   border-radius: 50%;
 }
 
-
-/* Responsive Design */
+/* ✅ Tablet view */
 @media (max-width: 768px) {
-  .bottom-nav {
-      padding: 1vh 1.5vw; /* Adjust padding for smaller screens */
-  }
-
   .nav-item {
-      font-size: 1rem; /* Use rem for readability */
-      padding: 1vh 0;
+    font-size: 0.95rem;
+    padding: 1vh 0;
   }
 
-  .nav-item img {
-      width: 2rem;
-      height: 2rem; /* Scale down icons */
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
   }
 }
 
+/* ✅ Mobile view: ซ่อน span */
 @media (max-width: 480px) {
-  .bottom-nav {
-      padding: 0.8vh 1vw; /* Further reduce padding */
+  .nav-item span:not(.cart-badge) {
+    display: none;
   }
 
   .nav-item {
-      font-size: 0.9rem; /* Reduce text size */
-      padding: 0.8vh 0;
+    padding: 0.5vh 0;
   }
 
-  .nav-item img {
-      width: 1.8rem;
-      height: 1.8rem; /* Adjust icon size */
+  .nav-item svg {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 0;
   }
 }

@@ -8,19 +8,23 @@ body {
   height: auto;
   max-width: 80rem;
   margin-top: 1rem;
+  min-width: 20rem; /* ✅ ป้องกันไม่ให้เล็กเกินไป */
 }
 
-.cart-container-user {
+.cart-page .cart-container-user {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  min-width: 350px;
+  max-width: 600px; /* ✅ ป้องกันล้นจอใหญ่ */
+  margin: 0 auto; /* ✅ จัดกึ่งกลางแนวนอน */
   background: white;
   padding: 1.25rem;
   border-radius: 0.625rem;
   margin-bottom: 5rem;
   box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  animation: fadeGrow 0.3s ease; /* 🟢 ทำให้การขยาย-ย่อ smooth */
 }
 
 .cart-item-user {
@@ -98,17 +102,28 @@ body {
   border: none;
 }
 
-.action-buttons {
+.cart-page .action-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
+  text-align: center;
 }
 
-.action-buttons .save-btn,
-.action-buttons .cancel-btn {
-  flex: 1 1 50%;
-  max-width: 50%;
+.cart-page .action-buttons button {
+  flex: 0 1 220px;
+  max-width: 90%;
+  width: 100%;
+  max-height: 48px; /* ✅ จำกัดความสูงไม่ให้ยืดเกิน */
+  overflow: hidden; /* ป้องกันเนื้อในล้น */
+  display: flex; /* ✅ จัด icon + ข้อความในแนวนอน */
+  align-items: center; /* ✅ กึ่งกลางแนวตั้ง */
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem; /* ปรับ padding ไม่ให้สูงเกิน */
+  font-size: 1rem;
 }
 
 .edit-btn svg,
@@ -190,10 +205,6 @@ body {
   }
 }
 
-.cart-container-user {
-  animation: fadeGrow 0.3s ease;
-}
-
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -235,4 +246,87 @@ body {
 
 .btn-toggle-hidden {
   visibility: hidden;
+  width: 0px;
+  height: 0px;
+}
+
+/* ✅ Scoped Selector ป้องกันกระทบหน้าอื่น */
+.cart-page {
+  padding: 1rem;
+}
+
+/* ✅ Responsive: Layout แนวตั้งบนมือถือ */
+@media (max-width: 768px) {
+  .cart-page .cart-container-user {
+    width: 100%;
+    max-width: 95%; /* ✅ ไม่เต็มจอ 100% เพื่อมี margin ซ้ายขวานิดนึง */
+    padding: 1rem;
+  }
+
+  .cart-page .cart-item-user {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem; /* ⭕ ให้ขอบมน */
+    background-color: #ffffff;
+  }
+
+  .cart-page .cart-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+
+  .cart-page .cart-info {
+    text-align: center;
+    font-weight: 600;
+    padding: 0.5rem 0;
+  }
+
+  .cart-page .cart-quantity {
+    display: flex;
+    flex-direction: column; /* ✅ เรียงแนวตั้ง */
+    align-items: center; /* ✅ จัดให้อยู่กลาง */
+    justify-content: center;
+    gap: 0.3rem;
+  }
+
+  .cart-page .cart-quantity .quantity-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .cart-page .cart-quantity .quantity-controls {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .cart-page .quantity-btn {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .cart-page .quantity-btn,
+  .cart-page .delete-btn {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .cart-page .delete-btn {
+    display: block;
+    margin: 0.5rem auto 0;
+  }
+
+  .cart-page .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cart-page .action-buttons button {
+    font-size: 0.9rem;
+    max-height: 42px;
+    padding: 0.4rem 0.8rem;
+  }
 }

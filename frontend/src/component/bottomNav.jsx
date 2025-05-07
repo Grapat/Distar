@@ -29,7 +29,7 @@ const BottomNav = () => {
 
   // ✅ ตั้ง interval refresh ทุก 30 วินาที
   useEffect(() => {
-    const interval = setInterval(fetchCartCount, 30000); // 30 วินาที
+    const interval = setInterval(fetchCartCount, 10000); // 30 วินาที
     return () => clearInterval(interval);
   }, [user]);
 

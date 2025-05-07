@@ -1,20 +1,22 @@
+/* ✅ โครงสร้างหลักเดิม */
 .order-nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100vw;          /* 💡 ให้ครอบเต็มหน้าจอ */
-  position: fixed;       /* 💡 ให้อยู่เหนือ content เสมอ */
-  top: 10vh;             /* 💡 ปรับระยะจาก header (10vh จาก header.css) */
+  width: 100vw;
+  position: fixed;
+  top: 10vh; /* ✅ อยู่ใต้ header */
   left: 0;
   padding: 10px 0;
   background: white;
   border-top: 2px solid #ddd;
   border-bottom: 2px solid #ddd;
-  border-radius: 0 0 10px 10px; /* มุมล่างซ้าย-ขวาโค้ง */
-  z-index: 1000;
+  border-radius: 0 0 10px 10px;
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
 }
 
-
+/* ✅ ปุ่มแต่ละอัน */
 .nav-item {
   font-size: 16px;
   font-weight: bold;
@@ -23,11 +25,30 @@
   cursor: pointer;
   padding: 10px 16px;
   border: none;
+  border-radius: 6px;
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* ✅ เปลี่ยนเป็นสีเทาเมื่อ hover */
 .nav-item:hover {
-  background-color: #f0f0f0; /* เทาอ่อน */
-  color: #222;               /* สีตัวอักษรเข้มขึ้นเล็กน้อย */
+  background-color: #f0f0f0;
+  color: #222;
+}
+
+/* ✅ Responsive: ปรับแนวปุ่มสำหรับมือถือ */
+@media (max-width: 600px) {
+  .order-nav {
+    top: 3rem; /* ✅ ยังคงอยู่ด้านบน */
+    bottom: unset; /* ❌ ปิด bottom ที่เคยใช้ */
+    border-radius: 0 0 10px 10px;
+    flex-direction: row;
+    padding: 0.5rem 0;
+  }
+
+  .nav-item {
+    flex: 1;
+    font-size: 14px;
+    padding: 10px 6px;
+    text-align: center;
+    border-radius: 0;
+  }
 }
