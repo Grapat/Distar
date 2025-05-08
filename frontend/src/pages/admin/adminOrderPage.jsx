@@ -9,7 +9,7 @@ const AdminOrderPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:4005/api/order" || `${API}/api/order`);
+        const response = await fetch(`${API}/api/order`);
         const data = await response.json();
         setOrders(data);
       } catch (error) {
@@ -22,7 +22,7 @@ const AdminOrderPage = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await fetch(`http://localhost:4005/api/order/${orderId}` || `${API}/api/order/${orderId}`, {
+      await fetch(`${API}/api/order/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const AdminOrderPage = () => {
     if (!window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบ Order #${orderId}?`)) return;
 
     try {
-      const response = await fetch(`http://localhost:4005/api/order/${orderId}` || `${API}/api/order/${orderId}`, {
+      const response = await fetch(`${API}/api/order/${orderId}`, {
         method: "DELETE",
       });
 

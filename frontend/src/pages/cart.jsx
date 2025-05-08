@@ -19,7 +19,7 @@ const Cart = () => {
 
     const fetchCartItems = async () => {
       try {
-        const response = await fetch(`http://localhost:4005/api/cart/user/${user.user_id}`);
+        const response = await fetch(`${API}/api/cart/user/${user.user_id}`);
         const data = await response.json();
         setCartItems(data);
       } catch (error) {
@@ -29,7 +29,7 @@ const Cart = () => {
 
     const fetchUserCredit = async () => {
       try {
-        const response = await fetch(`http://localhost:4005/api/auth/user`, {
+        const response = await fetch(`${API}/api/auth/user`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -48,7 +48,7 @@ const Cart = () => {
 
   const updateCartQuantity = async (cart_id, newQuantity) => {
     try {
-      const response = await fetch(`http://localhost:4005/api/cart/${cart_id}` || `${API}/api/cart/${cart_id}`, {
+      const response = await fetch(`${API}/api/cart/${cart_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQuantity }),
@@ -138,7 +138,7 @@ const Cart = () => {
     }
 
     for (const cart_id of deletedItems) {
-      await fetch(`http://localhost:4005/api/cart/${cart_id}`, {
+      await fetch(`${API}/api/cart/${cart_id}`, {
         method: "DELETE",
       });
     }
@@ -161,7 +161,7 @@ const Cart = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:4005/api/order/place/${user.user_id}`, {
+      const response = await fetch(`${API}/api/order/place/${user.user_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

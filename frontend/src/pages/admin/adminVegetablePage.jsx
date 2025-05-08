@@ -41,7 +41,7 @@ const AdminVegetablePage = () => {
   // Fetch all vegetables
   const fetchVegetables = async () => {
     try {
-      const response = await fetch("http://localhost:4005/api/vegs" || `${API}/api/vegs`);
+      const response = await fetch(`${API}/api/vegs`);
       const data = await response.json();
       setVegetables(data);
     } catch (error) {
@@ -52,7 +52,7 @@ const AdminVegetablePage = () => {
   // Fetch categories to show category names
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:4005/api/categories" || `${API}/api/categories`);
+      const response = await fetch(`${API}/api/categories`);
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -63,7 +63,7 @@ const AdminVegetablePage = () => {
   // Handle Add Vegetable
   const handleAddVegetable = async () => {
     try {
-      const response = await fetch("http://localhost:4005/api/vegs"  || `${API}/api/vegs`, {
+      const response = await fetch(`${API}/api/vegs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newVegetable),
@@ -78,7 +78,7 @@ const AdminVegetablePage = () => {
 
   const handleAddCategory = async () => {
     try {
-      const response = await fetch("http://localhost:4005/api/categories" || `${API}/api/categories`, {
+      const response = await fetch(`${API}/api/categories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newCategory }),
@@ -95,7 +95,7 @@ const AdminVegetablePage = () => {
   const handleUpdateVegetable = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4005/api/vegs/${editingVegetable.vegetable_id}` || `${API}/api/vegs/${editingVegetable.vegetable_id}`,
+        `${API}/api/vegs/${editingVegetable.vegetable_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -118,7 +118,7 @@ const AdminVegetablePage = () => {
   const handleUpdateCategory = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4005/api/categories/${editingCategory.category_id}` || `${API}/api/categories/${editingCategory.category_id}`,
+        `${API}/api/categories/${editingCategory.category_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -143,7 +143,7 @@ const AdminVegetablePage = () => {
     if (!confirmDelete) return;
 
     try {
-      await fetch(`http://localhost:4005/api/vegs/${vegetableId}` || `${API}/api/vegs/${vegetableId}`, {
+      await fetch(`${API}/api/vegs/${vegetableId}`, {
         method: "DELETE",
       });
       setVegetables((prevVegetables) =>
@@ -161,7 +161,7 @@ const AdminVegetablePage = () => {
     if (!confirmDelete) return;
 
     try {
-      await fetch(`http://localhost:4005/api/categories/${categoryId}` || `${API}/api/categories/${categoryId}`, {
+      await fetch(`${API}/api/categories/${categoryId}`, {
         method: "DELETE",
       });
       setCategories(categories.filter((cat) => cat.category_id !== categoryId));

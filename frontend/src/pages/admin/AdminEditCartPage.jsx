@@ -16,7 +16,7 @@ const AdminEditCartPage = () => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:4005/api/cart/user/${user_id}` || `${API}/api/cart/user/${user_id}`, {
+      const response = await fetch(`${API}/api/cart/user/${user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartItems(await response.json());
@@ -28,7 +28,7 @@ const AdminEditCartPage = () => {
   const fetchUserCredit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:4005/api/users/${user_id}` || `${API}/api/users/${user_id}`, {
+      const res = await fetch(`${API}/api/users/${user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -61,7 +61,7 @@ const AdminEditCartPage = () => {
       // ✅ อัปเดตตะกร้า
       await Promise.all(
         cartItems.map(async (item) => {
-          await fetch(`http://localhost:4005/api/cart/${item.cart_id}` || `${API}/api/cart/${item.cart_id}`, {
+          await fetch(`${API}/api/cart/${item.cart_id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const AdminEditCartPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:4005/api/cart/${cart_id}` || `${API}/api/cart/${cart_id}`, {
+      await fetch(`${API}/api/cart/${cart_id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

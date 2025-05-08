@@ -13,7 +13,7 @@ const OrderPending = () => {
       try {
         if (!user_id) return;
 
-        const response = await fetch(`http://localhost:4005/api/order/pending/user/${user_id}` || `${API}/api/order/pending/user/${user_id}`);
+        const response = await fetch(`${API}/api/order/pending/user/${user_id}`);
         const data = await response.json();
         setOrders(data);
       } catch (error) {

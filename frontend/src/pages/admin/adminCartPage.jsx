@@ -22,7 +22,7 @@ const AdminCartPage = () => {
 
   const fetchData = async (endpoint, setter) => {
     try {
-      const response = await fetch(`http://localhost:4005/api/${endpoint}` || `${API}/api/${endpoint}`);
+      const response = await fetch(`${API}/api/${endpoint}`);
       const data = await response.json();
       setter(data);
     } catch (error) {
@@ -33,7 +33,7 @@ const AdminCartPage = () => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:4005/api/cart/all" || `${API}/api/cart/all`, {
+      const response = await fetch(`${API}/api/cart/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartItems(await response.json());
@@ -81,8 +81,7 @@ const AdminCartPage = () => {
     try {
       const responses = await Promise.all(
         items.map(async (item) => {
-          const response = await fetch(
-            "http://localhost:4005/api/cart/admin-create" || `${API}/api/cart/admin-create`,
+          const response = await fetch(`${API}/api/cart/admin-create`,
             {
               method: "POST",
               headers: {
@@ -111,7 +110,7 @@ const AdminCartPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:4005/api/cart/clear/${user_id}` || `${API}/api/cart/clear/${user_id}`, {
+      await fetch(`${API}/api/cart/clear/${user_id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -139,7 +138,7 @@ const AdminCartPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:4005/api/order/place/${user_id}` || `${API}/api/order/place/${user_id}`, {
+      const response = await fetch(`${API}/api/order/place/${user_id}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });

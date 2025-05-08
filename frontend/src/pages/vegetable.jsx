@@ -25,10 +25,10 @@ export default function Vegetable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:4005/api/vegs" || `${API}/api/vegs`);
+        const response = await fetch(`${API}/api/vegs`);
         if (!response.ok) throw new Error("Network response was not ok");
 
-        const catRes = await fetch("http://localhost:4005/api/categories" || `${API}/api/categories`);
+        const catRes = await fetch(`${API}/api/categories`);
         if (!catRes.ok) throw new Error("Network response was not ok");
 
         const catData = await catRes.json();
@@ -68,7 +68,7 @@ export default function Vegetable() {
       }
 
       // ✅ ดึง user credit จาก API (อัปเดตล่าสุด)
-      const userRes = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/user`, {
+      const userRes = await fetch(`${API}/api/auth/user`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -77,7 +77,7 @@ export default function Vegetable() {
       const currentCredit = userData.user?.credit ?? 0;
 
       // ✅ ดึงยอดรวมในตะกร้าปัจจุบัน
-      const summaryRes = await fetch(`http://localhost:4005/api/cart/summary/${user.user_id}` || `${API}/api/cart/summary/${user.user_id}`, {
+      const summaryRes = await fetch(`${API}/api/cart/summary/${user.user_id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -94,7 +94,7 @@ export default function Vegetable() {
       }
 
       // ✅ เพิ่มเข้าตะกร้าตามปกติ
-      const response = await fetch("http://localhost:4005/api/cart"  || `${API}/api/cart`, {
+      const response = await fetch(`${API}/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
   const fetchCart = async () => {
     if (!user?.user_id) return;
     try {
-      const res = await fetch(`http://localhost:4005/api/cart/user/${user.user_id}` || `${API}/api/cart/user/${user.user_id}`);
+      const res = await fetch(`${API}/api/cart/user/${user.user_id}`);
       const data = await res.json();
       setCartItems(data);
     } catch (err) {

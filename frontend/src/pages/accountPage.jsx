@@ -15,7 +15,7 @@ const AccountPage = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/user`, {
+        const response = await fetch(`${API}/api/auth/user`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,

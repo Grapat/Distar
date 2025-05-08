@@ -16,11 +16,11 @@ const VegDetail = () => {
   useEffect(() => {
     const fetchVegetable = async () => {
       try {
-        const res = await fetch(`http://localhost:4005/api/vegs/${id}` || `${API}/api/vegs/${id}`);
+        const res = await fetch(`${API}/api/vegs/${id}`);
         const data = await res.json();
         setVegetable(data);
 
-        const response = await fetch("http://localhost:4005/api/vegs" || `${API}/api/vegs`);
+        const response = await fetch(`${API}/api/vegs`);
         const vegetables = await response.json();
         setVegs(vegetables);
 
@@ -45,7 +45,7 @@ const VegDetail = () => {
         return;
       }
 
-      const userRes = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/user`, {
+      const userRes = await fetch(`${API}/api/auth/user`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -54,7 +54,7 @@ const VegDetail = () => {
       const currentCredit = userData.user?.credit ?? 0;
 
       const summaryRes = await fetch(
-        `http://localhost:4005/api/cart/summary/${user.user_id}` || `${API}/api/cart/summary/${user.user_id}`,
+        `${API}/api/cart/summary/${user.user_id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -69,7 +69,7 @@ const VegDetail = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:4005/api/cart" || `${API}api/cart`, {
+      const response = await fetch(`${API}api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
