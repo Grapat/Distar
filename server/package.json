@@ -1,4 +1,7 @@
 {
+  "scripts": {
+  "start": "node server.js"
+},
   "dependencies": {
     "@testing-library/react": "^16.2.0",
     "bcrypt": "^5.1.1",
