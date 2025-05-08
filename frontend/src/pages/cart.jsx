@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Cart.css";
 import { useAuth } from "../context/AuthContext";
+import { API } from "../lib/api";
 
 const Cart = () => {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ const Cart = () => {
 
   const updateCartQuantity = async (cart_id, newQuantity) => {
     try {
-      const response = await fetch(`http://localhost:4005/api/cart/${cart_id}`, {
+      const response = await fetch(`http://localhost:4005/api/cart/${cart_id}` || `${API}/api/cart/${cart_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQuantity }),

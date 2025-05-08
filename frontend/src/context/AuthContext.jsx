@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/login`, {
+      const response = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/user`, {
         method: "GET",
         headers: { 
           "Authorization": `Bearer ${token}`, 

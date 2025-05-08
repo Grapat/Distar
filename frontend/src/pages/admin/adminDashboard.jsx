@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../css/adminHome.css"; // ใช้คลาส admin-home, admin-btn เดิม
+import "../../css/adminHome.css";
+import { API } from "../../lib/api";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -19,28 +20,28 @@ const AdminDashboard = () => {
         const token = localStorage.getItem("token");
 
         // ✅ Users
-        const userRes = await fetch("http://localhost:4005/api/users", {
+        const userRes = await fetch("http://localhost:4005/api/users" || `${API}/api/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const userData = await userRes.json();
         setUsers(userData);
 
         // ✅ Orders
-        const orderRes = await fetch("http://localhost:4005/api/order", {
+        const orderRes = await fetch("http://localhost:4005/api/order" || `${API}/api/order`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const orderData = await orderRes.json();
         setOrders(orderData);
 
         // ✅ Vegetables
-        const vegRes = await fetch("http://localhost:4005/api/vegs", {
+        const vegRes = await fetch("http://localhost:4005/api/vegs" || `${API}/api/vegs`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const vegData = await vegRes.json();
         setVegetables(vegData);
 
         // ✅ Categories
-        const catRes = await fetch("http://localhost:4005/api/categories", {
+        const catRes = await fetch("http://localhost:4005/api/categories" || `${API}/api/categories`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const catData = await catRes.json();

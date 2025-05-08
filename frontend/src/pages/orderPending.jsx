@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext"; // ✅ ดึงข้อมูลผู้ใช้จาก context
 import "../css/order.css";
+import { API } from "../lib/api"; // ✅ ใช้ API จาก lib
 
 const OrderPending = () => {
   const [orders, setOrders] = useState([]);
@@ -12,7 +13,7 @@ const OrderPending = () => {
       try {
         if (!user_id) return;
 
-        const response = await fetch(`http://localhost:4005/api/order/pending/user/${user_id}`);
+        const response = await fetch(`http://localhost:4005/api/order/pending/user/${user_id}` || `${API}/api/order/pending/user/${user_id}`);
         const data = await response.json();
         setOrders(data);
       } catch (error) {

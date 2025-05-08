@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../css/adminUserPage.css";
+import { API } from "../../lib/api";
 
 const AdminUserPage = () => {
   const [users, setUsers] = useState([]);
@@ -27,7 +28,7 @@ const AdminUserPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:4005/api/auth/register", {
+      const response = await fetch("http://localhost:4005/api/auth/register" || `${API}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -61,7 +62,7 @@ const AdminUserPage = () => {
   // Fetch all users
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:4005/api/users");
+      const response = await fetch("http://localhost:4005/api/users" || `${API}/api/users`);
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -78,7 +79,7 @@ const AdminUserPage = () => {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:4005/api/users/${editingUser.user_id}`, {
+      const response = await fetch(`http://localhost:4005/api/users/${editingUser.user_id}` || `${API}/api/users/${editingUser.user_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editingUser),
@@ -99,7 +100,7 @@ const AdminUserPage = () => {
     if (!confirmDelete) return;
 
     try {
-      await fetch(`http://localhost:4005/api/users/${userId}`, { method: "DELETE" });
+      await fetch(`http://localhost:4005/api/users/${userId}` || `${API}/api/users/${userId}`, { method: "DELETE" });
       setUsers(users.filter((usr) => usr.user_id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);

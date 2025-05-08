@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/registerPage.css";
+import { API } from "../lib/api"; // ✅ นำเข้า API
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -25,7 +26,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:4005/api/auth/register", {
+      const response = await fetch("http://localhost:4005/api/auth/register" || `${API}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

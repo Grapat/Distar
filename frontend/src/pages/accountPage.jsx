@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../css/accountPage.css";
 import { useAuth } from "../context/AuthContext"; // ✅ ใช้ context
 import { useNavigate } from "react-router-dom";
+import { API } from "../lib/api";
 
 const AccountPage = () => {
   const [userData, setUserData] = useState(null);
@@ -14,7 +15,7 @@ const AccountPage = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("http://localhost:4005/api/auth/user", {
+        const response = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/user`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
