@@ -240,6 +240,18 @@ const AdminCartPage = () => {
             />
           </div>
         ))}
+        {selectedVegetables.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedVegetables([]);
+              setQuantityMap({});
+            }}
+            className="remove-button"
+          >
+            ล้างผักที่เลือกทั้งหมด
+          </button>
+        )}
 
         <button onClick={createCart}>เพิ่มสินค้าใหม่</button>
       </div>

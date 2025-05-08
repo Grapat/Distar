@@ -60,12 +60,19 @@ const AdminOrderPage = () => {
   };
 
   const renderOrder = (order) => {
-    const totalItems = order.Order_Items?.length ?? 0;
-    const totalQty = order.Order_Items?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
     return (
       <div key={order.order_id} className="order-item-user">
         <h4>Order #{order.order_id}</h4>
-        <p>ผัก {totalItems} รายการ รวม {totalQty} หน่วย</p>
+        <p>ผัก {order.Order_Items.length} รายการ รวม {order.Order_Items.reduce((sum, item) => sum + item.quantity, 0)} หน่วย</p>
+
+        {/* ✅ แสดงรายการผัก */}
+        <ul style={{ marginTop: "0.5rem", paddingLeft: "1rem" }}>
+          {order.Order_Items.map((item) => (
+            <li key={item.order_item_id}>
+              {item.Vegetable?.name || "ไม่พบชื่อผัก"} × {item.quantity} หน่วย
+            </li>
+          ))}
+        </ul>
 
         <div className="order-buttons">
           <label htmlFor={`status-${order.order_id}`}>เปลี่ยนสถานะ:</label>
@@ -74,12 +81,9 @@ const AdminOrderPage = () => {
             value={order.status}
             onChange={(e) => handleStatusChange(order.order_id, e.target.value)}
           >
-            <option value="pending">
-              รอดำเนินการ</option>
-            <option value="shipped">
-              จัดส่งแล้ว</option>
-            <option value="delivered">
-              ส่งสำเร็จ</option>
+            <option value="pending">รอดำเนินการ</option>
+            <option value="shipped">จัดส่งแล้ว</option>
+            <option value="delivered">ส่งสำเร็จ</option>
           </select>
 
           <button className="order-delete-btn" onClick={() => handleDeleteOrder(order.order_id)}>

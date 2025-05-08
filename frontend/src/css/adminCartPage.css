@@ -80,6 +80,10 @@ h2 {
   background-color: #c82333;
 }
 
+.remove-button {
+  margin-top: 1rem;
+}
+
 /* ------------------------ Cart Display (Main Area) ------------------------ */
 .cart-item-user {
   padding: 12px;

@@ -11,6 +11,7 @@ const AdminVegetablePage = () => {
     description: "",
     stock: 0,
     category_id: "",
+    img_url: "",
   });
   const [editingVegetable, setEditingVegetable] = useState(null);
   const [search, setSearch] = useState("");
@@ -137,6 +138,9 @@ const AdminVegetablePage = () => {
 
   // Handle Delete Vegetable
   const handleDelete = async (vegetableId) => {
+    const confirmDelete = window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบผักรายการนี้? การลบจะไม่สามารถย้อนกลับได้!");
+    if (!confirmDelete) return;
+
     try {
       await fetch(`http://localhost:4005/api/vegs/${vegetableId}`, {
         method: "DELETE",
@@ -144,11 +148,17 @@ const AdminVegetablePage = () => {
       setVegetables((prevVegetables) =>
         prevVegetables.filter((veg) => veg.vegetable_id !== vegetableId)
       );
+      alert("✅ ลบผักสำเร็จแล้วค่ะ");
     } catch (error) {
       console.error("Error deleting vegetable:", error);
+      alert("❌ เกิดข้อผิดพลาดขณะลบผัก");
     }
   };
+
   const handleDeleteCategory = async (categoryId) => {
+    const confirmDelete = window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? การลบจะไม่สามารถย้อนกลับได้!");
+    if (!confirmDelete) return;
+
     try {
       await fetch(`http://localhost:4005/api/categories/${categoryId}`, {
         method: "DELETE",
@@ -227,6 +237,22 @@ const AdminVegetablePage = () => {
           ))}
         </select>
 
+        <input
+          type="text"
+          placeholder="URL รูปภาพ"
+          value={newVegetable.image_url || ""}
+          onChange={(e) =>
+            setNewVegetable({ ...newVegetable, image_url: e.target.value })
+          }
+        />
+        {newVegetable.image_url && (
+          <img
+            src={newVegetable.image_url}
+            alt="ตัวอย่างรูปภาพ"
+            style={{ width: "100px", height: "100px", objectFit: "cover", marginTop: "10px" }}
+          />
+        )}
+
         <button onClick={handleAddVegetable} className="admin-veg-controller-add-button">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -243,78 +269,86 @@ const AdminVegetablePage = () => {
           </div>
         ) : (
           filteredVegetables
-          .sort((a, b) => a.stock - b.stock)
-          .map((veg) => (
-            <div key={veg.vegetable_id} className="admin-veg-row-wrapper">
-              <div className="admin-veg-row">
-                <img src={veg.image_url || "/images/placeholder.jpg"} alt={veg.name} className="admin-veg-image" />
-                <div className="admin-veg-text">
-                  <h3>{veg.name}</h3>
-                  <p>{veg.Category?.name}</p>
-                  <p>คงเหลือ: {veg.stock} หน่วย</p>
-                </div>
-                <div className="admin-button-row">
-                  <button onClick={() => setEditingVegetable(veg)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                  </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* 👇 แสดงฟอร์มเฉพาะถ้า veg คือรายการที่กำลังแก้ */}
-              {editingVegetable?.vegetable_id === veg.vegetable_id && (
-                <div className={`admin-veg-edit-panel ${editingVegetable?.vegetable_id === veg.vegetable_id ? "active" : ""}`}>
-                  <input
-                    type="text"
-                    value={editingVegetable.name}
-                    onChange={(e) =>
-                      setEditingVegetable({ ...editingVegetable, name: e.target.value })
-                    }
-                  />
-                  <textarea
-                    value={editingVegetable.description}
-                    onChange={(e) =>
-                      setEditingVegetable({ ...editingVegetable, description: e.target.value })
-                    }
-                  />
-                  <input
-                    type="number"
-                    value={editingVegetable.stock}
-                    min={0}
-                    onChange={(e) =>
-                      setEditingVegetable({ ...editingVegetable, stock: Number(e.target.value) })
-                    }
-                  />
-                  <select
-                    value={editingVegetable.category_id}
-                    onChange={(e) =>
-                      setEditingVegetable({ ...editingVegetable, category_id: e.target.value })
-                    }
-                  >
-                    <option value="">เลือกหมวดหมู่</option>
-                    {categories.map((cat) => (
-                      <option key={cat.category_id} value={cat.category_id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
-
-                  <div className="admin-button-row-edit">
-                    <button onClick={handleUpdateVegetable}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+            .sort((a, b) => a.stock - b.stock)
+            .map((veg) => (
+              <div key={veg.vegetable_id} className="admin-veg-row-wrapper">
+                <div className="admin-veg-row">
+                  <img src={veg.image_url || "/images/placeholder.jpg"} alt={veg.name} className="admin-veg-image" />
+                  <div className="admin-veg-text">
+                    <h3>{veg.name}</h3>
+                    <p>{veg.Category?.name}</p>
+                    <p>คงเหลือ: {veg.stock} หน่วย</p>
+                  </div>
+                  <div className="admin-button-row">
+                    <button onClick={() => setEditingVegetable(veg)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                     </svg>
-                      บันทึก
-                    </button>
-                    <button onClick={() => setEditingVegetable(null)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                      ยกเลิก
                     </button>
                   </div>
                 </div>
-              )}
-            </div>
-          ))
+
+                {/* 👇 แสดงฟอร์มเฉพาะถ้า veg คือรายการที่กำลังแก้ */}
+                {editingVegetable?.vegetable_id === veg.vegetable_id && (
+                  <div className={`admin-veg-edit-panel ${editingVegetable?.vegetable_id === veg.vegetable_id ? "active" : ""}`}>
+                    <input
+                      type="text"
+                      value={editingVegetable.name}
+                      onChange={(e) =>
+                        setEditingVegetable({ ...editingVegetable, name: e.target.value })
+                      }
+                    />
+                    <textarea
+                      value={editingVegetable.description}
+                      onChange={(e) =>
+                        setEditingVegetable({ ...editingVegetable, description: e.target.value })
+                      }
+                    />
+                    <input
+                      type="number"
+                      value={editingVegetable.stock}
+                      min={0}
+                      onChange={(e) =>
+                        setEditingVegetable({ ...editingVegetable, stock: Number(e.target.value) })
+                      }
+                    />
+                    <select
+                      value={editingVegetable.category_id}
+                      onChange={(e) =>
+                        setEditingVegetable({ ...editingVegetable, category_id: e.target.value })
+                      }
+                    >
+                      <option value="">เลือกหมวดหมู่</option>
+                      {categories.map((cat) => (
+                        <option key={cat.category_id} value={cat.category_id}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="admin-button-row-edit">
+                      <button onClick={handleUpdateVegetable}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                      </svg>
+                        บันทึก
+                      </button>
+                      <button onClick={() => setEditingVegetable(null)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                        ยกเลิก
+                      </button>
+                      <button onClick={() => handleDelete(editingVegetable?.vegetable_id)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          strokeWidth={1.5} stroke="currentColor" className="size-6">
+                          <path strokeLinecap="round" strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        ลบผัก
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
         )}
       </div>
 
@@ -388,6 +422,13 @@ const AdminVegetablePage = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
                       ยกเลิก</button>
+                    <button onClick={() => handleDeleteCategory(editingCategory?.category_id)}>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      ลบประเภท</button>
                   </div>
                 </div>
               )}
