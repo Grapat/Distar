@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // 👉 นำเข้า useNavigate
-
+import { API } from "../lib/api";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await fetch("http://localhost:4005/api/auth/user", {
+      const response = await fetch("http://localhost:4005/api/auth/user" || `${API}/api/auth/login`, {
         method: "GET",
         headers: { 
           "Authorization": `Bearer ${token}`, 

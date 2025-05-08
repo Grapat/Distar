@@ -19,7 +19,7 @@ module.exports = {
         zipcode: '10000',
         user_type: 'admin',
         credit: 999,
-        createdAt: new Date()
+        created_at: new Date()
       },
       {
         user_id: 'SW9999',
@@ -33,7 +33,7 @@ module.exports = {
         zipcode: '50000',
         user_type: 'customer',
         credit: 10,
-        createdAt: new Date()
+        created_at: new Date()
       }
     ], {});
   },

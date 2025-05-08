@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // ✅ ดึง user
 import "../css/bottomNav.css";
+import { API } from "../lib/api";
 
 const BottomNav = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const BottomNav = () => {
   const fetchCartCount = async () => {
     if (!user?.user_id) return;
     try {
-      const res = await fetch(`http://localhost:4005/api/cart/user/${user.user_id}`);
+      const res = await fetch(`http://localhost:4005/api/cart/user/${user.user_id}` || `${API}/api/auth/login`);
       const data = await res.json();
       const totalQty = data.reduce((sum, item) => sum + item.quantity, 0);
       setCartCount(totalQty);

@@ -24,7 +24,6 @@ module.exports = {
       name,
       description: null,
       stock: 100, // 🔧 Default stock, ปรับได้ตามชอบ
-      category_id: 5, // ❗ ปรับให้ตรงกับ category จริง ถ้ามี
       created_at: now
     }));
 
