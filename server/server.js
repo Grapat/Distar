@@ -31,11 +31,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(compression());
+app.set('trust proxy', 1); // Trust first proxy (for rate limiting)
 app.use(rateLimiter);
 app.use(requestLogger);
 
 // 🌱 Serve Static Files (Frontend)
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+//app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // 🚀 API Routes
 const authRoutes = require("./routes/authRoutes");
@@ -58,9 +59,9 @@ app.use("/api/users", userRoutes);
 app.use(errorMiddleware);
 
 // Handle unknown routes (serve frontend)
-app.get("*", (req, res) => {
+/* app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-});
+}); */
 
 // Start Server
 const PORT = process.env.PORT || 4005;
