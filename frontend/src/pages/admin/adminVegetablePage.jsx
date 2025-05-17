@@ -29,9 +29,10 @@ const AdminVegetablePage = () => {
     );
 
 
-  const filteredCategories = categories.filter((cat) =>
-    cat.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCategories = categories
+    .filter((cat) =>
+      cat.name.toLowerCase().includes(searchCategory.toLowerCase())
+    );
 
   useEffect(() => {
     fetchVegetables();
