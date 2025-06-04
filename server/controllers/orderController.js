@@ -1,31 +1,48 @@
-const { Cart, Order, Order_Item, Vegetable, Inventory, User } = require("../models");
+const {
+  Cart,
+  Order,
+  Order_Item,
+  Vegetable,
+  Inventory,
+  User,
+} = require("../models");
 
 // 📦 สร้างคำสั่งซื้อใหม่โดยใช้ผักจากตะกร้า
 const createOrder = async (req, res) => {
   try {
     const { user_id } = req.params;
+    const { date_deli } = req.body; // ✅ รับวันจัดส่งจากผู้ใช้
 
-    // ✅ 1. ดึงสินค้าในตะกร้าของผู้ใช้
     const cartItems = await Cart.findAll({ where: { user_id } });
     if (!cartItems || cartItems.length === 0) {
-      return res.status(400).json({ message: "ตะกร้าว่าง ไม่สามารถสั่งซื้อได้" });
+      return res
+        .status(400)
+        .json({ message: "ตะกร้าว่าง ไม่สามารถสั่งซื้อได้" });
     }
 
-    // ✅ 2. ดึงเครดิตของผู้ใช้
     const user = await User.findByPk(user_id);
     if (!user) return res.status(404).json({ message: "ไม่พบผู้ใช้" });
 
-    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const totalQuantity = cartItems.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
     if (totalQuantity > user.credit) {
       return res.status(400).json({
         message: `ยอดรวมสินค้า ${totalQuantity} เกินเครดิตที่มีอยู่ (${user.credit}) ค่ะ`,
       });
     }
 
-    // ✅ 3. สร้าง Order
-    const newOrder = await Order.create({ user_id });
+    const deliveryDate = new Date(date_deli); // ✅ แปลงวันที่
+    const DOW = deliveryDate.toLocaleDateString("en-US", { weekday: "long" }); // ✅ แปลงเป็นชื่อวัน
 
-    // ✅ 4. สร้างรายการ Order_Item และอัปเดต stock + inventory
+    const newOrder = await Order.create({
+      user_id,
+      date_deli: deliveryDate,
+      DOW,
+    });
+
+    // ✅ สร้าง Order_Item และจัดการ Stock
     for (const item of cartItems) {
       await Order_Item.create({
         order_id: newOrder.order_id,
@@ -47,19 +64,19 @@ const createOrder = async (req, res) => {
       }
     }
 
-    // ✅ 5. ล้างตะกร้า
     await Cart.destroy({ where: { user_id } });
 
     res.status(201).json({
       message: "📦 สร้างออเดอร์สำเร็จ!",
       order_id: newOrder.order_id,
+      date_deli: deliveryDate,
+      DOW,
     });
   } catch (error) {
     console.error("❌ Error creating order:", error);
     res.status(400).json({ error: error.message });
   }
 };
-
 
 // 📋 ดึงคำสั่งซื้อทั้งหมด
 const getAllOrders = async (req, res) => {
@@ -328,6 +345,45 @@ const getPendingOrdersByUserId = async (req, res) => {
   }
 };
 
+// 📋 ดึงคำสั่งซื้อทั้งหมดตาม DOW
+const getOrdersByDOW = async (req, res) => {
+  try {
+    const { dow } = req.params;
+
+    if (!dow) {
+      return res.status(400).json({ message: "ต้องระบุชื่อวัน DOW ด้วยค่ะ" });
+    }
+
+    const orders = await Order.findAll({
+      where: { DOW: dow },
+      attributes: ["order_id", "status", "date_deli", "DOW"],
+      include: [
+        { model: User, attributes: ["name", "email"] },
+        {
+          model: Order_Item,
+          as: "Order_Items",
+          include: [{ model: Vegetable, attributes: ["name"] }],
+        },
+      ],
+    });
+
+    res.json(
+      orders.map((o) => ({
+        id: o.order_id,
+        user: o.User,
+        status: o.status,
+        date: o.date_deli,
+        DOW: o.DOW,
+        total: o.Order_Items.reduce((sum, i) => sum + i.quantity, 0),
+        items: o.Order_Items,
+      }))
+    );
+  } catch (error) {
+    console.error("❌ Error fetching orders by DOW:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
@@ -340,4 +396,5 @@ module.exports = {
   getSuccessOrdersByUserId,
   getPendingOrders,
   getPendingOrdersByUserId,
+  getOrdersByDOW,
 };

@@ -24,6 +24,7 @@ module.exports = {
       name,
       description: null,
       stock: 100, // 🔧 Default stock, ปรับได้ตามชอบ
+      category_id: 1,
       created_at: now
     }));
 

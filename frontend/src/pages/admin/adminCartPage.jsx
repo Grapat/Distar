@@ -12,6 +12,7 @@ const AdminCartPage = () => {
   const [userSearch, setUserSearch] = useState("");
   const [selectedVegetables, setSelectedVegetables] = useState([]);
   const [quantityMap, setQuantityMap] = useState({});
+  const [deliveryDate, setDeliveryDate] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -136,11 +137,20 @@ const AdminCartPage = () => {
   const placeOrder = async (user_id) => {
     if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อสินค้าให้ผู้ใช้นี้?")) return;
 
+    if (!deliveryDate) {
+      alert("❌ กรุณาเลือกวันที่จัดส่งก่อนค่ะ");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${API}/api/order/place/${user_id}`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ date_deli: deliveryDate }),
       });
 
       const responseText = await response.text();
@@ -158,8 +168,7 @@ const AdminCartPage = () => {
       }
 
       alert(`✅ สั่งซื้อสำเร็จ! รหัสออเดอร์: ${data.order_id}`);
-      fetchCartItems(); // 👈 โหลดข้อมูลตะกร้าใหม่
-
+      fetchCartItems();
     } catch (error) {
       console.error("Error placing order:", error);
       alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์!");
@@ -172,6 +181,14 @@ const AdminCartPage = () => {
     return name.includes(userSearch) || id.includes(userSearch);
   });
 
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setDate(minDate.getDate() + 2); // ล่วงหน้า 2 วัน
+
+  const maxDate = new Date(today);
+  maxDate.setDate(maxDate.getDate() + 7); // ไม่เกิน 7 วัน
+
+  const formatDate = (date) => date.toISOString().split("T")[0];
 
   return (
     <div className="admin-cart-grid">
@@ -265,7 +282,16 @@ const AdminCartPage = () => {
           filteredCart.slice(0, 20).map(({ user, vegetables }) => (
             <div key={user?.user_id || "unknown"} className="cart-item-user">
               <div className="cart-info">
-                <h3>ผู้ใช้: {user?.name || "ไม่พบผู้ใช้"} ({user?.email})</h3>
+                <h3>ผู้ใช้: {user?.name || "ไม่พบผู้ใช้"} ({user?.email})</h3><br></br>
+                <h3>กำหนดวันจัดส่งสินค้า</h3>
+                <input
+                  type="date"
+                  value={deliveryDate}
+                  min={formatDate(minDate)}
+                  max={formatDate(maxDate)}
+                  onChange={(e) => setDeliveryDate(e.target.value)}
+                  className="delivery-date-input"
+                />
                 {vegetables.map((vegItem) => {
                   const imageUrl = vegItem.Vegetable?.image_url || "❌ ไม่มีรูป";
                   return (

@@ -13,6 +13,8 @@ const Cart = () => {
   const [editedItems, setEditedItems] = useState({});
   const [deletedItems, setDeletedItems] = useState([]);
   const navigate = useNavigate();
+  const [deliveryDate, setDeliveryDate] = useState("");
+
 
   useEffect(() => {
     if (!user?.user_id) return;
@@ -161,6 +163,11 @@ const Cart = () => {
     }
 
     try {
+      if (!deliveryDate) {
+        alert("❌ กรุณาเลือกวันที่จัดส่งก่อนค่ะ");
+        return;
+      }
+
       const response = await fetch(`${API}/api/order/place/${user.user_id}`, {
         method: "POST",
         headers: {
@@ -168,11 +175,7 @@ const Cart = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          user_id: user.user_id,
-          items: cartItems.map((item) => ({
-            vegetable_id: item.vegetable_id,
-            quantity: item.quantity,
-          })),
+          date_deli: deliveryDate, // ✅ ส่งวันจัดส่ง
         }),
       });
 
@@ -199,6 +202,16 @@ const Cart = () => {
       alert("เกิดข้อผิดพลาดขณะสั่งซื้อ");
     }
   };
+
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setDate(minDate.getDate() + 2);
+
+  const maxDate = new Date(today);
+  maxDate.setDate(maxDate.getDate() + 7);
+
+  const formatDate = (date) => date.toISOString().split("T")[0];
+
 
   return (
     <div className="cart-page">
@@ -297,6 +310,18 @@ const Cart = () => {
               </svg>
               เลือกผักเพิ่มเติม
             </button>
+          </div>
+          <div className="delivery-date-section">
+            <label htmlFor="deliveryDate">📅 วันที่จัดส่งสินค้า:</label>
+            <input
+              type="date"
+              id="deliveryDate"
+              value={deliveryDate}
+              onChange={(e) => setDeliveryDate(e.target.value)}
+              min={formatDate(minDate)}
+              max={formatDate(maxDate)}
+              className="delivery-date-input"
+            />
           </div>
           <div className="place-order">
             <button className={`place-order-btn ${isEditing ? "btn-toggle-hidden" : "btn-toggle-visible"}`} onClick={placeOrder}>

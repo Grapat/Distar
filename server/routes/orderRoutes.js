@@ -11,11 +11,11 @@ const {
   getSuccessOrdersByUserId,
   getPendingOrders,
   getPendingOrdersByUserId,
+  getOrdersByDOW,
 } = require("../controllers/orderController");
 const router = express.Router();
 
 router.post("/place/:user_id", createOrder);
-
 
 router.get("/all/:id", getOrderById);
 router.get("/arrived/user/:user_id", getArrivedOrdersByUserId);
@@ -24,6 +24,7 @@ router.get("/pending/user/:user_id", getPendingOrdersByUserId);
 router.get("/arrived", getArrivedOrders);
 router.get("/success", getSuccessOrders);
 router.get("/pending", getPendingOrders);
+router.get("/by-dow/:dow", getOrdersByDOW);
 router.get("/", getAllOrders);
 
 router.put("/:id", updateOrderStatus);
