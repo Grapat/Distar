@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         ),
         allowNull: true,
       },
+      address: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
     {
       sequelize,

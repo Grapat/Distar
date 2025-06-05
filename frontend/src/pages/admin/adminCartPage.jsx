@@ -183,7 +183,7 @@ const AdminCartPage = () => {
 
   const today = new Date();
   const minDate = new Date(today);
-  minDate.setDate(minDate.getDate() + 2); // ล่วงหน้า 2 วัน
+  minDate.setDate(minDate.getDate() + 1); // ล่วงหน้า 1 วัน
 
   const maxDate = new Date(today);
   maxDate.setDate(maxDate.getDate() + 7); // ไม่เกิน 7 วัน

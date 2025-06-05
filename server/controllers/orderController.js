@@ -82,7 +82,7 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      attributes: ["order_id", "user_id", "status"],
+      attributes: ["order_id", "user_id", "status", "date_deli", "DOW", "address"],
       include: [
         { model: User, attributes: ["name", "email"] },
         {

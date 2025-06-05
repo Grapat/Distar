@@ -6,6 +6,7 @@ const AdminOrderPage = () => {
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDOW, setFilterDOW] = useState(""); // 👈 ตัวกรองวันจัดส่ง
+  const [statusFilter, setStatusFilter] = useState(""); // 👈 กรองสถานะ
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -20,6 +21,7 @@ const AdminOrderPage = () => {
 
     fetchOrders();
   }, []);
+
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
@@ -63,33 +65,69 @@ const AdminOrderPage = () => {
 
   const renderOrder = (order) => {
     return (
-      <div key={order.order_id} className="order-item-user">
-        <h4>Order #{order.order_id}</h4>
-        <p>จัดส่งวันที่: {order.date_deli?.slice(0, 10)} ({order.DOW || "ไม่ระบุ"})</p>
-        <p>ผัก {order.Order_Items.length} รายการ รวม {order.Order_Items.reduce((sum, item) => sum + item.quantity, 0)} หน่วย</p>
+      <div key={order.order_id} className="order-wrapper" style={{ marginBottom: "2rem", padding: "1rem", border: "5px solid #8bc34a", borderRadius: "12px", background: "#fdfdfd", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }}>
+        <table className="order-table" cellPadding="6" style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead style={{ backgroundColor: "#f0f0f0" }}>
+            <tr>
+              <th colSpan="3">คำสั่งซื้อของ {order.User.name}</th>
+            </tr>
+            <tr>
+              <td colSpan="3">
+                <span className={`status-badge ${order.status}`}>
+                  {order.status === "pending" ? "รอดำเนินการ" : order.status === "shipped" ? "จัดส่งแล้ว" : "ส่งสำเร็จ"}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="3">
+                จัดส่งวันที่: {order.date_deli?.slice(0, 10)} ({order.DOW || "ไม่ระบุ"})<br />
+                รวม {order.Order_Items.length} รายการ / {order.Order_Items.reduce((sum, item) => sum + item.quantity, 0)} หน่วย <br />
+              </td>
+            </tr>
+            <tr>
+              <th>ลำดับ</th>
+              <th>ชื่อผัก</th>
+              <th>จำนวน (หน่วย)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {order.Order_Items.map((item, index) => (
+              <tr key={item.order_item_id}>
+                <td>{index + 1}</td>
+                <td>{item.Vegetable?.name || "ไม่พบชื่อผัก"}</td>
+                <td>{item.quantity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-        {/* ✅ แสดงรายการผัก */}
-        <ul style={{ marginTop: "0.5rem", paddingLeft: "1rem" }}>
-          {order.Order_Items.map((item) => (
-            <li key={item.order_item_id}>
-              {item.Vegetable?.name || "ไม่พบชื่อผัก"} × {item.quantity} หน่วย
-            </li>
-          ))}
-        </ul>
+        {/* ✅ Section แยก control ออกจากตาราง */}
+        <div className="order-controls" style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+          <div>
+            <label htmlFor={`status-${order.order_id}`}>เปลี่ยนสถานะ: </label>
+            <select
+              id={`status-${order.order_id}`}
+              value={order.status}
+              onChange={(e) => handleStatusChange(order.order_id, e.target.value)}
+              style={{ padding: "6px", borderRadius: "6px" }}
+            >
+              <option value="pending">รอดำเนินการ</option>
+              <option value="shipped">จัดส่งแล้ว</option>
+              <option value="delivered">ส่งสำเร็จ</option>
+            </select>
+          </div>
 
-        <div className="order-buttons">
-          <label htmlFor={`status-${order.order_id}`}>เปลี่ยนสถานะ:</label>
-          <select
-            id={`status-${order.order_id}`}
-            value={order.status}
-            onChange={(e) => handleStatusChange(order.order_id, e.target.value)}
+          <button
+            onClick={() => handleDeleteOrder(order.order_id)}
+            style={{
+              padding: "6px 12px",
+              backgroundColor: "#e74c3c",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer"
+            }}
           >
-            <option value="pending">รอดำเนินการ</option>
-            <option value="shipped">จัดส่งแล้ว</option>
-            <option value="delivered">ส่งสำเร็จ</option>
-          </select>
-
-          <button className="order-delete-btn" onClick={() => handleDeleteOrder(order.order_id)}>
             ลบคำสั่งซื้อ
           </button>
         </div>
@@ -104,8 +142,9 @@ const AdminOrderPage = () => {
 
     const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm) || userId.includes(searchTerm);
     const matchesDOW = !filterDOW || order.DOW === filterDOW;
+    const matchesStatus = !statusFilter || order.status === statusFilter;
 
-    return matchesSearch && matchesDOW;
+    return matchesSearch && matchesDOW && matchesStatus;
   });
 
   return (
@@ -129,20 +168,21 @@ const AdminOrderPage = () => {
           <option value="Saturday">Saturday</option>
           <option value="Sunday">Sunday</option>
         </select>
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+          <option value="">-- ทุกสถานะ --</option>
+          <option value="pending">รอดำเนินการ</option>
+          <option value="shipped">จัดส่งแล้ว</option>
+          <option value="delivered">ส่งสำเร็จ</option>
+        </select>
       </div>
 
       <div className="admin-order-display">
-        {/* 🔲 กริด 3 คอลัมน์ตามสถานะ */}
         <div className="order-warp">
-          <div className="order-column pending">
-            {filteredOrders.filter((o) => o.status === "pending").map(renderOrder)}
-          </div>
-          <div className="order-column shipped">
-            {filteredOrders.filter((o) => o.status === "shipped").map(renderOrder)}
-          </div>
-          <div className="order-column delivered">
-            {filteredOrders.filter((o) => o.status === "delivered").map(renderOrder)}
-          </div>
+          {filteredOrders.length === 0 ? (
+            <p>ไม่มีคำสั่งซื้อที่ตรงกับเงื่อนไข</p>
+          ) : (
+            filteredOrders.map(renderOrder)
+          )}
         </div>
       </div>
     </div>

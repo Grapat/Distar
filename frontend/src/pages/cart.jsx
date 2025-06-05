@@ -8,6 +8,7 @@ const Cart = () => {
   const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [userCredit, setUserCredit] = useState(null);
+  const [userAddress, setUserAddress] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [originalCartSnapshot, setOriginalCartSnapshot] = useState([]);
   const [editedItems, setEditedItems] = useState({});
@@ -205,7 +206,7 @@ const Cart = () => {
 
   const today = new Date();
   const minDate = new Date(today);
-  minDate.setDate(minDate.getDate() + 2);
+  minDate.setDate(minDate.getDate() + 1);
 
   const maxDate = new Date(today);
   maxDate.setDate(maxDate.getDate() + 7);
