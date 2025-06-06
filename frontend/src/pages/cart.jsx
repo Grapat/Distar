@@ -8,7 +8,8 @@ const Cart = () => {
   const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [userCredit, setUserCredit] = useState(null);
-  const [userAddress, setUserAddress] = useState("");
+  const [userAddressOptions, setUserAddressOptions] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [originalCartSnapshot, setOriginalCartSnapshot] = useState([]);
   const [editedItems, setEditedItems] = useState({});
@@ -39,11 +40,23 @@ const Cart = () => {
         });
         const data = await response.json();
         setUserCredit(data.user?.credit ?? 0);
+
+        const addrList = [];
+
+        if (data.user?.address && data.user?.province && data.user?.zipcode) {
+          addrList.push(`${data.user.address} ${data.user.province} ${data.user.zipcode}`);
+        }
+
+        if (data.user?.alt_address) {
+          addrList.push(data.user.alt_address);
+        }
+
+        setUserAddressOptions(addrList);
+        setSelectedAddress(addrList[0] || "");
       } catch (err) {
         console.error("❌ ดึงเครดิตไม่สำเร็จ", err);
       }
     };
-
     fetchCartItems();
     fetchUserCredit();
   }, [user?.user_id]);
@@ -177,6 +190,7 @@ const Cart = () => {
         },
         body: JSON.stringify({
           date_deli: deliveryDate, // ✅ ส่งวันจัดส่ง
+          address: selectedAddress, // ✅ ใช้อันที่ user เลือก
         }),
       });
 
@@ -311,6 +325,20 @@ const Cart = () => {
               </svg>
               เลือกผักเพิ่มเติม
             </button>
+          </div>
+          <div className="address-choice-section">
+            <label>🏠 เลือกที่อยู่จัดส่ง:</label>
+            <select
+              value={selectedAddress}
+              onChange={(e) => setSelectedAddress(e.target.value)}
+              className="address-select"
+            >
+              {userAddressOptions.map((addr, index) => (
+                <option key={index} value={addr}>
+                  {addr}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="delivery-date-section">
             <label htmlFor="deliveryDate">📅 วันที่จัดส่งสินค้า:</label>

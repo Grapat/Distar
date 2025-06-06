@@ -82,6 +82,7 @@ const AdminOrderPage = () => {
               <td colSpan="3">
                 จัดส่งวันที่: {order.date_deli?.slice(0, 10)} ({order.DOW || "ไม่ระบุ"})<br />
                 รวม {order.Order_Items.length} รายการ / {order.Order_Items.reduce((sum, item) => sum + item.quantity, 0)} หน่วย <br />
+                สถานที่จัดส่ง: {order.address || "ไม่พบที่อยู่จัดส่ง"}
               </td>
             </tr>
             <tr>

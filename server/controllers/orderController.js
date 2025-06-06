@@ -11,7 +11,11 @@ const {
 const createOrder = async (req, res) => {
   try {
     const { user_id } = req.params;
-    const { date_deli } = req.body; // ✅ รับวันจัดส่งจากผู้ใช้
+    const { date_deli, address } = req.body; // ✅ เพิ่ม address
+
+    if (!address || address.trim() === "") {
+      return res.status(400).json({ message: "กรุณาระบุที่อยู่จัดส่งค่ะ" });
+    }
 
     const cartItems = await Cart.findAll({ where: { user_id } });
     if (!cartItems || cartItems.length === 0) {
@@ -35,11 +39,13 @@ const createOrder = async (req, res) => {
 
     const deliveryDate = new Date(date_deli); // ✅ แปลงวันที่
     const DOW = deliveryDate.toLocaleDateString("en-US", { weekday: "long" }); // ✅ แปลงเป็นชื่อวัน
+    const trimmedAddress = address?.trim();
 
     const newOrder = await Order.create({
       user_id,
       date_deli: deliveryDate,
       DOW,
+      address: trimmedAddress, // ✅ เพิ่มที่อยู่จัดส่ง
     });
 
     // ✅ สร้าง Order_Item และจัดการ Stock
@@ -82,7 +88,14 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
-      attributes: ["order_id", "user_id", "status", "date_deli", "DOW", "address"],
+      attributes: [
+        "order_id",
+        "user_id",
+        "status",
+        "date_deli",
+        "DOW",
+        "address",
+      ],
       include: [
         { model: User, attributes: ["name", "email"] },
         {
