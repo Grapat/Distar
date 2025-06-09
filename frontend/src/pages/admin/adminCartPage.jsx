@@ -8,27 +8,47 @@ const AdminCartPage = () => {
   const [users, setUsers] = useState([]);
   const [vegetables, setVegetables] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
-  const [selectedAddresses, setSelectedAddresses] = useState({});
   const [searchVeg, setSearchVeg] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [selectedVegetables, setSelectedVegetables] = useState([]);
   const [deliveryDates, setDeliveryDates] = useState({});
   const [quantityMap, setQuantityMap] = useState({});
   const navigate = useNavigate();
+  const [userAddressesOptions, setUserAddressesOptions] = useState({}); // Stores all available addresses for each user
+  const [currentSelectedAddress, setCurrentSelectedAddress] = useState({}); // Stores the currently chosen address for each user
 
   useEffect(() => {
     fetchData("users", (data) => {
       setUsers(data);
 
-      const addressMap = {};
+      const addressesForUsers = {};
+      const initialSelected = {}; // To store the first available address as default
       data.forEach((u) => {
-        if (u.address || u.alt_address) {
-          addressMap[u.user_id] = u.address && u.province && u.zipcode
-            ? `${u.address} ${u.province} ${u.zipcode}`
-            : u.alt_address || "ไม่พบที่อยู่";
+        const options = [];
+        if (u.address && u.province && u.zipcode) {
+          options.push({
+            label: `${u.address} ${u.province} ${u.zipcode} (ที่อยู่หลัก)`,
+            value: `${u.address} ${u.province} ${u.zipcode}`
+          });
         }
+        if (u.alt_address) {
+          options.push({
+            label: `${u.alt_address} (ที่อยู่สำรอง)`,
+            value: u.alt_address
+          });
+        }
+
+        // If no addresses are found, add a "No address" option
+        if (options.length === 0) {
+          options.push({ label: "ไม่พบที่อยู่", value: "" }); // Use an empty string for value
+        }
+
+        addressesForUsers[u.user_id] = options;
+        // Set the first available address as the default selected one, or empty string
+        initialSelected[u.user_id] = options.length > 0 ? options[0].value : "";
       });
-      setSelectedAddresses(addressMap);
+      setUserAddressesOptions(addressesForUsers);
+      setCurrentSelectedAddress(initialSelected); // Initialize the selected addresses
     });
 
     fetchData("vegs", setVegetables);
@@ -151,9 +171,10 @@ const AdminCartPage = () => {
   const placeOrder = async (user_id) => {
     if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อสินค้าให้ผู้ใช้นี้?")) return;
 
-    const selectedAddress = selectedAddresses[user_id]?.trim();
+    // Use the new state for the selected address
+    const selectedAddress = currentSelectedAddress[user_id]?.trim();
 
-    if (!selectedAddress) {
+    if (!selectedAddress || selectedAddress === "") { // Also check for empty string
       alert("❌ กรุณาเลือกที่อยู่ก่อนทำการสั่งซื้อค่ะ");
       return;
     }
@@ -172,8 +193,8 @@ const AdminCartPage = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          date_deli: deliveryDates,
-          address: selectedAddress, // ✅ ใส่ไปกับคำสั่งซื้อ
+          date_deli: deliveryDates[user_id], // Pass the specific date for this user
+          address: selectedAddress, // ✅ Now sends the currently selected address
         }),
       });
 
@@ -312,19 +333,19 @@ const AdminCartPage = () => {
                 <div className="address-select-box">
                   <label>📍 เลือกที่อยู่จัดส่ง:</label>
                   <select
-                    value={selectedAddresses[user.user_id] || "ไม่มีที่อยู่"}
+                    value={currentSelectedAddress[user.user_id] || ""} // Use currentSelectedAddress
                     onChange={(e) =>
-                      setSelectedAddresses((prev) => ({
+                      setCurrentSelectedAddress((prev) => ({ // Update currentSelectedAddress
                         ...prev,
                         [user.user_id]: e.target.value,
                       }))
                     }
                   >
-                    {selectedAddresses[user.user_id] && (
-                      <option value={`${selectedAddresses[user.user_id]}`}>
-                        {selectedAddresses[user.user_id]}
+                    {userAddressesOptions[user.user_id]?.map((option) => ( // Iterate through all options
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
-                    )}
+                    ))}
                   </select>
                 </div>
 
