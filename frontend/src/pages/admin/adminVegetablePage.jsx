@@ -326,6 +326,14 @@ const AdminVegetablePage = () => {
                         </option>
                       ))}
                     </select>
+                    <input
+                      type="text"
+                      value={editingVegetable.image_url}
+                      min={0}
+                      onChange={(e) =>
+                        setEditingVegetable({ ...editingVegetable, image_url: e.target.value })
+                      }
+                    />
 
                     <div className="admin-button-row-edit">
                       <button onClick={handleUpdateVegetable}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -438,7 +446,7 @@ const AdminVegetablePage = () => {
           ))
         )}
       </div>
-
+      <br />
     </div >
 
   );
