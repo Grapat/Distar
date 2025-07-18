@@ -20,12 +20,12 @@ const app = express();
 let pool;
 
 // --- DEBUG LOG ---
-console.log("Value of process.env.DB_URI:", process.env.DB_URI);
+console.log("Value of process.env.DB_URI:", process.env.DB_URL);
 // --- END DEBUG LOG ---
 
 if (process.env.DB_URL) {
   // ✅ For Render deployment (or any environment where DB_URI is provided)
-  console.log("Using DB_URI for database connection.");
+  console.log("Using DB_URL for database connection.");
   pool = new Pool({
     connectionString: process.env.DB_URL,
     ssl: {
