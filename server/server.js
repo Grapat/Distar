@@ -114,6 +114,10 @@ app.use(errorMiddleware);
     res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 }); */
 
+app.get("/", (req, res) => {
+  res.send("🚀 Distar API is running!");
+});
+
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
