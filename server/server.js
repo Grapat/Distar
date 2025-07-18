@@ -23,11 +23,11 @@ let pool;
 console.log("Value of process.env.DB_URI:", process.env.DB_URI);
 // --- END DEBUG LOG ---
 
-if (process.env.DB_URI) {
+if (process.env.DB_URL) {
   // ✅ For Render deployment (or any environment where DB_URI is provided)
   console.log("Using DB_URI for database connection.");
   pool = new Pool({
-    connectionString: process.env.DB_URI,
+    connectionString: process.env.DB_URL,
     ssl: {
       rejectUnauthorized: false, // Often required for external PostgreSQL services like Render's
     },
