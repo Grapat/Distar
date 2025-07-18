@@ -39,10 +39,7 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
-      console.log("✅ Login Success:", {
-        token: data.token,
-        user: data.user
-      });
+      console.log("✅ Login Success:");
 
       if (!data.token || !data.user?.userType) {
         throw new Error("Invalid response from server");

@@ -37,13 +37,15 @@ const OrderDeliver = ({ orderId }) => {
                 <div className="order-info">
                   <h3>คำสั่งซื้อ #{order.id}</h3>
                   <p>สถานะ: <span className={`status ${order.status}`}>{order.status}</span></p>
-                  <p>วันที่สั่งซื้อ: {new Date(order.date).toLocaleString("th-TH", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit"
-                  })}</p>
+                  <p>
+                    วันที่สั่งซื้อ: {new Date(order.createdAt).toLocaleString("th-TH", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
+                  </p>
                 </div>
               </li>
             ))}

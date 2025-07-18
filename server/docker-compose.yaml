@@ -1,0 +1,43 @@
+version: '3.8' # Specify the Docker Compose file format version
+
+services:
+  # Define the PostgreSQL database service
+  db:
+    image: postgres:13
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: distart_db
+      POSTGRES_USER: Admin
+      POSTGRES_PASSWORD: DistarFresh
+    ports:
+      - "54321:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s # Check every 5 seconds
+      timeout: 5s # Timeout after 5 seconds
+      retries: 5 # Retry 5 times before marking as unhealthy
+
+  # Define Node.js backend server service
+  backend:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PGHOST: db
+      PGUSER: Admin
+      PGPASSWORD: DistarFresh
+      PGDATABASE: distart_db
+      NODE_ENV: development
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - node_modules_data:/app/node_modules
+
+volumes:
+  db_data: # This volume will store the PostgreSQL data
+  node_modules_data: # This new volume will store the backend's node_modules

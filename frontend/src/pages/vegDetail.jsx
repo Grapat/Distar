@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { API } from "../lib/api"; // ✅ ใช้ API จาก lib
+import { API } from "../lib/api";
 import "../css/vegDetail.css";
 
 const VegDetail = () => {
@@ -69,7 +69,7 @@ const VegDetail = () => {
         return;
       }
 
-      const response = await fetch(`${API}api/cart`, {
+      const response = await fetch(`${API}/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

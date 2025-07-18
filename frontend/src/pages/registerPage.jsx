@@ -47,7 +47,7 @@ const RegisterPage = () => {
         throw new Error(data.message || "Registration failed");
       }
 
-      console.log("Registration successful", data);
+      console.log("Registration successful");
       navigate("/login");
     } catch (err) {
       setError(err.message);
