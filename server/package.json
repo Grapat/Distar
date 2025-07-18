@@ -4,7 +4,9 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate": "sequelize db:migrate --env production",
+    "seed": "sequelize db:seed:all --env production"
   },
   "dependencies": {
     "@testing-library/react": "^16.2.0",
