@@ -17,7 +17,11 @@ const rateLimiter = require("./middleware/rateLimiter");
 const app = express();
 
 const corsOptions = {
-  origin: ["https://distarwebapp.vercel.app", "http://localhost:3000"],
+  origin: [
+    "https://distarwebapp.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173",
+  ],
   credentials: true,
 };
 
@@ -73,6 +77,7 @@ pool
 
 // 🛠️ Apply Global Middleware
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
