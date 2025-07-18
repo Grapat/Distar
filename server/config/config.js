@@ -16,8 +16,8 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: "postgres",
     logging: false,
-    jwtSecret: process.env.JWT_SECRET, // ✅ เพิ่ม JWT_SECRET
-    jwtExpiresIn: process.env.JWT_EXPIRES_IN // ✅ เพิ่ม JWT_EXPIRES_IN
+    jwtSecret: process.env.JWT_SECRET,
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN,
   },
   test: {
     username: process.env.DB_USERNAME,
@@ -25,7 +25,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: "postgres"
+    dialect: "postgres",
   },
   production: {
     username: process.env.DB_USERNAME,
@@ -33,6 +33,9 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: "postgres"
-  }
+    dialect: "postgres",
+    logging: false,
+    jwtSecret: process.env.JWT_SECRET,
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN,
+  },
 };
