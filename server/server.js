@@ -16,14 +16,46 @@ const rateLimiter = require("./middleware/rateLimiter");
 
 const app = express();
 
-// ✅ PostgreSQL Connection (Ensure Docker is Running)
-const pool = new Pool({
+// ✅ PostgreSQL Connection - Conditional for Local vs. Render
+let pool;
+
+if (process.env.DB_URI) {
+  // ✅ For Render deployment (or any environment where DB_URI is provided)
+  console.log("Using DB_URI for database connection.");
+  pool = new Pool({
+    connectionString: process.env.DB_URI,
+    ssl: {
+      rejectUnauthorized: false, // Often required for external PostgreSQL services like Render's
+    },
+  });
+} else {
+  // ✅ For Local Development (or any environment where individual DB variables are used)
+  console.log(
+    "Using individual DB environment variables for database connection."
+  );
+  pool = new Pool({
     user: process.env.DB_USERNAME,
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-});
+    port: process.env.DB_PORT,
+    // For local development, SSL might not be needed or might need different settings
+    // If you use Docker locally with SSL, you might need to add ssl: { rejectUnauthorized: false } here too
+  });
+}
+
+// Test database connection on server start
+pool
+  .connect()
+  .then((client) => {
+    console.log("✅ Connected to PostgreSQL database!");
+    client.release();
+  })
+  .catch((err) => {
+    console.error("❌ Error connecting to PostgreSQL database:", err.message);
+    // It's good practice to exit if the database connection fails on startup
+    process.exit(1);
+  });
 
 // 🛠️ Apply Global Middleware
 app.use(cors());
@@ -31,7 +63,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(compression());
-app.set('trust proxy', 1); // Trust first proxy (for rate limiting)
+app.set("trust proxy", 1); // Trust first proxy (for rate limiting)
 app.use(rateLimiter);
 app.use(requestLogger);
 
@@ -66,5 +98,5 @@ app.use(errorMiddleware);
 // Start Server
 const PORT = process.env.PORT || 4005;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on ${ `http://localhost:${PORT}`}`);
+  console.log(`🚀 Server running on ${`http://localhost:${PORT}`}`);
 });
