@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
   pool = new Pool({
     connectionString: process.env.DB_URL,
     ssl: {
-      rejectUnauthorized: false, // Often required for external PostgreSQL services like Render's
+      rejectUnauthorized: false,
     },
   });
 } else {
@@ -54,7 +54,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Test database connection on server start
 pool
   .connect()
   .then((client) => {
