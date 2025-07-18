@@ -19,6 +19,10 @@ const app = express();
 // ✅ PostgreSQL Connection - Conditional for Local vs. Render
 let pool;
 
+// --- DEBUG LOG ---
+console.log("Value of process.env.DB_URI:", process.env.DB_URI);
+// --- END DEBUG LOG ---
+
 if (process.env.DB_URI) {
   // ✅ For Render deployment (or any environment where DB_URI is provided)
   console.log("Using DB_URI for database connection.");
@@ -33,6 +37,12 @@ if (process.env.DB_URI) {
   console.log(
     "Using individual DB environment variables for database connection."
   );
+  // Log individual variables for debugging local setup if needed
+  console.log("DB_USERNAME:", process.env.DB_USERNAME);
+  console.log("DB_HOST:", process.env.DB_HOST);
+  console.log("DB_PORT:", process.env.DB_PORT);
+  console.log("DB_NAME:", process.env.DB_NAME);
+  console.log("DB_PASSWORD:", process.env.DB_PASSWORD ? "********" : "Not Set"); // Mask password
   pool = new Pool({
     user: process.env.DB_USERNAME,
     host: process.env.DB_HOST,
